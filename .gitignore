@@ -1,0 +1,23 @@
+# Lista do que entra, e não do que fica fora: só vai para o repositório a
+# página publicada e a evidência dela. As camadas originais (source/), o
+# laboratório (hero/), as ferramentas de preparo (tools/) e os relatos de
+# processo (relatorios/) ficam na pasta de trabalho, e um arquivo novo na raiz
+# fica fora até alguém incluí-lo aqui.
+/*
+!/.gitignore
+!/.github/
+!/README.md
+!/README.en.md
+!/REPORT.md
+!/A11Y-DECISIONS.md
+!/pagina/
+
+# Amostra de componentes: fora do escopo do REPORT.md e não publicada.
+/pagina/componentes/
+# imagens que só a amostra de componentes usa
+/pagina/img/ciprestes.webp
+/pagina/img/lua.webp
+/pagina/img/templo.webp
+
+.venv/
+__pycache__/

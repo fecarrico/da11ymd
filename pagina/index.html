@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DA11Y.md · Acessibilidade antes do primeiro pixel</title>
+<script>
+  // Idioma, antes da primeira pintura: a escolha salva no botão vence; sem ela,
+  // o primeiro idioma do navegador que a página tem (português ou inglês); sem
+  // nenhum dos dois, inglês. Os textos trocam no script de idioma, no fim da página.
+  (function () {
+    var d = document.documentElement, lang;
+    try { lang = localStorage.getItem('dally-lang'); } catch (e) { /* vale só nesta visita */ }
+    if (lang !== 'pt' && lang !== 'en') {
+      var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+      lang = 'en';
+      for (var i = 0; i < list.length; i++) {
+        var code = String(list[i]).toLowerCase();
+        if (code.indexOf('pt') === 0) { lang = 'pt'; break; }
+        if (code.indexOf('en') === 0) break;
+      }
+    }
+    d.dataset.lang = lang;
+    d.lang = lang === 'en' ? 'en' : 'pt-BR';
+    if (lang === 'en') d.classList.add('lang-pending');
+    d.classList.add('js');
+  })();
+</script>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: grid de 12 colunas, tudo alinhado pela mesma borda esquerda. O motivo
+   é o das linhas de construção do hero: fio fino com nó quadrado marca cada
+   seção e cada regra. Tema claro único, por escolha: tinta sobre papel.
+   Contraste (contrast-check.py, Shield): tinta/papel 11,84:1 · tinta-2/papel
+   7,52:1 · tinta/papel-2 15,18:1 · papel/tinta 11,84:1 · papel-mudo/tinta 8,52:1
+   · branco/painel 13,97:1 · cinza/painel 11,19:1 · branco/rosa 7,32:1 */
+:root {
+  --paper: #d1cfcb;
+  --paper-2: #ebe9e4;
+  --ink: #141414;
+  --ink-2: #3a3834;
+  --rule: #a9a6a0; /* fio decorativo, não é componente */
+  --paper-muted: #b3b0aa; /* só sobre --ink */
+  --fig-panel: #2c2c2c; /* card de anotação do Figma */
+  --fig-text: #ffffff;
+  --fig-text-2: #e6e6e6;
+  --fig-pink: #a50f68;
+  /* as categorias das anotações de ação (DA11Y.md §5), na cor que o Figma dá a
+     elas, escurecidas para 7:1 com o texto do chip: branco no azul e no violeta,
+     tinta no laranja, que escurecido virava ferrugem */
+  --fig-blue: #0e53ae;
+  --fig-orange: #f2913a;
+  --fig-violet: #7212df;
+  --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1C12.6 8.2 15.8 11.4 23 12 15.8 12.6 12.6 15.8 12 23 11.4 15.8 8.2 12.6 1 12 8.2 11.4 11.4 8.2 12 1Z'/%3E%3C/svg%3E"); /* o rosa da categoria Accessibility, escurecido para 7:1 */
+  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, "DejaVu Sans Mono", monospace;
+  --gutter: 2rem;
+  --hero-h: min(100svh, max(32rem, 36.26vw));
+  /* no celular em pé, no máximo 1100 unidades de arte visíveis (layers.json, narrow) */
+  --art-unit: max(100vw / 2063, min(var(--hero-h) * 0.6 / 748, 100vw / 1100));
+  --spill: calc(var(--art-unit) * 190);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); }
+/* em inglês, a página espera a tradução (script de idioma) para aparecer; se o script falhar,
+   ela aparece assim mesmo em 1,5 s, em português (A11Y.md §6, Content Held Hostage) */
+.lang-pending body { visibility: hidden; animation: lang-reveal 0s 1.5s forwards; }
+@keyframes lang-reveal { to { visibility: visible; } }
+body { position: relative; margin: 0; background: var(--paper); color: var(--ink); font: 1.0625rem/1.6 var(--body); }
+
+/* pular para o conteúdo: o primeiro foco da página, visível quando recebe o foco (guide-navigation §1, SC 2.4.1) */
+.skip-link { position: absolute; left: 1rem; top: 1rem; z-index: 10; display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.25rem; background: var(--ink); color: var(--paper); font: 700 1rem/1.2 var(--body); text-decoration: none; transform: translateY(-200%); }
+.skip-link:focus-visible, .skip-link:focus { transform: none; outline: 3px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 6px var(--paper); }
+/* o destino do link recebe o foco só para o próximo Tab começar ali; não é um controle */
+main:focus { outline: none; }
+/* texto corrido: no máximo ~70 caracteres por linha (A11Y.md §4, SC 1.4.8) */
+main p { max-width: 34em; } /* no máximo ~80 caracteres em Atkinson Hyperlegible; 70ch dava ~100 */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+.ext { width: 0.8em; height: 0.8em; margin-left: 0.2em; vertical-align: -0.05em; fill: currentColor; }
+code { font-family: var(--mono); font-size: 0.92em; }
+
+/* ---------- hero (o mesmo do laboratório) ---------- */
+.hero { position: relative; height: calc(var(--hero-h) + var(--spill)); overflow: hidden; background: var(--paper); }
+.hero__poster { position: absolute; bottom: 0; left: 50%; width: calc(var(--art-unit) * 2103); max-width: none; height: auto; transform: translateX(-50%); }
+.hero__art-box { position: absolute; top: 0; left: 0; width: 1px; height: var(--hero-h); visibility: hidden; pointer-events: none; }
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.hero-live .hero__canvas { opacity: 1; }
+/* ondas do clique na água: por cima da cena, nunca recebe o clique */
+.hero__ripples { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: difference; }
+.hero-live .hero__poster { visibility: hidden; }
+/* celular em pé: a imagem parada é a composição estreita (390 px), e cobre o hero inteiro presa pelo pé, onde fica o horizonte */
+@media (max-width: 28.125em) {
+  .hero__poster { top: auto; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; transform: none; }
+}
+/* a frase fica no alto do céu: na altura de y 62 da arte, ou a 1,5rem do topo quando a arte é cortada em cima */
+.hero__tagline { position: absolute; top: max(1.5rem, min(62 * var(--art-unit), var(--hero-h) - 686 * var(--art-unit))); left: 0; right: 0; z-index: 1; display: grid; justify-items: center; margin: 0; padding: 0 1rem; font-family: var(--display); font-size: 1.25rem; font-weight: 400; line-height: 1.2; text-align: center; color: var(--ink); }
+.hero__tagline > span { grid-area: 1 / 1; }
+/* a cópia de trás é uma faixa de papel opaca, esfumada na borda: a frase nunca encosta na tinta da cena,
+   que no celular passa por trás dela (céu alto, estrelas, paralaxe). A11Y.md §6, Text over Video */
+.tagline__halo { color: var(--paper); -webkit-text-stroke: 0.24em var(--paper); background: var(--paper); box-shadow: 0 0 0.6em 0.45em var(--paper); }
+.tagline__halo .tagline__f { overflow: visible; }
+.tagline__halo .tagline__f path { fill: var(--paper); stroke: var(--paper); stroke-width: 106; stroke-linejoin: round; }
+.tagline__f { display: inline-block; width: calc(1.55em * 476 / 686); height: 1.55em; margin-inline: 0.1em; vertical-align: middle; }
+.tagline__text .tagline__f { background-color: var(--ink); -webkit-mask: url(figma-f.svg) center / contain no-repeat; mask: url(figma-f.svg) center / contain no-repeat; }
+.hero__tagline.is-textured .tagline__text { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; }
+.hero__tagline.is-textured .tagline__text .tagline__f { background-repeat: no-repeat; }
+/* controles do topo, no canto direito, sobre o céu: o idioma e, na ponta, a pausa.
+   Um componente só para os dois. Quebram linha antes de sair da tela (SC 1.4.10, 1.4.12). */
+.hero__controls { position: absolute; top: 1rem; right: 1rem; left: 1rem; z-index: 3; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; pointer-events: none; }
+.hero__ctrl { pointer-events: auto; display: inline-flex; align-items: center; gap: 0.5rem; min-width: 3rem; min-height: 3rem; padding: 0.5rem 1rem; border: 2px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
+.hero__ctrl[hidden] { display: none; }
+.hero__ctrl:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 8px var(--paper); }
+.hero__ctrl-icon { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
+.hero__lang .hero__ctrl-icon { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.hero__motion[data-state="running"] .icon-play, .hero__motion[data-state="paused"] .icon-pause { display: none; }
+/* abaixo de 64em, os controles chegariam até a frase (em 60em, a 9 px dela): os dois entram no
+   fluxo do topo, os controles e embaixo deles a frase, que desce junto se eles quebrarem linha
+   ou crescerem com o zoom. Acima disso, o script do fim da página faz o mesmo (hero--stacked)
+   quando a frase encosta nos controles, como com o espaçamento de texto do usuário (SC 1.4.12) */
+@media (max-width: 63.99em) {
+  .hero__controls { position: relative; inset: auto; margin: 1rem 1rem 0; }
+  .hero__tagline { position: relative; top: auto; margin-top: 0.75rem; }
+}
+.hero--stacked .hero__controls { position: relative; inset: auto; margin: 1rem 1rem 0; }
+.hero--stacked .hero__tagline { position: relative; top: auto; margin-top: 0.75rem; }
+
+/* gotas: tela por cima da página, nunca recebe clique */
+.drip { position: absolute; left: 0; z-index: 2; pointer-events: none; }
+
+/* ---------- estrutura ----------
+   Sem fios entre seções nem entre itens: a estrutura vem do alinhamento e do
+   espaço. Toda seção tem o título na coluna da esquerda e o conteúdo na da
+   direita, na mesma grade de 12 colunas. */
+.page { padding-inline: 1rem; }
+.wrap { max-width: 72rem; margin-inline: auto; }
+.grid12, .split { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+.grid12 > *, .split > * { grid-column: 1 / -1; min-width: 0; }
+/* abaixo de 60em é tudo uma coluna: a grade vira bloco, porque os 11 vãos de
+   2rem sozinhos (352 px) passariam da tela de 320 px (reflow, SC 1.4.10) */
+@media (max-width: 59.99em) { .grid12, .split { display: block; } }
+
+.section { padding-block: 4.5rem; }
+h2 { margin: 0 0 1.5rem; max-width: 18ch; font: 400 2.25rem/1.15 var(--display); text-wrap: balance; }
+h3, p { margin: 0; }
+/* fluxo do conteúdo: o espaço entre blocos vem daqui, e só daqui */
+.split .split__body > * + * { margin-top: 2em; }
+.split .split__body > .decisions { margin-block: 2em; }
+.split .split__wide { margin-top: 3rem; }
+.lede { font-size: 1.25rem; line-height: 1.55; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+/* abertura: o texto à esquerda; a coluna da direita é das gotas e da poça */
+.intro { padding-top: 4rem; }
+
+/* as cinco decisões que já estão no desenho, em tipo grande */
+.decisions { padding: 0; list-style: none; font: 400 1.75rem/1.25 var(--display); }
+
+/* pontos: título e texto, separados só pelo espaço */
+
+.subhead { font: 400 1.5rem/1.25 var(--display); }
+
+/* anotações: o canvas do Figma, com cada anotação presa a um componente */
+.pins { margin: 2.5rem 0 0; }
+.pins__row { display: grid; gap: 3rem 2rem; }
+.pin { display: grid; grid-template-rows: auto auto 1fr; justify-items: start; }
+.pin__node { display: flex; align-items: flex-end; min-height: 5.5rem; padding: 0 0 0.25rem 0.5rem; }
+.pin__line { width: 0; height: 2.25rem; margin-left: 2.25rem; border-left: 2px dashed var(--cat, var(--fig-pink)); }
+.pin__card { justify-self: stretch; align-content: start; display: grid; gap: 0.375rem; padding: 1rem 1.125rem 1.25rem; border-radius: 10px; background: var(--fig-panel); color: var(--fig-text-2); font: 0.9375rem/1.5 var(--body); }
+.chip { display: inline-block; padding: 0.0625rem 0.5rem; border-radius: 4px; background: var(--cat, var(--fig-pink)); color: var(--cat-text, var(--fig-text)); font: 700 0.875rem/1.6 var(--body); }
+/* cada tipo na sua categoria: o chip, a linha e o contorno do nó levam a cor dela */
+.pin--decision { --cat: var(--fig-blue); }
+.pin--fix { --cat: var(--fig-orange); --cat-text: var(--ink); }
+.pin--ds { --cat: var(--fig-violet); }
+.pin__card .chip { justify-self: start; margin-bottom: 0.5rem; }
+.pin__type { margin: 0 0 0.25rem; color: var(--fig-text); font-weight: 700; }
+.pin__card p { margin: 0; }
+.mock { display: inline-flex; align-items: center; gap: 0.75rem; outline: 2px solid var(--cat, var(--fig-pink)); outline-offset: 4px; }
+.mock-toast { display: inline-flex; align-items: center; gap: 1rem; padding: 0.625rem 0.75rem 0.625rem 1rem; border: 2px solid var(--ink); background: var(--paper); font-size: 0.9375rem; }
+.mock-x { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; font-size: 1.125rem; line-height: 1; }
+.pins figcaption { margin-top: 1.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+
+/* curiosidade: faixa escura, papel sobre tinta, como a ilustração em ASCII */
+.trivia { margin-inline: -1rem; padding: 5rem 1rem; background: var(--ink); color: var(--paper); }
+.trivia :focus-visible { outline-color: var(--paper); }
+.trivia__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 3rem; align-items: start; }
+.trivia__grid > * { min-width: 0; }
+.trivia__eyebrow { margin: 0 0 1rem; font: 500 0.875rem/1.5 var(--mono); color: var(--paper-muted); }
+.trivia h2 { color: var(--paper); }
+.trivia .prose { display: grid; gap: 2em; max-width: 40rem; }
+.trivia .prose p { color: var(--paper); }
+.painting { margin: 0; }
+.painting img { display: block; width: 100%; height: auto; }
+.label { margin-top: 1.25rem; display: grid; gap: 0.125rem; font-size: 0.9375rem; color: var(--paper-muted); }
+.label__title { color: var(--paper); }
+
+.footer { padding-block: 3rem 4rem; }
+.footer__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
+.footer p { margin: 0; color: var(--ink-2); }
+.footer__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
+.footer__links a { display: inline-flex; align-items: center; min-height: 48px; }
+.footer__version { font-family: var(--mono); font-size: 0.9375rem; }
+
+
+/* ---------- componentes (a mesma família da página de componentes) ----------
+   Foco dos controles (botões, abas, cards): cantoneiras de 3 px que cobrem
+   70% do contorno, 2,1 px de contorno inteiro (SC 2.4.13 pede 2 px). Links no
+   meio do texto seguem com o contorno comum. */
+.btn:focus-visible, .tab:focus-visible, .card__link:focus-visible { outline: none; }
+.btn:focus-visible::after, .tab:focus-visible::after, .card:focus-within::after {
+  content: ""; position: absolute; inset: -9px; pointer-events: none;
+  background:
+    linear-gradient(var(--ink), var(--ink)) top left / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top left / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top right / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top right / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom left / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom left / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom right / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom right / 3px 35% no-repeat;
+}
+.tab:focus-visible::after { inset: -2px -10px; }
+
+/* botão: textura em pontilhado numa faixa à esquerda, nunca sob o texto */
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 2rem; }
+.btn { --tex-w: 56px; position: relative; display: inline-grid; grid-template-columns: var(--tex-w) 1fr var(--tex-w); align-items: center; min-width: 17rem; min-height: 48px; padding: 0; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); white-space: nowrap; text-decoration: none; cursor: pointer; }
+/* as duas laterais têm a mesma largura: o rótulo fica no centro do botão */
+.btn__label { grid-column: 2; padding: 0 0.5rem; text-align: center; }
+.btn .ico { grid-column: 3; justify-self: end; width: 1.25rem; height: 1.25rem; margin-right: 1.125rem; fill: none; stroke: currentColor; stroke-width: 2; }
+.btn--primary { background: var(--ink); color: var(--paper); }
+.btn::before, .btn__tex { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: var(--tex-w); background-repeat: no-repeat; background-size: 100% 100%; pointer-events: none; }
+.btn::before { background-image: var(--tex-a, none); }
+.btn--primary::before { background-image: var(--tex-a-ink, none); }
+.btn__tex { opacity: 0; background-image: var(--tex-b, none); transition: opacity 320ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.btn--primary .btn__tex { background-image: var(--tex-b-ink, none); }
+.btn:hover .btn__tex { opacity: 1; }
+.btn:hover .btn__label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+
+
+/* abas */
+.tabs { margin-top: 1.75rem; }
+.tabs__list { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; padding: 0 0.75rem 0.25rem; margin: 0 -0.75rem; border-bottom: 1px solid var(--ink); }
+.tab { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 48px; padding: 0 0.25rem; border: 0; background: none; color: var(--ink); font: 400 1.0625rem/1.2 var(--body); cursor: pointer; }
+.tab::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.tab[aria-selected="true"] { font-weight: 700; }
+.tab[aria-selected="true"]::before { background: var(--ink); }
+.tab__mark { position: absolute; left: -0.25rem; right: -0.25rem; bottom: -4px; height: 7px; background: var(--tex-tab, var(--ink)) center / 100% 100% no-repeat; opacity: 0; }
+.tab[aria-selected="true"] .tab__mark { opacity: 1; }
+/* o painel desce 0,75rem para o contorno de foco (3 px, a 3 px) não encostar na linha das abas */
+.tabs__panel { margin-top: 0.75rem; padding-top: 1.25rem; }
+.tabs__panel > * + * { margin-top: 2em; }
+.tabs__panel > .tabs__heading[hidden] + * { margin-top: 0; }
+
+/* passos numerados, na vertical: círculos ligados por pontilhado */
+.stepper { display: grid; gap: 2.25rem; margin: 0; padding: 0; list-style: none; }
+.step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 0 1.25rem; }
+.step__num { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); font: 400 1.25rem/1 var(--display); }
+.step__body { min-width: 0; display: grid; gap: 2em; align-content: start; padding-top: 0.55rem; }
+.step:not(:last-child)::after { content: ""; position: absolute; left: 21px; top: 50px; bottom: calc(-2.25rem + 6px); border-left: 2px dotted var(--ink-2); }
+
+/* bloco para copiar: o campo com rótulo e linha, com cara de código */
+.copy { display: grid; gap: 0.5rem; }
+.copy__label { display: flex; align-items: center; gap: 0.75rem; font: 500 0.875rem/1.4 var(--mono); color: var(--ink); }
+.copy__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
+.copy pre { margin: 0; padding: 0.875rem 4.5rem 0.875rem 1rem; border: 2px solid var(--ink); background: var(--paper) var(--tex-corner, none) right top / 64px 40px no-repeat; font: 0.9375rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.copy pre code { font-size: 1em; }
+.copy__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 0.5rem; }
+.copy__status { min-height: 1.6em; font-size: 0.9375rem; }
+
+/* cards: um link por card, o card inteiro clicável */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: 2.5rem 2rem; }
+.card { position: relative; display: grid; grid-template-rows: auto 1fr; border: 2px solid var(--ink); background: var(--paper); }
+.card__img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-bottom: 2px solid var(--ink); }
+.card__body { display: grid; grid-template-columns: 1fr auto; align-content: start; gap: 0.5rem 1rem; padding: 1.25rem 1.25rem 1.5rem; }
+.card__title { grid-column: 1; font: 400 1.5rem/1.2 var(--display); }
+.card__text { grid-column: 1; color: var(--ink-2); }
+.card .ico { grid-column: 2; grid-row: 1; align-self: center; width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; }
+.card__link { color: inherit; text-decoration: none; }
+.card__link::before { content: ""; position: absolute; inset: 0; }
+.card__link:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.card__tag { justify-self: start; grid-column: 1; padding: 0.125rem 0.5rem; border: 1px solid currentColor; font: 500 0.875rem/1.5 var(--mono); }
+.card--dark { background: var(--ink); color: var(--paper); }
+.card--dark .card__img { border-bottom-color: var(--paper); }
+.card--dark .card__text { color: var(--paper); }
+
+/* os componentes desenhados na figura das anotações */
+.mock-field { display: grid; gap: 0.375rem; width: min(15rem, 100%); }
+.mock-field__label { display: flex; align-items: center; gap: 0.5rem; font: 500 0.8125rem/1.4 var(--mono); }
+.mock-field__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
+.mock-input { height: 2.75rem; border: 2px solid var(--ink); background: var(--paper) var(--tex-corner, none) right top / 56px 34px no-repeat; }
+.btn.btn--mock { min-width: min(12rem, 100%); cursor: default; }
+/* o nó ocupa a coluna e o campo desenhado encolhe com ela: com letra grande numa tela estreita, a figura não rola de lado */
+.pin__node { justify-self: stretch; max-width: 100%; }
+.mock-field { max-width: 100%; }
+
+/* seção sem coluna de título: título e abertura em cima, conteúdo em largura cheia */
+.section__intro { max-width: 46rem; }
+.section__intro h2 { max-width: 22ch; }
+.section__intro p { max-width: 34em; }
+
+/* as decisões que já estão no desenho: tópicos com losango */
+.split .split__body > .topics { margin-block: 2em; }
+.topics { display: grid; gap: 1.25rem 2.5rem; margin: 0; padding: 0; list-style: none; }
+.topics li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.125rem 0; }
+.topics li::before { content: ""; grid-row: 1; width: 0.6rem; height: 0.6rem; margin-top: 0.5rem; background: var(--ink); transform: rotate(45deg); }
+.topics__name { grid-column: 2; font-weight: 700; }
+.topics__text { grid-column: 2; color: var(--ink-2); }
+
+/* abas de "Como começar" */
+.tabs--first { margin-top: 0; }
+/* sem JavaScript: os blocos empilhados, cada um com o seu título */
+.tabs__heading { margin-top: 2.5rem; font: 400 1.5rem/1.25 var(--display); }
+.tabs__panel:first-of-type .tabs__heading { margin-top: 0; }
+/* com JavaScript, antes de as abas ficarem prontas, só o primeiro bloco aparece */
+.js .tabs:not(.is-ready) .tabs__panel ~ .tabs__panel { display: none; }
+.js .tabs:not(.is-ready) .tabs__heading { display: none; }
+.tabs__lead { color: var(--ink-2); }
+.tabs__panel .stepper { margin-top: 2em; }
+.tabs__note { margin-top: 2em; max-width: 34em; font-size: 0.9375rem; color: var(--ink-2); }
+.copy + .copy { margin-top: 0.5rem; }
+.copy--small pre { padding-right: 1rem; background-image: none; }
+
+/* as cinco regras: grade, com a estrela de quatro pontas */
+.rules { display: grid; gap: 2.5rem 2.5rem; margin: 2.5rem 0 0; padding: 0; list-style: none; }
+.rule { display: grid; gap: 0.625rem; align-content: start; }
+.rule h3 { display: flex; gap: 0.75rem; align-items: baseline; font: 400 1.5rem/1.25 var(--display); text-wrap: balance; }
+.rule h3::before { content: ""; flex: none; width: 0.85rem; height: 0.85rem; background: var(--ink); -webkit-mask: var(--star) center / contain no-repeat; mask: var(--star) center / contain no-repeat; }
+.rule p { color: var(--ink-2); padding-left: 1.6rem; }
+
+/* irmão do A11Y.md: a marca dele em caracteres e as quatro relações numa linha */
+.sib-banner { margin: 2.5rem 0 0; }
+.sib-banner img { display: block; width: 100%; height: auto; border: 2px solid var(--ink); }
+.sib-banner figcaption { margin-top: 0.75rem; font-size: 0.9375rem; color: var(--ink-2); }
+.rels { display: grid; gap: 2.5rem 2rem; margin-top: 3rem; }
+.rel { display: grid; gap: 0.5rem; align-content: start; }
+.rel__kind { font: 500 0.9375rem/1.4 var(--mono); }
+.rel h3 { font: 400 1.375rem/1.25 var(--display); text-wrap: balance; }
+.rel p:last-child { color: var(--ink-2); }
+
+@media (min-width: 48em) {
+  .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* entre 40em e 60em, a gota cai numa margem reservada à direita do texto, e a poça fica embaixo dele */
+@media (min-width: 40em) and (max-width: 59.99em) {
+  .intro .intro__text { max-width: calc(100% - 4.5rem); }
+  .intro { padding-bottom: 7rem; }
+}
+@media (min-width: 60em) {
+  .pins__row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rules { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .section { padding-block: 5rem; }
+  .intro { padding-top: 6rem; padding-bottom: 11rem; }
+  .intro h2 { max-width: 22ch; }
+  .intro .intro__text { grid-column: 1 / span 7; }
+  .split__head { grid-column: 1 / span 4; align-self: start; position: sticky; top: 2rem; }
+  /* com um bloco em largura cheia embaixo, o título não acompanha a rolagem: ele desceria por cima do bloco */
+  .split--wide .split__head { position: static; }
+  .split__body { grid-column: 6 / span 7; }
+  .split__wide { grid-column: 1 / -1; }
+  .split h2 { margin-bottom: 0; }
+}
+@media (max-width: 30em) {
+  .btn { min-width: 0; width: 100%; white-space: normal; }
+}
+/* tela muito estreita: as laterais do botão encolhem para o rótulo caber numa linha só */
+@media (max-width: 22.5em) {
+  .btn { --tex-w: 36px; }
+  h2 { font-size: 1.75rem; }
+  .section { padding-block: 3.5rem; }
+  .decisions { font-size: 1.5rem; }
+  .lede { font-size: 1.125rem; }
+  .hero__tagline { font-size: 0.875rem; }
+}
+/* celular: os dois controles numa linha só. Letra de 14 px (o mínimo do Shield), laterais menores
+   e o globo sai. Sem isso, "Português" e "Resume animation" quebravam em 375 px */
+@media (max-width: 24em) {
+  .hero__ctrl { padding-inline: 0.75rem; font-size: 0.875rem; }
+  .hero__lang .hero__ctrl-icon { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn__tex { transition: none; }
+}
+@media (forced-colors: active) {
+  .btn::before, .btn__tex { display: none; }
+  .btn:focus-visible, .tab:focus-visible { outline: 3px solid CanvasText; outline-offset: 4px; }
+  .card:focus-within { outline: 3px solid CanvasText; outline-offset: 4px; }
+  .btn:focus-visible::after, .tab:focus-visible::after, .card:focus-within::after { display: none; }
+  .tab[aria-selected="true"] { text-decoration: underline; }
+  .hero__tagline .tagline__text, .hero__tagline.is-textured .tagline__text { color: CanvasText; background: none; -webkit-background-clip: border-box; background-clip: border-box; }
+  .tagline__halo { display: none; }
+  .tagline__text .tagline__f { forced-color-adjust: none; background: CanvasText; }
+  .hero__ctrl:focus-visible { outline: 3px solid CanvasText; outline-offset: -7px; }
+}
+</style>
+</head>
+<body>
+
+<div lang="pt-BR" data-lang-root>
+<a class="skip-link" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<header class="hero">
+  <!-- o logotipo é o mesmo nas duas línguas: "design accessibility" fica em inglês -->
+  <h1 class="sr-only">dally.md, <span lang="en">design accessibility</span></h1>
+  <div class="hero__controls">
+    <!-- o botão diz o outro idioma, escrito nele mesmo e com o lang dele (script de idioma) -->
+    <button type="button" class="hero__ctrl hero__lang" lang="en" hidden>
+      <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25"/><path d="M1.75 8h12.5M8 1.75c-1.9 1.7-2.75 3.7-2.75 6.25S6.1 12.55 8 14.25M8 1.75c1.9 1.7 2.75 3.7 2.75 6.25S9.9 12.55 8 14.25"/></svg>
+      <span class="hero__lang-label">English</span>
+    </button>
+    <button type="button" class="hero__ctrl hero__motion" data-state="running" hidden>
+      <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path class="icon-pause" d="M4 3h3v10H4zM9 3h3v10H9z"/>
+        <path class="icon-play" d="M4 2.5v11l9-5.5z"/>
+      </svg>
+      <span class="hero__motion-label">Pausar animação</span>
+    </button>
+    <span class="sr-only" role="status" data-lang-status></span>
+  </div>
+  <!-- o leitor de tela lê a frase inteira, com o nome da marca no lugar do "F": a parte visual fica fora da árvore -->
+  <p class="hero__tagline">
+    <span class="sr-only" data-i18n="tagline">Deixe seu Figma acessível</span>
+    <span class="tagline__halo" aria-hidden="true"><span data-i18n="tagline-a">Deixe seu</span> <svg class="tagline__f" viewBox="1783 56 476 686" focusable="false"><path d="M1994.34 109.333H1915.67C1872.22 109.333 1837 144.553 1837 188C1837 231.446 1872.22 266.666 1915.67 266.666H1994.34V109.333ZM1994.34 55.9995H2047.67H2126.34C2199.24 55.9995 2258.33 115.098 2258.33 188C2258.33 231.02 2237.76 269.235 2205.9 293.333C2237.76 317.431 2258.33 355.646 2258.33 398.667C2258.33 471.568 2199.24 530.667 2126.34 530.667C2096.86 530.667 2069.64 521.005 2047.67 504.675V530.667V609.333C2047.67 682.235 1988.57 741.333 1915.67 741.333C1842.77 741.333 1783.67 682.235 1783.67 609.333C1783.67 566.309 1804.25 528.098 1836.1 504C1804.25 479.901 1783.67 441.687 1783.67 398.667C1783.67 355.646 1804.25 317.431 1836.1 293.333C1804.25 269.235 1783.67 231.02 1783.67 188C1783.67 115.098 1842.77 55.9995 1915.67 55.9995H1994.34ZM2047.67 109.333V266.666H2126.34C2169.78 266.666 2205 231.446 2205 188C2205 144.553 2169.78 109.333 2126.34 109.333H2047.67ZM1915.67 477.332H1994.34V398.869V398.667V398.464V320H1915.67C1872.22 320 1837 355.22 1837 398.667C1837 442.009 1872.05 477.165 1915.36 477.333L1915.67 477.332ZM1837 609.333C1837 565.989 1872.05 530.835 1915.36 530.666L1915.67 530.667H1994.34V609.333C1994.34 652.779 1959.12 688 1915.67 688C1872.22 688 1837 652.779 1837 609.333ZM2047.67 398.51C2047.75 355.136 2082.94 320 2126.34 320C2169.78 320 2205 355.22 2205 398.667C2205 442.113 2169.78 477.333 2126.34 477.333C2082.94 477.333 2047.75 442.198 2047.67 398.823V398.51Z"/></svg> <span data-i18n="tagline-b">acessível</span></span>
+    <span class="tagline__text" aria-hidden="true"><span data-i18n="tagline-a">Deixe seu</span> <span class="tagline__f"></span> <span data-i18n="tagline-b">acessível</span></span>
+  </p>
+  <picture>
+    <source media="(max-width: 28.125em)" srcset="poster-estreito.webp" width="780" height="1160">
+    <img class="hero__poster" src="poster.webp" alt="" width="3155" height="1407" decoding="async">
+  </picture>
+  <div class="hero__art-box"></div>
+  <canvas class="hero__canvas" aria-hidden="true"></canvas>
+</header>
+
+<main class="page" id="conteudo" tabindex="-1">
+  <div class="wrap">
+    <section class="section intro grid12" aria-labelledby="sobre">
+      <div class="intro__text">
+        <h2 id="sobre" data-i18n="intro-title">Acessibilidade antes do primeiro pixel</h2>
+        <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código, e assim a interface já nasce acessível no protótipo.</p>
+        <div class="actions">
+          <a class="btn btn--primary" href="#comecar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="start">Como começar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></a>
+          <a class="btn" href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="repo-btn">Repositório no GitHub</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split" aria-labelledby="por-que">
+      <div class="split__head">
+        <h2 id="por-que" data-i18n="why-title">Por que começar pelo design</h2>
+      </div>
+      <div class="split__body">
+        <p data-i18n="why-p1">Muitas decisões de acessibilidade são tomadas antes de o código existir. Quando o desenho chega a quem desenvolve, estas já estão nele:</p>
+        <ul class="topics">
+          <li><span class="topics__name" data-i18n="topic1-name">Contraste</span><span class="topics__text" data-i18n="topic1-text">A cor do texto e dos ícones contra o fundo.</span></li>
+          <li><span class="topics__name" data-i18n="topic2-name">Área de toque</span><span class="topics__text" data-i18n="topic2-text">O tamanho de cada botão e de cada link.</span></li>
+          <li><span class="topics__name" data-i18n="topic3-name">Estados de foco</span><span class="topics__text" data-i18n="topic3-text">Como cada controle aparece quando o teclado chega nele.</span></li>
+          <li><span class="topics__name" data-i18n="topic4-name">Mensagens de erro</span><span class="topics__text" data-i18n="topic4-text">O que avisa que algo deu errado e como resolver.</span></li>
+          <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela.</span></li>
+        </ul>
+        <p data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</p>
+      </div>
+    </section>
+
+    <section class="section split" aria-labelledby="comecar">
+      <div class="split__head">
+        <h2 id="comecar" data-i18n="start">Como começar</h2>
+      </div>
+      <div class="split__body">
+        <div class="tabs tabs--first" data-tabs>
+          <section class="tabs__panel" id="painel-chat" aria-labelledby="painel-chat-titulo">
+            <h3 class="tabs__heading" id="painel-chat-titulo" data-i18n="chat-title">No chat do agente</h3>
+            <p class="tabs__lead" data-i18n="chat-lead">Para um pedido de cada vez, sem preparar nada antes.</p>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+                <p data-i18n="chat-step1">Escreva o pedido como sempre e acrescente o link do protocolo. Por exemplo:</p>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="create-label">Para criar</span>
+                    <pre><code id="pedido-criar" data-i18n="create-prompt">Crie este componente seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="pedido-criar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-create-sr"> para criar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="analyze-label">Para analisar</span>
+                    <pre><code id="pedido-analisar" data-i18n="analyze-prompt">Analise esta tela seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="pedido-analisar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-analyze-sr"> para analisar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+                <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e anota no arquivo o que encontrou.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+                <p data-i18n="chat-step3">Quando ele apontar um contraste reprovado, confira o mesmo par na checagem de contraste do Figma, no seletor de cor. Não use a correção automática, porque ela troca a cor que veio da biblioteca.</p>
+              </div></li>
+            </ol>
+          </section>
+          <section class="tabs__panel" id="painel-skill" aria-labelledby="painel-skill-titulo">
+            <h3 class="tabs__heading" id="painel-skill-titulo" data-i18n="skill-title">Como skill</h3>
+            <p class="tabs__lead" data-i18n="skill-lead">Para chamar o protocolo com uma barra, em qualquer arquivo. Funciona em todos os planos.</p>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+                <p data-i18n="skill-step1">No chat do agente, clique na caixa do pedido e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+                <p data-i18n="skill-step2">Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
+                <div class="copy copy--small">
+                    <span class="copy__label" data-i18n="name-label">Nome</span>
+                    <pre><code id="skill-nome">da11y</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="skill-nome"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-name">Copiar nome</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+                <div class="copy copy--small">
+                    <span class="copy__label" data-i18n="desc-label">Descrição</span>
+                    <pre><code id="skill-descricao" data-i18n="skill-desc">Cria e analisa jornadas, telas e componentes seguindo as regras de acessibilidade do DA11Y.md.</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="skill-descricao"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-desc">Copiar descrição</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="instr-label">Instruções</span>
+                    <pre><code id="skill-instrucoes" data-i18n="skill-instr">Ao criar, editar ou analisar jornadas, telas ou componentes, siga estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="skill-instrucoes"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-instr">Copiar instruções</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+                <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code>. A skill fica disponível em todos os seus arquivos.</p>
+              </div></li>
+            </ol>
+          </section>
+          <section class="tabs__panel" id="painel-biblioteca" aria-labelledby="painel-biblioteca-titulo">
+            <h3 class="tabs__heading" id="painel-biblioteca-titulo" data-i18n="lib-title">Na biblioteca</h3>
+            <p class="tabs__lead" data-i18n="lib-lead">Para a regra entrar sozinha nos desenhos feitos com a sua biblioteca.</p>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+                <p data-i18n="lib-step1">Baixe a guideline pronta, um arquivo Markdown com a regra.</p>
+                <div class="actions"><a class="btn" href="https://github.com/fecarrico/DA11Y.md/blob/main/guidelines/acessibilidade-da11y.md" data-i18n-attr="href:guideline-href" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="guideline-btn">Guideline pronta</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a></div>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+                <p data-i18n="lib-step2">Na biblioteca, abra <span lang="en">Library</span> › <span lang="en">Manage guidelines</span> e envie o arquivo.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+                <p data-i18n="lib-step3">Quando alguém pedir ao agente um desenho com essa biblioteca, a regra entra sozinha.</p>
+              </div></li>
+            </ol>
+            <p class="tabs__note" data-i18n="lib-note">As guidelines de biblioteca são um recurso dos planos Professional, Organization e Enterprise, e valem para pedidos de desenho com a biblioteca. Para analisar uma tela que já existe, use o chat ou a skill.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="anotacoes">
+      <div class="section__intro">
+        <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
+        <p data-i18n="notes-intro">Cada anotação fica presa ao nó que ela comenta, e a primeira linha diz o que fazer com ela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela avaliada recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Fora ela, só há anotação quando há algo a fazer.</p>
+      </div>
+      <figure class="pins">
+        <div class="pins__row">
+          <div class="pin pin--decision">
+            <div class="pin__node" aria-hidden="true"><div class="mock-toast"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock mock-x">×</span></div></div>
+            <div class="pin__line" aria-hidden="true"></div>
+            <div class="pin__card">
+              <span class="chip" data-i18n="cat-decision">Decisão sua</span>
+              <p class="pin__type" data-i18n="type-decision">Decisão sua · proposta do agente</p>
+              <p data-i18n="pin1-a">Botão só com ícone, no canto do aviso</p>
+              <p data-i18n="pin1-b">Nome proposto: Fechar aviso</p>
+            </div>
+          </div>
+          <div class="pin pin--fix">
+            <div class="pin__node" aria-hidden="true"><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock-input"></span></div></div>
+            <div class="pin__line" aria-hidden="true"></div>
+            <div class="pin__card">
+              <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
+              <p class="pin__type" data-i18n="cat-fix">Corrigir aqui</p>
+              <p data-i18n="pin2-a">A borda do campo E-mail tem a cor trocada nesta tela</p>
+              <p data-i18n="pin2-b">Volte à variante da biblioteca</p>
+            </div>
+          </div>
+          <div class="pin pin--ds">
+            <div class="pin__node" aria-hidden="true"><span class="mock btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
+            <div class="pin__line" aria-hidden="true"></div>
+            <div class="pin__card">
+              <span class="chip" data-i18n="cat-ds">Erro do design system</span>
+              <p class="pin__type" data-i18n="cat-ds">Erro do design system</p>
+              <p data-i18n="pin3-a">O texto do botão primário fica abaixo do contraste mínimo</p>
+              <p data-i18n="pin3-b">Encaminhe a quem mantém a biblioteca</p>
+            </div>
+          </div>
+        </div>
+        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Ilustração feita para esta página.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" aria-labelledby="pede">
+      <div class="section__intro">
+        <h2 id="pede" data-i18n="rules-title">O que ele pede ao agente</h2>
+        <p data-i18n="rules-intro">O DA11Y.md é um arquivo Markdown que o agente lê por link e carrega só as partes que a tarefa pede. São cinco regras.</p>
+      </div>
+      <ul class="rules">
+          <li class="rule">
+            <h3 data-i18n="rule1-title">O que já existe vem primeiro</h3>
+            <p data-i18n="rule1-text">O agente procura os componentes, as variáveis e os estilos da biblioteca, e as regras já registradas, como um <code>DESIGN.md</code>. Ele aplica tudo como está e depois avalia. Ele avisa cada decisão prévia que afeta a acessibilidade, com a origem e a medida, e só corrige com autorização expressa.</p>
+          </li>
+          <li class="rule">
+            <h3 data-i18n="rule2-title">Calcular, nunca estimar</h3>
+            <p data-i18n="rule2-text">O contraste é calculado a partir dos valores dos tokens, em todo estado e em todo modo. Quando um par reprova, você confere o mesmo par na checagem de contraste do próprio Figma.</p>
+          </li>
+          <li class="rule">
+            <h3 data-i18n="rule3-title">A evidência fica no arquivo</h3>
+            <p data-i18n="rule3-text">Cada tela avaliada recebe uma anotação curta, nativa do Figma, com o status e o que há para fazer. O relatório completo sai no chat, para você salvar e entregar a quem desenvolve.</p>
+          </li>
+          <li class="rule">
+            <h3 data-i18n="rule4-title">Cada anotação pede uma ação</h3>
+            <p data-i18n="rule4-text">A primeira linha diz o que é. Pode ser uma decisão sua, algo para corrigir neste arquivo ou um erro do design system para encaminhar a quem mantém a biblioteca. O que passou fica no relatório, fora do canvas.</p>
+          </li>
+          <li class="rule">
+            <h3 data-i18n="rule5-title">Design system com contexto para agentes</h3>
+            <p data-i18n="rule5-text">Quando a tarefa é criar componentes, o agente também escreve o que o próximo agente precisa ler: a descrição, os apelidos, o contrato de acessibilidade e a anatomia na ordem de leitura.</p>
+          </li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="relacao">
+      <div class="section__intro">
+        <h2 id="relacao" data-i18n="sib-title">Irmão do A11Y.md</h2>
+        <p data-i18n="sib-intro">O <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> é um arquivo que ensina a IA que programa (Cursor, Claude, Copilot) a construir interfaces acessíveis desde a primeira linha, seguindo as Diretrizes de Acessibilidade para Conteúdo Web (<abbr>WCAG</abbr> 2.2, na sigla em inglês). O DA11Y.md é o irmão dele para quem desenha. Ele leva as mesmas regras ao Figma, antes de o código existir.</p>
+      </div>
+      <figure class="sib-banner">
+        <img src="img/a11ymd-site.webp" alt="" width="2160" height="730" data-i18n-attr="src:banner-src">
+        <figcaption data-i18n="banner-caption">A marca do A11Y.md e o selo “Apoiado pelo Claude for Open Source Program”, redesenhados em caracteres.</figcaption>
+      </figure>
+      <div class="rels">
+        <div class="rel">
+          <p class="rel__kind" data-i18n="rel-inherits">[herda]</p>
+          <h3 data-i18n="rel1-title">Os mesmos números</h3>
+          <p data-i18n="rel1-text">Os perfis de conformidade, os limites de contraste e de área de toque e o modelo de severidade vêm do A11Y.md. Um script confere que os dois nunca se afastam, em inglês e em português.</p>
+        </div>
+        <div class="rel">
+          <p class="rel__kind" data-i18n="rel-inherits">[herda]</p>
+          <h3 data-i18n="rel2-title">O mesmo jeito de usar</h3>
+          <p data-i18n="rel2-text">Um arquivo que o agente lê por link e que carrega cada guia só quando a tarefa pede. Nada para instalar.</p>
+        </div>
+        <div class="rel">
+          <p class="rel__kind" data-i18n="rel-own">[só dele]</p>
+          <h3 data-i18n="rel3-title">O que só existe no canvas</h3>
+          <p data-i18n="rel3-text">Ler um arquivo do Figma, avaliar o que o design system já decidiu e deixar a evidência em anotações no próprio arquivo.</p>
+        </div>
+        <div class="rel">
+          <p class="rel__kind" data-i18n="rel-meet">[encontro]</p>
+          <h3 data-i18n="rel4-title">Do desenho para o código</h3>
+          <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. Quem programa não precisa carregar as regras de design.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="trivia" aria-labelledby="nome">
+    <div class="wrap trivia__grid">
+      <figure class="painting">
+        <img src="persistencia-ascii.png" width="1190" height="792" data-i18n-attr="alt:painting-alt" alt="Em caracteres claros sobre fundo escuro, um relógio derretido escorre da borda de uma mesa, e outro se dobra sobre uma figura adormecida.">
+        <figcaption class="label">
+          <span class="label__title" data-i18n="painting-title"><i>A Persistência da Memória</i>, detalhe</span>
+          <span>Salvador Dalí, 1931</span>
+          <span data-i18n="painting-medium">Óleo sobre tela, 24,1 × 33 cm</span>
+          <span data-i18n="painting-museum">Museum of Modern Art, Nova York</span>
+          <span data-i18n="painting-redrawn">Redesenhado aqui com caracteres de texto</span>
+        </figcaption>
+      </figure>
+      <div>
+        <p class="trivia__eyebrow" data-i18n="trivia">Curiosidade</p>
+        <h2 id="nome" data-i18n="name-title">O nome e o logotipo</h2>
+        <div class="prose">
+          <p data-i18n="name-p1">DA11Y.md é a soma do D de design com o A11Y de acessibilidade. O nome pode ser lido como "dally", que soa como o nome do pintor Salvador Dalí. A referência à arte é de propósito, porque aproxima o projeto do design e da criatividade, que é o meio de quem vai usá-lo.</p>
+          <p data-i18n="name-p2">O "a" do logotipo carrega o relógio derretido do quadro <i>A Persistência da Memória</i>. A escolha mostra a pretensão do projeto, que é ser um contexto persistente na memória do agente. O agente deve usar o protocolo sempre que desenha uma interface.</p>
+          <p data-i18n="name-p3">Para caber nessa memória, o protocolo segue boas práticas de engenharia de prompt e carrega cada guia só quando a tarefa pede, o que poupa tokens. Mas o foco não é economia, é acessibilidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="section split split--wide" aria-labelledby="contribuir">
+      <div class="split__head">
+        <h2 id="contribuir" data-i18n="contrib-title">Como contribuir</h2>
+      </div>
+      <div class="split__body">
+        <p data-i18n="contrib-intro">A contribuição mais útil é um relato de campo. Conte o que aconteceu quando você usou o DA11Y.md num desenho real. O <a href="https://github.com/fecarrico/DA11Y.md/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">guia de contribuição<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> explica o resto.</p>
+      </div>
+      <div class="split__wide cards">
+        <article class="card">
+          <img class="card__img" src="img/relato.webp" alt="" width="720" height="480">
+          <div class="card__body">
+            <span class="card__tag" data-i18n="contrib-tag">Contribuir</span>
+            <h3 class="card__title"><a class="card__link" href="https://github.com/fecarrico/DA11Y.md/issues/new?template=field-report.yml" target="_blank" rel="noopener"><span data-i18n="card1-title">Enviar um relato de campo</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></a></h3>
+            <svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg>
+            <p class="card__text" data-i18n="card1-text">O que o agente fez, o que você esperava e o que aconteceu.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img class="card__img" src="img/github.webp" alt="" width="720" height="480">
+          <div class="card__body">
+            <h3 class="card__title"><a class="card__link" href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener"><span data-i18n="card2-title">Repositório do DA11Y.md</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></a></h3>
+            <svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg>
+            <p class="card__text" data-i18n="card2-text">O protocolo, os guias de componente e os modelos de relatório, no GitHub.</p>
+          </div>
+        </article>
+        <article class="card card--dark">
+          <img class="card__img" src="img/a11ymd.webp" alt="" width="720" height="480">
+          <div class="card__body">
+            <h3 class="card__title"><a class="card__link" href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></a></h3>
+            <svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg>
+            <p class="card__text" data-i18n="card3-text">O protocolo irmão, para o agente de código.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer page">
+  <div class="wrap footer__row">
+    <p>Felipe A. Carriço</p>
+    <ul class="footer__links">
+      <li><a href="https://linkedin.com/in/fecarrico" target="_blank" rel="noopener">LinkedIn<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+      <li><a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+      <li data-i18n="license">Licença MIT</li>
+    </ul>
+    <p class="footer__version">DA11Y.md 0.1.0</p>
+  </div>
+</footer>
+</div>
+
+<!-- idioma: antes dos outros scripts, que leem os textos dele -->
+<script>
+  // Idioma da página: português (o texto do HTML) ou inglês (o dicionário abaixo).
+  // Fica dentro da página, e não num arquivo à parte, para a tradução e os
+  // scripts seguintes nunca esperarem a rede (auditoria de 13/10).
+  //
+  // O script do topo do index.html escolhe o idioma antes da primeira pintura: a
+  // escolha salva no botão vence; sem ela, o primeiro idioma do navegador que a
+  // página tem; sem nenhum dos dois, inglês. Este arquivo troca os textos marcados
+  // com data-i18n, os atributos de data-i18n-attr ("atributo:chave") e o título, e
+  // liga o botão de idioma do hero. O português é lido do próprio HTML na carga,
+  // então o HTML continua sendo a fonte do texto em português.
+  //
+  // A única exceção é o logotipo ("dally.md, design accessibility"), igual nas duas.
+  //
+  // Para os outros scripts: window.dallyText(chave) devolve o texto no idioma da
+  // vez, e o evento dally:lang avisa quando ele muda.
+  //
+  // Botão (A11Y-DECISIONS.md, Troca de idioma): um botão só, que diz o outro
+  // idioma escrito nele mesmo e com o lang dele, como o botão de pausa diz a
+  // ação. Não é switch (liga e desliga uma configuração, e PT/EN não é ligado e
+  // desligado) nem grupo de rádio (as setas trocariam a página inteira, SC 3.2.2).
+  (function () {
+    'use strict';
+    var STORAGE_KEY = 'dally-lang';
+    var root = document.documentElement;
+    var box = document.querySelector('[data-lang-root]');
+
+    var EXT = '<svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg>';
+    var NEWTAB = ' (opens in a new tab)';
+    function link(href, text) {
+      return '<a href="' + href + '" target="_blank" rel="noopener">' + text + '<span class="sr-only" data-i18n="newtab">' + NEWTAB + '</span>' + EXT + '</a>';
+    }
+    var A11Y = link('https://github.com/fecarrico/A11Y.md', 'A11Y.md');
+    var CORE = 'https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/en/DA11Y.md';
+
+    var EN_TITLE = 'DA11Y.md · Accessibility before the first pixel';
+    var EN = {
+      'skip': 'Skip to content',
+      'newtab': NEWTAB,
+      'tagline': 'Make your Figma accessible',
+    'tagline-a': 'Make your',
+      'tagline-b': 'accessible',
+
+      'intro-title': 'Accessibility before the first pixel',
+      'intro-lede': 'DA11Y.md is a protocol for Figma’s artificial intelligence (<abbr>AI</abbr>) agent to design accessible interfaces. It brings to the design file the same rules that ' + A11Y + ' brings to code, so the interface is already accessible in the prototype.',
+      'start': 'Getting started',
+      'repo-btn': 'Repository on GitHub',
+
+      'why-title': 'Why start with design',
+      'why-p1': 'Many accessibility decisions are made before the code exists. By the time the design reaches whoever builds it, these are already in it:',
+      'topic1-name': 'Contrast',
+      'topic1-text': 'The color of text and icons against the background.',
+      'topic2-name': 'Touch target',
+      'topic2-text': 'The size of each button and each link.',
+      'topic3-name': 'Focus states',
+      'topic3-text': 'How each control looks when the keyboard reaches it.',
+      'topic4-name': 'Error messages',
+      'topic4-text': 'What says something went wrong and how to fix it.',
+      'topic5-name': 'Reading order',
+      'topic5-text': 'The sequence in which the screen reader goes through the screen.',
+      'why-p2': 'When the design ignores these decisions, the developer fixes them in code, and the product ends up different from what was designed. DA11Y.md brings the rules to the moment the screen is drawn. That way design and code answer to the same numbers.',
+
+      'chat-title': 'In the agent’s chat',
+      'chat-lead': 'For one request at a time, with nothing to set up first.',
+      'chat-step1': 'Write your prompt as usual and add the link to the protocol. For example:',
+      'create-label': 'To create',
+      'create-prompt': 'Create this component strictly following the accessibility rules in the file ' + CORE,
+      'copy-prompt': 'Copy prompt',
+      'copy-create-sr': ' to create',
+      'analyze-label': 'To analyze',
+      'analyze-prompt': 'Analyze this screen strictly following the accessibility rules in the file ' + CORE,
+      'copy-analyze-sr': ' to analyze',
+      'chat-step2': 'The agent reads the protocol, applies your library first and annotates in the file what it found.',
+      'chat-step3': 'When it points out a failing contrast, check the same pair in Figma’s contrast check, in the color picker. Do not use the auto-correct, because it changes the color that came from the library.',
+
+      'skill-title': 'As a skill',
+      'skill-lead': 'To call the protocol with a slash, in any file. It works on every plan.',
+      'skill-step1': 'In the agent’s chat, click the prompt box and choose Skills › Add skill › Start from scratch.',
+      'skill-step2': 'Fill in the three fields with these texts and click Add.',
+      'name-label': 'Name',
+      'copy-name': 'Copy name',
+      'desc-label': 'Description',
+      'skill-desc': 'Creates and analyzes flows, screens and components following the DA11Y.md accessibility rules.',
+      'copy-desc': 'Copy description',
+      'instr-label': 'Instructions',
+      'skill-instr': 'When creating, editing or analyzing flows, screens or components, strictly follow the accessibility rules in the file ' + CORE,
+      'copy-instr': 'Copy instructions',
+      'skill-step3': 'To use it, type <code>/da11y</code> in your prompt and write what you need, like <code>/da11y analyze this screen</code>. The skill is available in all your files.',
+
+      'lib-title': 'In the library',
+      'lib-lead': 'So the rule comes in by itself in designs made with your library.',
+      'lib-step1': 'Download the ready-made guideline, a Markdown file with the rule.',
+      'guideline-btn': 'Ready-made guideline',
+      'guideline-href': 'https://github.com/fecarrico/DA11Y.md/blob/main/guidelines/accessibility-da11y.md',
+      'lib-step2': 'In the library, open Library › Manage guidelines and upload the file.',
+      'lib-step3': 'When someone asks the agent for a design with that library, the rule comes in by itself.',
+      'lib-note': 'Library guidelines are a feature of the Professional, Organization and Enterprise plans, and they apply to design requests with the library. To analyze a screen that already exists, use the chat or the skill.',
+
+      'notes-title': 'How annotations appear in the file',
+      'notes-intro': 'Each annotation is pinned to the node it comments on, and its first line says what to do with it. Each type has its own category, so each person can filter what they have to do. The evaluated screen gets an annotation with its status, in the Accessibility category. Apart from it, there is an annotation only when there is something to do.',
+      'mock-toast': 'Notice saved',
+      'mock-email': 'Email',
+      'mock-continue': 'Continue',
+      'cat-decision': 'Your decision',
+      'type-decision': 'Your decision · agent proposal',
+      'pin1-a': 'Icon-only button, in the corner of the notice',
+      'pin1-b': 'Proposed name: Close notice',
+      'cat-fix': 'Fix here',
+      'pin2-a': 'The Email field’s border has the wrong color on this screen',
+      'pin2-b': 'Go back to the library variant',
+      'cat-ds': 'Design system error',
+      'pin3-a': 'The primary button’s text falls below the minimum contrast',
+      'pin3-b': 'Route it to whoever maintains the library',
+      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. An illustration made for this page.',
+
+      'rules-title': 'What it asks of the agent',
+      'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
+      'rule1-title': 'What already exists comes first',
+      'rule1-text': 'The agent looks up the library’s components, variables and styles, and the rules already on record, such as a <code>DESIGN.md</code>. It applies everything as it is and then evaluates. It warns about every prior decision that affects accessibility, with its origin and its measurement, and fixes only with explicit authorization.',
+      'rule2-title': 'Compute, never estimate',
+      'rule2-text': 'Contrast is calculated from the token values, in every state and every mode. When a pair fails, you check the same pair in Figma’s own contrast check.',
+      'rule3-title': 'The evidence lives in the file',
+      'rule3-text': 'Each evaluated screen gets a short native Figma annotation, with the status and what there is to do. The full report comes in the chat, for you to save and hand to whoever builds.',
+      'rule4-title': 'Every annotation asks for an action',
+      'rule4-text': 'Its first line says what it is. It can be your decision, something to fix in this file or a design system error to route to whoever maintains the library. What passed stays in the report, off the canvas.',
+      'rule5-title': 'Design system with context for agents',
+      'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order.',
+
+      'sib-title': 'Sibling of A11Y.md',
+      'sib-intro': A11Y + ' is a file that teaches coding AI (Cursor, Claude, Copilot) to build accessible interfaces from the first line, following the Web Content Accessibility Guidelines (<abbr>WCAG</abbr> 2.2). DA11Y.md is its sibling for whoever designs. It brings the same rules to Figma, before the code exists.',
+      'banner-src': 'img/a11ymd-site-en.webp',
+      'banner-caption': 'The A11Y.md mark and the “Backed by Claude for Open Source Program” badge, redrawn in characters.',
+      'rel-inherits': '[inherits]',
+      'rel-own': '[its own]',
+      'rel-meet': '[meeting point]',
+      'rel1-title': 'The same numbers',
+      'rel1-text': 'The compliance profiles, the contrast and touch target thresholds and the severity model come from A11Y.md. A script checks that the two never drift apart, in English and in Portuguese.',
+      'rel2-title': 'The same way to use it',
+      'rel2-text': 'A file the agent reads by link, which loads each guide only when the task calls for it. Nothing to install.',
+      'rel3-title': 'What only exists on the canvas',
+      'rel3-text': 'Reading a Figma file, evaluating what the design system already decided and leaving the evidence as annotations in the file itself.',
+      'rel4-title': 'From design to code',
+      'rel4-text': 'The design report ends by asking for the code to follow A11Y.md, and the coding agent picks up where the design left off. Whoever codes does not need to load the design rules.',
+
+      'painting-alt': 'In light characters on a dark background, a melting clock drips from the edge of a table, and another drapes over a sleeping figure.',
+      'painting-title': '<i>The Persistence of Memory</i>, detail',
+      'painting-medium': 'Oil on canvas, 24.1 × 33 cm',
+      'painting-museum': 'Museum of Modern Art, New York',
+      'painting-redrawn': 'Redrawn here with text characters',
+      'trivia': 'Trivia',
+      'name-title': 'The name and the logo',
+      'name-p1': 'DA11Y.md is the D in design added to A11Y, short for accessibility. It can be read as "dally", which sounds like the name of the painter Salvador Dalí. The reference to art is deliberate, because it brings the project closer to design and creativity, which is where the people who will use it work.',
+      'name-p2': 'The "a" in the logo carries the melting clock from the painting <i>The Persistence of Memory</i>. The choice shows the project’s ambition, which is to be a persistent context in the agent’s memory. The agent should use the protocol every time it designs an interface.',
+      'name-p3': 'To fit in that memory, the protocol follows prompt engineering practices and loads each guide only when the task calls for it, which saves tokens. But the goal is not economy, it is accessibility.',
+
+      'contrib-title': 'How to contribute',
+      'contrib-intro': 'The most useful contribution is a field report. Tell us what happened when you used DA11Y.md on a real design. The ' + link('https://github.com/fecarrico/DA11Y.md/blob/main/CONTRIBUTING.md', 'contributing guide') + ' explains the rest.',
+      'contrib-tag': 'Contribute',
+      'card1-title': 'Send a field report',
+      'card1-text': 'What the agent did, what you expected and what happened.',
+      'card2-title': 'DA11Y.md repository',
+      'card2-text': 'The protocol, the component guides and the report templates, on GitHub.',
+      'card3-text': 'The sibling protocol, for the coding agent.',
+      'license': 'MIT License'
+    };
+
+    // textos que só os scripts usam
+    var TEXT = {
+      pt: {
+        'lang-name': 'Português',
+        'lang-status': 'Página em português.',
+        'motion-pause': 'Pausar animação',
+        'motion-resume': 'Retomar animação',
+        'tablist': 'Como chamar o protocolo',
+        'copied': 'Copiado.',
+        'copy-failed': 'Não deu para copiar sozinho. O texto já está selecionado. Copie com Ctrl+C, ou Command+C no Mac.'
+      },
+      en: {
+        'lang-name': 'English',
+        'lang-status': 'Page in English.',
+        'motion-pause': 'Pause animation',
+        'motion-resume': 'Resume animation',
+        'tablist': 'Ways to call the protocol',
+        'copied': 'Copied.',
+        'copy-failed': 'Could not copy it automatically. The text is already selected. Copy it with Ctrl+C, or Command+C on a Mac.'
+      }
+    };
+    var CODE = { pt: 'pt-BR', en: 'en' };
+
+    function attrPairs(el) {
+      return el.dataset.i18nAttr.split(/\s+/).map(function (pair) { return pair.split(':'); });
+    }
+
+    // o português é o que está no HTML agora, antes de qualquer troca
+    var PT = {};
+    var ptTitle = document.title;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      if (!(el.dataset.i18n in PT)) PT[el.dataset.i18n] = el.innerHTML;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+      attrPairs(el).forEach(function (p) { if (!(p[1] in PT)) PT[p[1]] = el.getAttribute(p[0]); });
+    });
+
+    var current = root.dataset.lang === 'en' ? 'en' : 'pt';
+    window.dallyText = function (key) { return TEXT[current][key]; };
+
+    var button = document.querySelector('.hero__lang');
+    var label = button && button.querySelector('.hero__lang-label');
+    var status = document.querySelector('[data-lang-status]');
+
+    function apply(lang) {
+      current = lang;
+      var dict = lang === 'en' ? EN : PT;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var html = dict[el.dataset.i18n];
+        if (html === undefined) { console.warn('[dally.md idioma] sem texto para', el.dataset.i18n); return; }
+        el.innerHTML = html;
+      });
+      document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+        attrPairs(el).forEach(function (p) { if (dict[p[1]] !== undefined) el.setAttribute(p[0], dict[p[1]]); });
+      });
+      // mensagem de cópia antiga ficaria no outro idioma
+      document.querySelectorAll('.copy__status').forEach(function (el) { el.textContent = ''; });
+      root.lang = CODE[lang];
+      root.dataset.lang = lang;
+      if (box) box.lang = CODE[lang];
+      document.title = lang === 'en' ? EN_TITLE : ptTitle;
+      if (button) {
+        var other = lang === 'en' ? 'pt' : 'en';
+        button.lang = CODE[other];
+        label.textContent = TEXT[other]['lang-name'];
+      }
+    }
+
+    try {
+      if (current === 'en') apply('en');
+      else if (box) box.lang = CODE.pt;
+    } finally {
+      root.classList.remove('lang-pending');
+    }
+
+    if (!button) return;
+    button.hidden = false;
+    button.addEventListener('click', function () {
+      var next = current === 'en' ? 'pt' : 'en';
+      try { localStorage.setItem(STORAGE_KEY, next); } catch (e) { /* vale só nesta visita */ }
+      apply(next);
+      // o foco fica no botão, que agora diz o outro idioma; a mensagem confirma a troca
+      if (status) {
+        status.lang = CODE[next];
+        status.textContent = '';
+        setTimeout(function () { status.textContent = TEXT[next]['lang-status']; }, 120);
+      }
+      document.dispatchEvent(new CustomEvent('dally:lang', { detail: { lang: next } }));
+    });
+  })();
+</script>
+<script type="module" src="hero.js"></script>
+<script type="module" src="drip.js"></script>
+<script type="module" src="ripples.js"></script>
+
+<script>
+  // Texturas em pontilhado de grão fino (pontos de 1 px numa grade de 2 px),
+  // sorteadas ponto a ponto: a faixa dos botões, a marca da aba ativa e o
+  // canto do bloco de cópia. Sem JavaScript, os componentes ficam sem textura.
+  (function () {
+    var INK = '#141414', PAPER = '#d1cfcb';
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), STEP = 2, seed = 11;
+    function rand() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function canvas(w, h) { var c = document.createElement('canvas'); c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); return c; }
+    var size = Math.max(1, Math.round(dpr));
+    // faixa do botão: p(u) é a chance de um ponto, de 0 (borda esquerda) a 1 (fim da faixa)
+    function strip(ground, dot, p) {
+      var W = 72, H = 44, c = canvas(W, H), g = c.getContext('2d');
+      g.fillStyle = ground; g.fillRect(0, 0, c.width, c.height); g.fillStyle = dot;
+      for (var y = 0; y < H; y += STEP) for (var x = 0; x < W; x += STEP) {
+        if (rand() < p(x / W)) g.fillRect(Math.round((x + rand() * 0.8) * dpr), Math.round((y + rand() * 0.8) * dpr), size, size);
+      }
+      return 'url(' + c.toDataURL() + ')';
+    }
+    // pontilhado livre sobre fundo transparente: p(u, v)
+    function free(w, h, p) {
+      var c = canvas(w, h), g = c.getContext('2d');
+      g.fillStyle = INK;
+      for (var y = 0; y < h; y += STEP / 2) for (var x = 0; x < w; x += STEP) {
+        if (rand() < p(x / w, y / h)) g.fillRect(Math.round((x + rand()) * dpr), Math.round((y + rand() * 0.5) * dpr), size, size);
+      }
+      return 'url(' + c.toDataURL() + ')';
+    }
+    var root = document.documentElement.style;
+    root.setProperty('--tex-a', strip(PAPER, INK, function (u) { return 0.75 * Math.pow(1 - u, 2); }));
+    root.setProperty('--tex-b', strip(PAPER, INK, function (u) { return 0.95 * Math.pow(1 - u, 1.3); }));
+    root.setProperty('--tex-a-ink', strip(INK, PAPER, function (u) { return 0.7 * Math.pow(1 - u, 2); }));
+    root.setProperty('--tex-b-ink', strip(INK, PAPER, function (u) { return 0.92 * Math.pow(1 - u, 1.3); }));
+    root.setProperty('--tex-tab', free(120, 7, function (u, v) { return (0.95 - Math.abs(v - 0.5)) * Math.min(1, Math.min(u, 1 - u) * 9); }));
+    root.setProperty('--tex-corner', free(64, 40, function (u, v) { return 0.6 * Math.pow(Math.max(0, 1 - Math.hypot(1 - u, v * 0.8)), 2.2); }));
+  })();
+
+  // Abas (A11Y.md, guide-tabs-accordion). Sem JavaScript, os três blocos ficam
+  // um embaixo do outro, cada um com o seu título (guide-loading-skeleton: o
+  // estado padrão é o legível). Aqui eles viram abas: um ponto de Tab para a
+  // lista inteira, na aba selecionada; as setas, Home e End trocam de aba e
+  // só o painel dela aparece; Tab numa aba entra no painel. Pelo APG, o
+  // painel recebe foco quando o primeiro conteúdo dele não é focável (abaixo).
+  (function () {
+    var FOCUSABLE = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    document.querySelectorAll('[data-tabs]').forEach(function (box) {
+      var panels = Array.prototype.slice.call(box.querySelectorAll('.tabs__panel'));
+      var list = document.createElement('div');
+      list.className = 'tabs__list';
+      list.setAttribute('role', 'tablist');
+      var say = function (key, pt) { return window.dallyText ? window.dallyText(key) : pt; };
+      list.setAttribute('aria-label', say('tablist', 'Como chamar o protocolo'));
+      var tabs = panels.map(function (panel, i) {
+        var heading = panel.querySelector('.tabs__heading');
+        var tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'tab';
+        tab.id = panel.id + '-aba';
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        tab.innerHTML = '<span class="tab__name"></span><span class="tab__mark" aria-hidden="true"></span>';
+        tab.firstChild.textContent = heading.textContent;
+        list.appendChild(tab);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        heading.hidden = true;
+        // padrão de abas do APG (W3C): o painel entra na ordem do Tab quando não
+        // tem nada focável dentro ou quando o primeiro conteúdo dele não é focável
+        var first = Array.prototype.find.call(panel.children, function (el) { return el !== heading; });
+        if (!panel.querySelector(FOCUSABLE) || !(first && first.matches(FOCUSABLE))) panel.tabIndex = 0;
+        return tab;
+      });
+      box.insertBefore(list, panels[0]);
+      function select(t, focus) {
+        tabs.forEach(function (x, i) {
+          var on = x === t;
+          x.setAttribute('aria-selected', String(on));
+          x.tabIndex = on ? 0 : -1;
+          panels[i].hidden = !on;
+        });
+        if (focus) t.focus();
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { select(t, true); });
+        t.addEventListener('keydown', function (e) {
+          var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+          if (k === undefined) return;
+          e.preventDefault();
+          select(tabs[(k + tabs.length) % tabs.length], true);
+        });
+      });
+      select(tabs[0], false);
+      box.classList.add('is-ready');
+      // troca de idioma: o nome de cada aba vem do título do painel, já traduzido
+      document.addEventListener('dally:lang', function () {
+        list.setAttribute('aria-label', say('tablist', 'Como chamar o protocolo'));
+        tabs.forEach(function (t, i) { t.firstChild.textContent = panels[i].querySelector('.tabs__heading').textContent; });
+      });
+    });
+  })();
+</script>
+<script>
+  // Controles do topo e frase do hero: acima de 64em, os dois ficam soltos sobre o
+  // céu. Se a frase encostar nos controles (espaçamento de texto do usuário, letra
+  // maior, a frase do outro idioma), os dois descem para o fluxo, como abaixo de
+  // 64em (SC 1.4.12, auditoria de 13/10). Sem JavaScript, não há controles.
+  (function () {
+    var hero = document.querySelector('.hero');
+    var tag = hero && hero.querySelector('.tagline__text');
+    var ctrls = hero ? Array.prototype.slice.call(hero.querySelectorAll('.hero__ctrl')) : [];
+    if (!tag || !ctrls.length || !window.ResizeObserver) return;
+    var GAP = 12;
+    function near(a, b) {
+      return a.left < b.right + GAP && b.left < a.right + GAP && a.top < b.bottom + GAP && b.top < a.bottom + GAP;
+    }
+    function check() {
+      hero.classList.remove('hero--stacked');
+      var t = tag.getBoundingClientRect();
+      hero.classList.toggle('hero--stacked', ctrls.some(function (c) { return !c.hidden && near(t, c.getBoundingClientRect()); }));
+    }
+    var ro = new ResizeObserver(check);
+    [hero, tag].concat(ctrls).forEach(function (el) { ro.observe(el); });
+    check();
+  })();
+
+  // copiar: o texto copiado é sempre o mesmo que está à vista no bloco
+  document.querySelectorAll('[data-copy]').forEach(function (button) {
+    var source = document.getElementById(button.dataset.copy);
+    var status = button.parentNode.querySelector('.copy__status');
+    function say(key, pt) {
+      var text = window.dallyText ? window.dallyText(key) : pt;
+      status.textContent = ''; setTimeout(function () { status.textContent = text; }, 120);
+    }
+    button.addEventListener('click', function () {
+      var fallback = function () {
+        window.getSelection().selectAllChildren(source);
+        say('copy-failed', 'Não deu para copiar sozinho. O texto já está selecionado. Copie com Ctrl+C, ou Command+C no Mac.');
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(source.textContent).then(function () { say('copied', 'Copiado.'); }, fallback);
+      } else { fallback(); }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+name: Publicar a página
+
+# A cada envio para a main, o gate estático do A11Y.md roda sobre a página e,
+# se passar, a pasta pagina/ vai para o GitHub Pages. Gate reprovado, página
+# não publicada: o REPORT.md é atualizado antes de cada entrega (A11Y.md §2).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # o gate compara o último commit do REPORT.md com o da página
+          fetch-depth: 0
+
+      - name: Gate do A11Y.md (verify-a11y.py)
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/fecarrico/A11Y.md/main/tools/verify-a11y.py \
+            -o "$RUNNER_TEMP/verify-a11y.py"
+          python3 "$RUNNER_TEMP/verify-a11y.py" . --src pagina
+
+      - name: Fontes hospedadas junto com a página
+        # decisão do projeto: no site, a fonte vai junto, sem chamar o Google Fonts
+        run: |
+          if grep -rnE 'fonts\.(googleapis|gstatic)\.com' pagina; then
+            echo "::error::A página ainda chama o Google Fonts. As fontes ficam em pagina/fonts/."
+            exit 1
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pagina
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

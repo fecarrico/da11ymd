@@ -1,0 +1,71 @@
+{
+  "cell": 3,
+  "mode": 0,
+  "contrast": 0.9,
+  "gamma": 0.8,
+  "parallax": 0.3,
+  "hparallax": 1,
+  "trunk": 1.2,
+  "water": 1.5,
+  "reflect": 1.15,
+  "twinkle": 0.9,
+  "logo": {
+    "light": 0.35,
+    "angle": 255,
+    "base": 0.85,
+    "halo": 1,
+    "reflection": 0.8
+  },
+  "layers": {
+    "ceu": {
+      "ink": 0.85,
+      "contrast": 2.5,
+      "gamma": 1.5
+    },
+    "nuvens": {
+      "ink": 0.6,
+      "contrast": 1,
+      "gamma": 1
+    },
+    "lua": {
+      "ink": 0.7,
+      "contrast": 1.1,
+      "gamma": 0.8
+    },
+    "morros": {
+      "ink": 0.65,
+      "contrast": 1.3,
+      "gamma": 1.55
+    },
+    "horizonte": {
+      "ink": 0.9,
+      "contrast": 1.5,
+      "gamma": 1.5
+    },
+    "rochas-esq": {
+      "ink": 1.15,
+      "contrast": 1.1,
+      "gamma": 1
+    },
+    "rochas-dir": {
+      "ink": 1,
+      "contrast": 1.3,
+      "gamma": 1.4
+    },
+    "agua": {
+      "ink": 0.8,
+      "contrast": 1.2,
+      "gamma": 1
+    },
+    "elefante-esq": {
+      "ink": 1,
+      "contrast": 1,
+      "gamma": 1
+    },
+    "elefante-dir": {
+      "ink": 1,
+      "contrast": 1,
+      "gamma": 1
+    }
+  }
+}
