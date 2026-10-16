@@ -495,6 +495,14 @@ h3, p { margin: 0; }
                       <span class="copy__status" role="status"></span>
                     </div>
                   </div>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="annotate-label">Para anotar a leitura</span>
+                    <pre><code id="pedido-anotar" data-i18n="annotate-prompt">Anote a leitura desta tela seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="pedido-anotar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-annotate-sr"> para anotar a leitura</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
                 <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e anota no arquivo o que encontrou.</p>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
@@ -808,6 +816,9 @@ h3, p { margin: 0; }
       'analyze-label': 'To analyze',
       'analyze-prompt': 'Analyze this screen strictly following the accessibility rules in the file ' + CORE,
       'copy-analyze-sr': ' to analyze',
+      'annotate-label': 'To annotate the reading',
+      'annotate-prompt': 'Annotate the reading of this screen strictly following the accessibility rules in the file ' + CORE,
+      'copy-annotate-sr': ' to annotate the reading',
       'chat-step2': 'The agent reads the protocol, applies your library first and annotates in the file what it found.',
       'chat-step3': 'When it points out a failing contrast, check the same pair in Figma’s contrast check, in the color picker. Do not use the auto-correct, because it changes the color that came from the library.',
 
