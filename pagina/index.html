@@ -444,6 +444,7 @@ h3, p { margin: 0; }
         <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código, e assim a interface já nasce acessível no protótipo.</p>
         <div class="actions">
           <a class="btn btn--primary" href="#comecar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="start">Como começar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></a>
+          <a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
           <a class="btn" href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="repo-btn">Repositório no GitHub</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
         </div>
       </div>
@@ -506,9 +507,9 @@ h3, p { margin: 0; }
             <p class="tabs__lead" data-i18n="skill-lead">Para chamar o protocolo com uma barra, em qualquer arquivo. Funciona em todos os planos.</p>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
-                <p data-i18n="skill-step1">No chat do agente, clique na caixa do pedido e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>.</p>
-              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
-                <p data-i18n="skill-step2">Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
+                <p data-i18n="skill-step1">Abra a página da skill na Comunidade do Figma e salve a skill na sua conta.</p>
+                <div class="actions"><a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a></div>
+                <p data-i18n="skill-step2">Se preferir criar a skill você mesmo, clique na caixa do pedido, no chat do agente, e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>. Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
                 <div class="copy copy--small">
                     <span class="copy__label" data-i18n="name-label">Nome</span>
                     <pre><code id="skill-nome">da11y</code></pre>
@@ -533,7 +534,7 @@ h3, p { margin: 0; }
                       <span class="copy__status" role="status"></span>
                     </div>
                   </div>
-              </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
                 <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code>. A skill fica disponível em todos os seus arquivos.</p>
               </div></li>
             </ol>
@@ -560,7 +561,7 @@ h3, p { margin: 0; }
     <section class="section" aria-labelledby="anotacoes">
       <div class="section__intro">
         <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">Cada anotação fica presa ao nó que ela comenta, e a primeira linha diz o que fazer com ela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela avaliada recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Fora ela, só há anotação quando há algo a fazer.</p>
+        <p data-i18n="notes-intro">Cada elemento em que o leitor de tela para recebe uma anotação só, presa a ele, com a ordem de leitura e o que é lido. Um erro cabe numa linha. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela avaliada recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você decide, acrescenta uma linha com ✓ e o seu nome.</p>
       </div>
       <figure class="pins">
         <div class="pins__row">
@@ -569,9 +570,9 @@ h3, p { margin: 0; }
             <div class="pin__line" aria-hidden="true"></div>
             <div class="pin__card">
               <span class="chip" data-i18n="cat-decision">Decisão sua</span>
-              <p class="pin__type" data-i18n="type-decision">Decisão sua · proposta do agente</p>
-              <p data-i18n="pin1-a">Botão só com ícone, no canto do aviso</p>
-              <p data-i18n="pin1-b">Nome proposto: Fechar aviso</p>
+              <p class="pin__type" data-i18n="type-decision">3 · aviso</p>
+              <p data-i18n="pin1-a">📢 "Aviso salvo"</p>
+              <p data-i18n="pin1-b">🔊 botão "Fechar aviso"</p>
             </div>
           </div>
           <div class="pin pin--fix">
@@ -579,9 +580,7 @@ h3, p { margin: 0; }
             <div class="pin__line" aria-hidden="true"></div>
             <div class="pin__card">
               <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
-              <p class="pin__type" data-i18n="cat-fix">Corrigir aqui</p>
-              <p data-i18n="pin2-a">A borda do campo E-mail tem a cor trocada nesta tela</p>
-              <p data-i18n="pin2-b">Volte à variante da biblioteca</p>
+              <p class="pin__type" data-i18n="pin2-type">🟠 Aqui: borda do campo E-mail com a cor trocada</p>
             </div>
           </div>
           <div class="pin pin--ds">
@@ -589,13 +588,11 @@ h3, p { margin: 0; }
             <div class="pin__line" aria-hidden="true"></div>
             <div class="pin__card">
               <span class="chip" data-i18n="cat-ds">Erro do design system</span>
-              <p class="pin__type" data-i18n="cat-ds">Erro do design system</p>
-              <p data-i18n="pin3-a">O texto do botão primário fica abaixo do contraste mínimo</p>
-              <p data-i18n="pin3-b">Encaminhe a quem mantém a biblioteca</p>
+              <p class="pin__type" data-i18n="pin3-type">🟠 Biblioteca: texto do botão abaixo do contraste mínimo</p>
             </div>
           </div>
         </div>
-        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Ilustração feita para esta página.</figcaption>
+        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Nelas, 🔊 marca o que o leitor de tela lê, 🔇 o que ele não lê e 📢 o que ele anuncia. Ilustração feita para esta página.</figcaption>
       </figure>
     </section>
 
@@ -611,7 +608,7 @@ h3, p { margin: 0; }
           </li>
           <li class="rule">
             <h3 data-i18n="rule2-title">Calcular, nunca estimar</h3>
-            <p data-i18n="rule2-text">O contraste é calculado a partir dos valores dos tokens, em todo estado e em todo modo. Quando um par reprova, você confere o mesmo par na checagem de contraste do próprio Figma.</p>
+            <p data-i18n="rule2-text">O contraste é calculado por um script que roda dentro do Figma, a partir dos valores dos tokens, em todo estado e em todo modo. Quando um par reprova, você confere o mesmo par na checagem de contraste do próprio Figma.</p>
           </li>
           <li class="rule">
             <h3 data-i18n="rule3-title">A evidência fica no arquivo</h3>
@@ -619,7 +616,7 @@ h3, p { margin: 0; }
           </li>
           <li class="rule">
             <h3 data-i18n="rule4-title">Cada anotação pede uma ação</h3>
-            <p data-i18n="rule4-text">A primeira linha diz o que é. Pode ser uma decisão sua, algo para corrigir neste arquivo ou um erro do design system para encaminhar a quem mantém a biblioteca. O que passou fica no relatório, fora do canvas.</p>
+            <p data-i18n="rule4-text">Uma anotação por elemento, com a ordem de leitura e o que o leitor de tela lê. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório, fora do canvas.</p>
           </li>
           <li class="rule">
             <h3 data-i18n="rule5-title">Design system com contexto para agentes</h3>
@@ -816,8 +813,9 @@ h3, p { margin: 0; }
 
       'skill-title': 'As a skill',
       'skill-lead': 'To call the protocol with a slash, in any file. It works on every plan.',
-      'skill-step1': 'In the agent’s chat, click the prompt box and choose Skills › Add skill › Start from scratch.',
-      'skill-step2': 'Fill in the three fields with these texts and click Add.',
+      'skill-step1': 'Open the skill’s page in the Figma Community and save the skill to your account.',
+      'community-btn': 'Skill in the Figma Community',
+      'skill-step2': 'If you’d rather create the skill yourself, click the prompt box in the agent’s chat and choose Skills › Add skill › Start from scratch. Fill in the three fields with these texts and click Add.',
       'name-label': 'Name',
       'copy-name': 'Copy name',
       'desc-label': 'Description',
@@ -838,32 +836,30 @@ h3, p { margin: 0; }
       'lib-note': 'Library guidelines are a feature of the Professional, Organization and Enterprise plans, and they apply to design requests with the library. To analyze a screen that already exists, use the chat or the skill.',
 
       'notes-title': 'How annotations appear in the file',
-      'notes-intro': 'Each annotation is pinned to the node it comments on, and its first line says what to do with it. Each type has its own category, so each person can filter what they have to do. The evaluated screen gets an annotation with its status, in the Accessibility category. Apart from it, there is an annotation only when there is something to do.',
+      'notes-intro': 'Each element where a screen reader stops gets one annotation, pinned to it, with the reading order and what is read. An error fits on one line. Each type has its own category, so each person can filter what they have to do. The evaluated screen gets an annotation with its status, in the Accessibility category. When you decide, you add a line with ✓ and your name.',
       'mock-toast': 'Notice saved',
       'mock-email': 'Email',
       'mock-continue': 'Continue',
       'cat-decision': 'Your decision',
-      'type-decision': 'Your decision · agent proposal',
-      'pin1-a': 'Icon-only button, in the corner of the notice',
-      'pin1-b': 'Proposed name: Close notice',
+      'type-decision': '3 · notice',
+      'pin1-a': '📢 "Notice saved"',
+      'pin1-b': '🔊 button "Close notice"',
       'cat-fix': 'Fix here',
-      'pin2-a': 'The Email field’s border has the wrong color on this screen',
-      'pin2-b': 'Go back to the library variant',
+      'pin2-type': '🟠 Here: Email field border in the wrong color',
       'cat-ds': 'Design system error',
-      'pin3-a': 'The primary button’s text falls below the minimum contrast',
-      'pin3-b': 'Route it to whoever maintains the library',
-      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. An illustration made for this page.',
+      'pin3-type': '🟠 Library: button text below the minimum contrast',
+      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. In them, 🔊 marks what the screen reader reads, 🔇 what it does not read and 📢 what it announces. An illustration made for this page.',
 
       'rules-title': 'What it asks of the agent',
       'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
       'rule1-title': 'What already exists comes first',
       'rule1-text': 'The agent looks up the library’s components, variables and styles, and the rules already on record, such as a <code>DESIGN.md</code>. It applies everything as it is and then evaluates. It warns about every prior decision that affects accessibility, with its origin and its measurement, and fixes only with explicit authorization.',
       'rule2-title': 'Compute, never estimate',
-      'rule2-text': 'Contrast is calculated from the token values, in every state and every mode. When a pair fails, you check the same pair in Figma’s own contrast check.',
+      'rule2-text': 'Contrast is calculated by a script that runs inside Figma, from the token values, in every state and every mode. When a pair fails, you check the same pair in Figma’s own contrast check.',
       'rule3-title': 'The evidence lives in the file',
       'rule3-text': 'Each evaluated screen gets a short native Figma annotation, with the status and what there is to do. The full report comes in the chat, for you to save and hand to whoever builds.',
       'rule4-title': 'Every annotation asks for an action',
-      'rule4-text': 'Its first line says what it is. It can be your decision, something to fix in this file or a design system error to route to whoever maintains the library. What passed stays in the report, off the canvas.',
+      'rule4-text': 'One annotation per element, with the reading order and what the screen reader reads. An error fits on one line. Measurements, caveats and what passed stay in the report, off the canvas.',
       'rule5-title': 'Design system with context for agents',
       'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order.',
 
