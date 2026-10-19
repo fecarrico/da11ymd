@@ -310,7 +310,7 @@ h3, p { margin: 0; }
 /* as decisões que já estão no desenho: tópicos com losango */
 .split .split__body > .topics { margin-block: 2em; }
 .topics { display: grid; gap: 1.25rem 2.5rem; margin: 0; padding: 0; list-style: none; }
-.topics li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.125rem 0; }
+.topics li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.125rem 0; align-content: start; }
 .topics li::before { content: ""; grid-row: 1; width: 0.6rem; height: 0.6rem; margin-top: 0.5rem; background: var(--ink); transform: rotate(45deg); }
 .topics__name { grid-column: 2; font-weight: 700; }
 .topics__text { grid-column: 2; color: var(--ink-2); }
@@ -445,7 +445,7 @@ h3, p { margin: 0; }
     <section class="section intro grid12" aria-labelledby="sobre">
       <div class="intro__text">
         <h2 id="sobre" data-i18n="intro-title">Acessibilidade antes do primeiro pixel</h2>
-        <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código, e assim a interface já nasce acessível no protótipo.</p>
+        <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar, analisar e anotar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código. Assim a interface já nasce acessível no protótipo, e quem desenvolve recebe no arquivo o que o leitor de tela vai ler.</p>
         <div class="actions">
           <a class="btn btn--primary" href="#comecar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="start">Como começar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></a>
           <a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
@@ -468,6 +468,21 @@ h3, p { margin: 0; }
           <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela.</span></li>
         </ul>
         <p data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</p>
+      </div>
+    </section>
+
+    <section class="section split" aria-labelledby="pedidos">
+      <div class="split__head">
+        <h2 id="pedidos" data-i18n="ask-title">O que pedir ao agente</h2>
+      </div>
+      <div class="split__body">
+        <p data-i18n="ask-intro">O protocolo atende três pedidos. Cada um grava uma coisa diferente no arquivo, e o que o agente mediu não se mistura com o que ele propõe.</p>
+        <ul class="topics">
+          <li><span class="topics__name" data-i18n="ask1-name">Criar</span><span class="topics__text" data-i18n="ask1-text">Você pede um componente ou uma tela. O agente procura o que a biblioteca já tem, desenha com ele e entrega a tela com a leitura anotada: em cada elemento em que o leitor de tela para, uma proposta do que é lido e em que ordem.</span></li>
+          <li><span class="topics__name" data-i18n="ask2-name">Analisar</span><span class="topics__text" data-i18n="ask2-text">Você pede a análise de uma tela que já existe. O agente mede contraste, área de toque, estados e texto, e anota o que precisa mudar: o que se corrige neste arquivo e o que é erro do design system. O que o desenho não responde, como se um card é um botão, vira uma pergunta. A leitura fica no relatório, como rascunho.</span></li>
+          <li><span class="topics__name" data-i18n="ask3-name">Anotar a leitura</span><span class="topics__text" data-i18n="ask3-text">Você pede a leitura quando o desenho fechou. É a entrega para quem desenvolve, o <span lang="en">handoff</span>. Cada elemento em que o leitor de tela para recebe uma proposta com a ordem e o que é lido. Você confere, edita se quiser e confirma com ✓ e o seu nome. Quem desenvolve implementa o que tem ✓ e pergunta sobre o que não tem.</span></li>
+        </ul>
+        <p data-i18n="ask-outro">Nos três pedidos, a tela recebe uma anotação com o status, as contagens do que há para fazer e onde está o relatório completo.</p>
       </div>
     </section>
 
@@ -508,7 +523,7 @@ h3, p { margin: 0; }
                     </div>
                   </div>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
-                <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e anota no arquivo o que encontrou.</p>
+                <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e grava no arquivo o resultado do pedido: a tela desenhada com a leitura, os erros da análise ou a leitura anotada para quem desenvolve.</p>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
                 <p data-i18n="chat-step3">Quando ele apontar um contraste reprovado, confira o mesmo par na checagem de contraste do Figma, no seletor de cor. Não use a correção automática, porque ela troca a cor que veio da biblioteca.</p>
               </div></li>
@@ -532,7 +547,7 @@ h3, p { margin: 0; }
                   </div>
                 <div class="copy copy--small">
                     <span class="copy__label" data-i18n="desc-label">Descrição</span>
-                    <pre><code id="skill-descricao" data-i18n="skill-desc">Cria e analisa jornadas, telas e componentes seguindo as regras de acessibilidade do DA11Y.md.</code></pre>
+                    <pre><code id="skill-descricao" data-i18n="skill-desc">Obrigatória para desenhar, editar, analisar ou revisar a acessibilidade de telas, fluxos ou componentes no Figma. Aplica o protocolo DA11Y.md, lido do GitHub, mede contraste, alvos e texto com código, e só termina com as anotações gravadas no arquivo.</code></pre>
                     <div class="copy__row">
                       <button type="button" class="btn" data-copy="skill-descricao"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-desc">Copiar descrição</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
                       <span class="copy__status" role="status"></span>
@@ -540,14 +555,14 @@ h3, p { margin: 0; }
                   </div>
                 <div class="copy">
                     <span class="copy__label" data-i18n="instr-label">Instruções</span>
-                    <pre><code id="skill-instrucoes" data-i18n="skill-instr">Ao criar, editar ou analisar jornadas, telas ou componentes, siga estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <pre><code id="skill-instrucoes" data-i18n="skill-instr">Ao desenhar ou avaliar jornadas, telas ou componentes, siga estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
                     <div class="copy__row">
                       <button type="button" class="btn" data-copy="skill-instrucoes"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-instr">Copiar instruções</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
                       <span class="copy__status" role="status"></span>
                     </div>
                   </div>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
-                <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code>. A skill fica disponível em todos os seus arquivos.</p>
+                <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code> ou <code>/da11y anote a leitura</code>. A skill fica disponível em todos os seus arquivos.</p>
               </div></li>
             </ol>
           </section>
@@ -573,7 +588,7 @@ h3, p { margin: 0; }
     <section class="section" aria-labelledby="anotacoes">
       <div class="section__intro">
         <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">Cada elemento em que o leitor de tela para recebe uma anotação só, presa a ele, com a ordem de leitura e o que é lido. Um erro cabe numa linha. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela avaliada recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você decide, acrescenta uma linha com ✓ e o seu nome.</p>
+        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Corrigir aqui é um defeito de uso neste arquivo. Erro do design system é um defeito da biblioteca, para quem cuida dela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta uma linha com ✓ e o seu nome.</p>
       </div>
       <figure class="pins">
         <div class="pins__row">
@@ -604,7 +619,7 @@ h3, p { margin: 0; }
             </div>
           </div>
         </div>
-        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Ilustração feita para esta página.</figcaption>
+        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
       </figure>
     </section>
 
@@ -616,7 +631,7 @@ h3, p { margin: 0; }
       <ul class="rules">
           <li class="rule">
             <h3 data-i18n="rule1-title">O que já existe vem primeiro</h3>
-            <p data-i18n="rule1-text">O agente procura os componentes, as variáveis e os estilos da biblioteca, e as regras já registradas, como um <code>DESIGN.md</code>. Ele aplica tudo como está e depois avalia. Ele avisa cada decisão prévia que afeta a acessibilidade, com a origem e a medida, e só corrige com autorização expressa.</p>
+            <p data-i18n="rule1-text">O agente procura os componentes, as variáveis e os estilos da biblioteca, e as regras já registradas, como um <code>DESIGN.md</code>. Ele aplica tudo como está e depois confere o resultado. Ele avisa cada decisão prévia que afeta a acessibilidade, com a origem e a medida, e só corrige com autorização expressa.</p>
           </li>
           <li class="rule">
             <h3 data-i18n="rule2-title">Calcular, nunca estimar</h3>
@@ -624,11 +639,11 @@ h3, p { margin: 0; }
           </li>
           <li class="rule">
             <h3 data-i18n="rule3-title">A evidência fica no arquivo</h3>
-            <p data-i18n="rule3-text">Cada tela avaliada recebe uma anotação curta, nativa do Figma, com o status e o que há para fazer. O relatório completo vai para uma página do próprio arquivo, e se repete no chat, para você salvar e entregar a quem desenvolve.</p>
+            <p data-i18n="rule3-text">Cada tela analisada recebe uma anotação curta, nativa do Figma, com o status e o que há para fazer. O relatório completo vai para uma página do próprio arquivo, e se repete no chat, para você salvar e entregar a quem desenvolve.</p>
           </li>
           <li class="rule">
             <h3 data-i18n="rule4-title">Cada anotação pede uma ação</h3>
-            <p data-i18n="rule4-text">Quando você pede a leitura, uma anotação por elemento, com a ordem de leitura e o que o leitor de tela lê. Numa avaliação, o canvas recebe só os erros e as perguntas de estrutura. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório, fora do canvas.</p>
+            <p data-i18n="rule4-text">Quando você pede a leitura, uma anotação por elemento, com a ordem de leitura e o que o leitor de tela lê. Numa análise, o canvas recebe só os erros e as perguntas de estrutura. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório, fora do canvas.</p>
           </li>
           <li class="rule">
             <h3 data-i18n="rule5-title">Design system com contexto para agentes</h3>
@@ -665,7 +680,7 @@ h3, p { margin: 0; }
         <div class="rel">
           <p class="rel__kind" data-i18n="rel-meet">[encontro]</p>
           <h3 data-i18n="rel4-title">Do desenho para o código</h3>
-          <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. Quem programa não precisa carregar as regras de design.</p>
+          <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</p>
         </div>
       </div>
     </section>
@@ -688,7 +703,7 @@ h3, p { margin: 0; }
         <h2 id="nome" data-i18n="name-title">O nome e o logotipo</h2>
         <div class="prose">
           <p data-i18n="name-p1">DA11Y.md é a soma do D de design com o A11Y de acessibilidade. O nome pode ser lido como "dally", que soa como o nome do pintor Salvador Dalí. A referência à arte é de propósito, porque aproxima o projeto do design e da criatividade, que é o meio de quem vai usá-lo.</p>
-          <p data-i18n="name-p2">O "a" do logotipo carrega o relógio derretido do quadro <i>A Persistência da Memória</i>. A escolha mostra a pretensão do projeto, que é ser um contexto persistente na memória do agente. O agente deve usar o protocolo sempre que desenha uma interface.</p>
+          <p data-i18n="name-p2">O "a" do logotipo carrega o relógio derretido do quadro <i>A Persistência da Memória</i>. A escolha mostra a pretensão do projeto, que é ser um contexto persistente na memória do agente. O agente deve usar o protocolo sempre que desenha, analisa ou anota uma interface.</p>
           <p data-i18n="name-p3">Para caber nessa memória, o protocolo segue boas práticas de engenharia de prompt e carrega cada guia só quando a tarefa pede, o que poupa tokens. Mas o foco não é economia, é acessibilidade.</p>
         </div>
       </div>
@@ -792,7 +807,7 @@ h3, p { margin: 0; }
       'tagline-b': 'accessible',
 
       'intro-title': 'Accessibility before the first pixel',
-      'intro-lede': 'DA11Y.md is a protocol for Figma’s artificial intelligence (<abbr>AI</abbr>) agent to design accessible interfaces. It brings to the design file the same rules that ' + A11Y + ' brings to code, so the interface is already accessible in the prototype.',
+      'intro-lede': 'DA11Y.md is a protocol for Figma’s artificial intelligence (<abbr>AI</abbr>) agent to design, analyze and annotate accessible interfaces. It brings to the design file the same rules that ' + A11Y + ' brings to code. That way the interface is already accessible in the prototype, and whoever builds receives in the file what the screen reader will read.',
       'start': 'Getting started',
       'repo-btn': 'Repository on GitHub',
 
@@ -810,6 +825,16 @@ h3, p { margin: 0; }
       'topic5-text': 'The sequence in which the screen reader goes through the screen.',
       'why-p2': 'When the design ignores these decisions, the developer fixes them in code, and the product ends up different from what was designed. DA11Y.md brings the rules to the moment the screen is drawn. That way design and code answer to the same numbers.',
 
+      'ask-title': 'What to ask the agent',
+      'ask-intro': 'The protocol answers three requests. Each one writes something different in the file, and what the agent measured never mixes with what it proposes.',
+      'ask1-name': 'Create',
+      'ask1-text': 'You ask for a component or a screen. The agent looks up what the library already has, designs with it and delivers the screen with its reading annotated: on each element where the screen reader stops, a proposal of what is read and in which order.',
+      'ask2-name': 'Analyze',
+      'ask2-text': 'You ask for the analysis of a screen that already exists. The agent measures contrast, touch targets, states and text, and annotates what needs to change: what is fixed in this file and what is a design system error. What the design does not answer, such as whether a card is a button, becomes a question. The reading stays in the report, as a draft.',
+      'ask3-name': 'Annotate the reading',
+      'ask3-text': 'You ask for the reading once the design is settled. It is the handoff to whoever builds. Each element where the screen reader stops gets a proposal with the order and what is read. You check it, edit it if you want and confirm with ✓ and your name. Whoever builds implements what has a ✓ and asks about what does not.',
+      'ask-outro': 'In all three requests, the screen gets an annotation with the status, the counts of what there is to do and where the full report is.',
+
       'chat-title': 'In the agent’s chat',
       'chat-lead': 'For one request at a time, with nothing to set up first.',
       'chat-step1': 'Write your prompt as usual and add the link to the protocol. For example:',
@@ -823,7 +848,7 @@ h3, p { margin: 0; }
       'annotate-label': 'To annotate the reading',
       'annotate-prompt': 'Annotate the reading of this screen strictly following the accessibility rules in the file ' + CORE,
       'copy-annotate-sr': ' to annotate the reading',
-      'chat-step2': 'The agent reads the protocol, applies your library first and annotates in the file what it found.',
+      'chat-step2': 'The agent reads the protocol, applies your library first and writes the request’s result in the file: the designed screen with its reading, the analysis’s errors, or the reading annotated for whoever builds.',
       'chat-step3': 'When it points out a failing contrast, check the same pair in Figma’s contrast check, in the color picker. Do not use the auto-correct, because it changes the color that came from the library.',
 
       'skill-title': 'As a skill',
@@ -834,12 +859,12 @@ h3, p { margin: 0; }
       'name-label': 'Name',
       'copy-name': 'Copy name',
       'desc-label': 'Description',
-      'skill-desc': 'Creates and analyzes flows, screens and components following the DA11Y.md accessibility rules.',
+      'skill-desc': 'Required to design, edit, analyze or review the accessibility of screens, flows or components in Figma. Applies the DA11Y.md protocol, read from GitHub, measures contrast, targets and text with code, and ends only with the annotations written in the file.',
       'copy-desc': 'Copy description',
       'instr-label': 'Instructions',
-      'skill-instr': 'When creating, editing or analyzing flows, screens or components, strictly follow the accessibility rules in the file ' + CORE,
+      'skill-instr': 'When designing or evaluating flows, screens or components, follow strictly the accessibility rules in the file ' + CORE,
       'copy-instr': 'Copy instructions',
-      'skill-step3': 'To use it, type <code>/da11y</code> in your prompt and write what you need, like <code>/da11y analyze this screen</code>. The skill is available in all your files.',
+      'skill-step3': 'To use it, type <code>/da11y</code> in your prompt and write what you need, like <code>/da11y analyze this screen</code> or <code>/da11y annotate the reading</code>. The skill is available in all your files.',
 
       'lib-title': 'In the library',
       'lib-lead': 'So the rule comes in by itself in designs made with your library.',
@@ -851,7 +876,7 @@ h3, p { margin: 0; }
       'lib-note': 'Library guidelines are a feature of the Professional, Organization and Enterprise plans, and they apply to design requests with the library. To analyze a screen that already exists, use the chat or the skill.',
 
       'notes-title': 'How annotations appear in the file',
-      'notes-intro': 'Each element where a screen reader stops gets one annotation, pinned to it, with the reading order and what is read. An error fits on one line. Each type has its own category, so each person can filter what they have to do. The evaluated screen gets an annotation with its status, in the Accessibility category. When you decide, you add a line with ✓ and your name.',
+      'notes-intro': 'The annotations are native to Figma and pinned to the element. A Proposal is what the agent proposes and you confirm: an element’s reading or a structural question. Fix here is a defect of use in this file. Design system error is a defect of the library, for whoever maintains it. Each type has its own category, so each person can filter what they have to do. The screen gets an annotation with its status, in the Accessibility category. When you confirm a proposal, you add a line with ✓ and your name.',
       'mock-toast': 'Notice saved',
       'mock-email': 'Email',
       'mock-continue': 'Continue',
@@ -863,18 +888,18 @@ h3, p { margin: 0; }
       'pin2-type': '🟠 HIGH · Here: Email field border in the wrong color',
       'cat-ds': 'Design system error',
       'pin3-type': '🟠 HIGH · Library: button text below the minimum contrast',
-      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. An illustration made for this page.',
+      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
 
       'rules-title': 'What it asks of the agent',
       'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
       'rule1-title': 'What already exists comes first',
-      'rule1-text': 'The agent looks up the library’s components, variables and styles, and the rules already on record, such as a <code>DESIGN.md</code>. It applies everything as it is and then evaluates. It warns about every prior decision that affects accessibility, with its origin and its measurement, and fixes only with explicit authorization.',
+      'rule1-text': 'The agent looks up the library’s components, variables and styles, and the rules already on record, such as a <code>DESIGN.md</code>. It applies everything as it is and then checks the result. It warns about every prior decision that affects accessibility, with its origin and its measurement, and fixes only with explicit authorization.',
       'rule2-title': 'Compute, never estimate',
       'rule2-text': 'Contrast is calculated by a script that runs inside Figma, from the token values, in every state and every mode. When a pair fails, you check the same pair in Figma’s own contrast check.',
       'rule3-title': 'The evidence lives in the file',
-      'rule3-text': 'Each evaluated screen gets a short native Figma annotation, with the status and what there is to do. The full report goes onto a page of the file itself, and is repeated in the chat, for you to save and hand to whoever builds.',
+      'rule3-text': 'Each analyzed screen gets a short native Figma annotation, with the status and what there is to do. The full report goes onto a page of the file itself, and is repeated in the chat, for you to save and hand to whoever builds.',
       'rule4-title': 'Every annotation asks for an action',
-      'rule4-text': 'When you ask for the reading, one annotation per element, with the reading order and what the screen reader reads. On an evaluation, the canvas gets only the errors and the structural questions. An error fits on one line. Measurements, caveats and what passed stay in the report, off the canvas.',
+      'rule4-text': 'When you ask for the reading, one annotation per element, with the reading order and what the screen reader reads. In an analysis, the canvas gets only the errors and the structural questions. An error fits on one line. Measurements, caveats and what passed stay in the report, off the canvas.',
       'rule5-title': 'Design system with context for agents',
       'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order.',
 
@@ -892,7 +917,7 @@ h3, p { margin: 0; }
       'rel3-title': 'What only exists on the canvas',
       'rel3-text': 'Reading a Figma file, evaluating what the design system already decided and leaving the evidence as annotations in the file itself.',
       'rel4-title': 'From design to code',
-      'rel4-text': 'The design report ends by asking for the code to follow A11Y.md, and the coding agent picks up where the design left off. Whoever codes does not need to load the design rules.',
+      'rel4-text': 'The design report ends by asking for the code to follow A11Y.md, and the coding agent picks up where the design left off. What has a ✓ arrives as a decision, and what does not arrives as a question. Whoever codes does not need to load the design rules.',
 
       'painting-alt': 'In light characters on a dark background, a melting clock drips from the edge of a table, and another drapes over a sleeping figure.',
       'painting-title': '<i>The Persistence of Memory</i>, detail',
@@ -902,7 +927,7 @@ h3, p { margin: 0; }
       'trivia': 'Trivia',
       'name-title': 'The name and the logo',
       'name-p1': 'DA11Y.md is the D in design added to A11Y, short for accessibility. It can be read as "dally", which sounds like the name of the painter Salvador Dalí. The reference to art is deliberate, because it brings the project closer to design and creativity, which is where the people who will use it work.',
-      'name-p2': 'The "a" in the logo carries the melting clock from the painting <i>The Persistence of Memory</i>. The choice shows the project’s ambition, which is to be a persistent context in the agent’s memory. The agent should use the protocol every time it designs an interface.',
+      'name-p2': 'The "a" in the logo carries the melting clock from the painting <i>The Persistence of Memory</i>. The choice shows the project’s ambition, which is to be a persistent context in the agent’s memory. The agent should use the protocol every time it designs, analyzes or annotates an interface.',
       'name-p3': 'To fit in that memory, the protocol follows prompt engineering practices and loads each guide only when the task calls for it, which saves tokens. But the goal is not economy, it is accessibility.',
 
       'contrib-title': 'How to contribute',
