@@ -67,7 +67,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { background: var(--paper); color: var(--ink); }
+html { background: var(--paper); color: var(--ink); scroll-padding-top: 4.5rem; }
 /* em inglês, a página espera a tradução (script de idioma) para aparecer; se o script falhar,
    ela aparece assim mesmo em 1,5 s, em português (A11Y.md §6, Content Held Hostage) */
 .lang-pending body { visibility: hidden; animation: lang-reveal 0s 1.5s forwards; }
@@ -171,7 +171,6 @@ h3, p { margin: 0; }
 
 /* anotações: o canvas do Figma, com cada anotação presa a um componente */
 .pins { margin: 2.5rem 0 0; }
-.pins__row { display: grid; gap: 3rem 2rem; }
 .pin { display: grid; grid-template-rows: auto auto 1fr; justify-items: start; }
 .pin__node { display: flex; align-items: flex-end; min-height: 5.5rem; padding: 0 0 0.25rem 0.5rem; }
 .pin__line { width: 0; height: 2.25rem; margin-left: 2.25rem; border-left: 2px dashed var(--cat, var(--fig-pink)); }
@@ -188,6 +187,100 @@ h3, p { margin: 0; }
 .mock-toast { display: inline-flex; align-items: center; gap: 1rem; padding: 0.625rem 0.75rem 0.625rem 1rem; border: 2px solid var(--ink); background: var(--paper); font-size: 0.9375rem; }
 .mock-x { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; font-size: 1.125rem; line-height: 1; }
 .pins figcaption { margin-top: 1.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+.pin--frame { --cat: var(--fig-pink); }
+.pin__done { color: var(--fig-text); font-weight: 700; }
+.mock-status { display: grid; gap: 0.25rem; padding: 0.75rem 1rem; border: 2px solid var(--ink); background: var(--paper); font-size: 0.9375rem; }
+.mock-status__title { font: 400 1.125rem/1.2 var(--display); margin-bottom: 0.25rem; }
+
+/* o que pedir: cada pedido lido da esquerda para a direita, você pede, o agente faz, no arquivo fica */
+.flow { margin: 2.5rem 0 0; }
+.flow__head { display: none; }
+.flow__row { display: grid; gap: 1.75rem 2rem; padding: 2.25rem 0; border-top: 1px solid var(--rule); }
+.flow__row:last-of-type { border-bottom: 1px solid var(--rule); }
+.flow__ask h3 { font: 400 1.75rem/1.2 var(--display); }
+.flow__label { margin: 1rem 0 0.5rem; font: 700 1rem/1.4 var(--body); }
+.flow__ask .flow__label { margin-top: 0.75rem; }
+.flow__say { color: var(--ink-2); }
+.flow .stepper { gap: 1rem; }
+.flow .step { grid-template-columns: 32px minmax(0, 1fr); gap: 0 0.875rem; }
+.flow .step__num { width: 32px; height: 32px; font-size: 1rem; }
+.flow .step__body { padding-top: 0.3rem; gap: 0; color: var(--ink-2); }
+.flow .step:not(:last-child)::after { left: 15px; top: 36px; bottom: calc(-1rem + 4px); }
+.flow__file { display: grid; gap: 1.25rem; align-content: start; }
+.flow .pin__node { min-height: 0; padding-top: 0.25rem; }
+.flow .pin__card { max-width: 26rem; }
+.flow figcaption { margin-top: 1.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+
+/* a tela desenhada: o mesmo componente nas figuras das decisões e das anotações */
+.mock-screen { display: grid; gap: 1.25rem; width: min(24rem, 100%); padding: 1.5rem 1.25rem; border: 2px solid var(--ink); background: var(--paper-2); }
+.mock-screen .mock-field { width: 100%; }
+.mock-screen .btn--mock { min-width: 0; width: 100%; }
+.mock-row { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0.625rem; align-items: start; }
+.mock-order { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; margin-top: 0.1rem; border: 1.5px solid var(--ink); border-radius: 50%; font: 400 0.875rem/1 var(--display); }
+.mock-row .btn--mock { align-self: center; }
+.mock-row:last-child .mock-order { margin-top: 0.75rem; }
+.mock-input--focus { outline: 3px solid var(--ink); outline-offset: 3px; }
+.mock-error { display: flex; gap: 0.5rem; align-items: baseline; margin-top: 0.5rem; font-size: 0.9375rem; }
+.mock-error b { flex: none; display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 0.75rem; line-height: 1; }
+.decisions-fig { display: grid; gap: 2.5rem; margin: 2.5rem 0 0; }
+.decisions-fig figcaption { font-size: 1.0625rem; color: var(--ink); max-width: 34em; }
+
+/* o canvas das anotações: a tela à esquerda, as quatro anotações à direita; a cor do contorno liga as duas */
+.canvas { display: grid; gap: 2.5rem; }
+.mock-screen--pinned { outline: 2px solid var(--fig-pink); outline-offset: 6px; margin: 6px; }
+.mock--decision { --cat: var(--fig-blue); }
+.mock--fix { --cat: var(--fig-orange); }
+.mock--ds { --cat: var(--fig-violet); }
+.mock-screen .mock-toast { justify-self: start; }
+.canvas__cards { display: grid; gap: 1.5rem; align-content: start; }
+
+/* as regras com vinheta: a figura à direita do texto */
+.vig-two { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 0.75rem; align-items: center; }
+.vig-btn { display: inline-grid; place-items: center; min-width: 6rem; min-height: 44px; padding: 0 1rem; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); font: 700 0.9375rem/1.2 var(--body); }
+.vig-btn--fake { border-style: dashed; border-radius: 10px; background: var(--paper); color: var(--ink); }
+.vig-cap { font-size: 0.9375rem; color: var(--ink-2); white-space: nowrap; }
+.vig-pair { display: grid; justify-items: center; gap: 0.25rem; padding: 1rem 1.25rem; border: 2px solid var(--ink); background: var(--paper-2); }
+.vig-pair__sample { font: 400 2.5rem/1 var(--display); }
+.vig-pair__ratio { font: 500 0.9375rem/1.4 var(--mono); }
+
+/* irmão do A11Y.md: os dois arquivos e as três ligações, no fio com nó quadrado do hero */
+.kin { margin: 3rem 0 0; display: grid; gap: 2rem; }
+.kin__node { display: grid; gap: 0.5rem; align-content: start; padding: 1.5rem; border: 2px solid var(--ink); background: var(--paper-2); }
+.kin__title { font: 400 1.75rem/1.1 var(--display); }
+.kin__sub { color: var(--ink-2); }
+.kin__node h3 { font: 400 1.25rem/1.25 var(--display); }
+.kin__node p:last-child { color: var(--ink-2); }
+.kin__node .kin__kind { margin-top: 1rem; }
+.kin__links { display: grid; gap: 1.75rem; margin: 0; padding: 0; list-style: none; align-content: center; }
+.kin__link { display: grid; gap: 0.375rem; }
+.kin__kind { font-weight: 700; }
+.kin__link h3 { font: 400 1.25rem/1.25 var(--display); }
+.kin__link > p:last-of-type { color: var(--ink-2); }
+.kin__arrow { display: none; }
+.kin figcaption { margin-top: 0.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+@media (min-width: 60em) {
+  .flow__head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 5fr); gap: 2rem; padding-bottom: 0.75rem; font-weight: 700; }
+  .flow__head p { margin: 0; }
+  .flow__row { grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 5fr); padding: 2.5rem 0; }
+  .flow__label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .decisions-fig { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 4rem; align-items: center; }
+  .decisions-fig .topics { grid-template-columns: minmax(0, 1fr); }
+  .decisions-fig figcaption { grid-column: 1 / -1; }
+  .decisions-fig .mock-screen { justify-self: end; }
+  .canvas { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
+  .canvas__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rules { max-width: 54rem; }
+  .rule--vig { grid-template-columns: minmax(0, 1fr) 14rem; column-gap: 2.5rem; }
+  .rule--vig h3, .rule--vig p { grid-column: 1; }
+  .rule__vig { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .kin { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); gap: 2.5rem; }
+  .kin figcaption { grid-column: 1 / -1; }
+  .kin__arrow { display: block; position: relative; height: 2px; margin-top: 0.75rem; background: var(--ink); }
+  .kin__arrow::before { content: ""; position: absolute; left: 0; top: -3px; width: 8px; height: 8px; background: var(--ink); }
+  .kin__arrow::after { content: ""; position: absolute; right: 1px; top: -4px; width: 8px; height: 8px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); transform: rotate(45deg); }
+  .kin__link--back .kin__arrow::before { left: auto; right: 0; }
+  .kin__link--back .kin__arrow::after { right: auto; left: 1px; transform: rotate(-135deg); }
+}
 
 /* curiosidade: faixa escura, papel sobre tinta, como a ilustração em ASCII */
 .trivia { margin-inline: -1rem; padding: 5rem 1rem; background: var(--ink); color: var(--paper); }
@@ -248,8 +341,8 @@ h3, p { margin: 0; }
 
 /* abas */
 .tabs { margin-top: 1.75rem; }
-.tabs__list { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; padding: 0 0.75rem 0.25rem; margin: 0 -0.75rem; border-bottom: 1px solid var(--ink); }
-.tab { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 48px; padding: 0 0.25rem; border: 0; background: none; color: var(--ink); font: 400 1.0625rem/1.2 var(--body); cursor: pointer; }
+.tabs__list { display: flex; flex-wrap: nowrap; gap: 0 2rem; padding: 0 0.75rem 0.25rem; margin: 0 -0.75rem; border-bottom: 1px solid var(--ink); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.tab { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 48px; white-space: nowrap; scroll-snap-align: start; padding: 0 0.25rem; border: 0; background: none; color: var(--ink); font: 400 1.0625rem/1.2 var(--body); cursor: pointer; }
 .tab::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; }
 .tab[aria-selected="true"] { font-weight: 700; }
 .tab[aria-selected="true"]::before { background: var(--ink); }
@@ -262,16 +355,17 @@ h3, p { margin: 0; }
 
 /* passos numerados, na vertical: círculos ligados por pontilhado */
 .stepper { display: grid; gap: 2.25rem; margin: 0; padding: 0; list-style: none; }
-.step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 0 1.25rem; }
+.step { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 1.25rem; }
 .step__num { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); font: 400 1.25rem/1 var(--display); }
 .step__body { min-width: 0; display: grid; gap: 2em; align-content: start; padding-top: 0.55rem; }
 .step:not(:last-child)::after { content: ""; position: absolute; left: 21px; top: 50px; bottom: calc(-2.25rem + 6px); border-left: 2px dotted var(--ink-2); }
 
 /* bloco para copiar: o campo com rótulo e linha, com cara de código */
-.copy { display: grid; gap: 0.5rem; }
+.copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; min-width: 0; }
+.copy pre { min-width: 0; }
 .copy__label { display: flex; align-items: center; gap: 0.75rem; font: 500 0.875rem/1.4 var(--mono); color: var(--ink); }
 .copy__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
-.copy pre { margin: 0; padding: 0.875rem 4.5rem 0.875rem 1rem; border: 2px solid var(--ink); background: var(--paper) var(--tex-corner, none) right top / 64px 40px no-repeat; font: 0.9375rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.copy pre { margin: 0; padding: 0.875rem 4.5rem 0.875rem 1rem; border: 2px solid var(--ink); background: var(--paper) var(--tex-corner, none) right top / 64px 40px no-repeat; font: 0.9375rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: break-word; }
 .copy pre code { font-size: 1em; }
 .copy__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 0.5rem; }
 .copy__status { min-height: 1.6em; font-size: 0.9375rem; }
@@ -342,9 +436,47 @@ h3, p { margin: 0; }
 .sib-banner figcaption { margin-top: 0.75rem; font-size: 0.9375rem; color: var(--ink-2); }
 .rels { display: grid; gap: 2.5rem 2rem; margin-top: 3rem; }
 .rel { display: grid; gap: 0.5rem; align-content: start; }
-.rel__kind { font: 500 0.9375rem/1.4 var(--mono); }
+.rel__kind { font: 400 0.9375rem/1.4 var(--body); color: var(--ink-2); }
 .rel h3 { font: 400 1.375rem/1.25 var(--display); text-wrap: balance; }
 .rel p:last-child { color: var(--ink-2); }
+
+/* ritmo: as anotações colam em "O que pedir"; "Como começar" ganha ar antes */
+.section--tight { padding-top: 2rem; }
+.section--lead { padding-top: 6rem; }
+
+/* o projeto em números, logo depois dos botões da abertura */
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 0.5rem 2.5rem; margin: 2.5rem 0 0; padding: 0; list-style: none; font-size: 0.9375rem; color: var(--ink-2); }
+@media (max-width: 30em) { .copy pre { padding-right: 1rem; background-image: none; } }
+@media (max-width: 24em) { .facts { grid-template-columns: minmax(0, 1fr); } .copy pre { overflow-wrap: anywhere; } }
+.facts strong { color: var(--ink); }
+
+/* o pedido: três opções no mesmo desenho das abas, e só o bloco escolhido aparece */
+.prompts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+.verbs { display: flex; flex-wrap: wrap; gap: 0 2rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+.verbs__legend { padding: 0; margin-bottom: 0.25rem; font-weight: 700; }
+.verb { position: relative; display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; }
+.verb input { position: absolute; width: 1px; height: 1px; margin: -1px; opacity: 0; }
+.verb span { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0 0.25rem; }
+.verb span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--ink); flex: none; }
+.verb input:checked + span { font-weight: 700; }
+.verb input:checked + span::before { background: var(--ink); }
+.verb input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 3px; }
+.prompts:has(.verb input:checked) .copy__label { display: none; }
+.prompts:has(input[value="criar"]:checked) .copy[data-verb]:not([data-verb="criar"]) { display: none; }
+.prompts:has(input[value="analisar"]:checked) .copy[data-verb]:not([data-verb="analisar"]) { display: none; }
+.prompts:has(input[value="anotar"]:checked) .copy[data-verb]:not([data-verb="anotar"]) { display: none; }
+
+/* barra de seções: vem depois do hero e fica no topo durante a rolagem */
+.topbar { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--ink); }
+.topbar__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; min-height: 3.5rem; }
+.topbar__brand { font: 400 1.25rem/1 var(--display); color: var(--ink); text-decoration: none; }
+.topbar__list { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
+.topbar__list a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); font-weight: 700; text-decoration: none; }
+.topbar__brand:hover, .topbar__list a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+@media (max-width: 40em) {
+  .topbar__brand { display: none; }
+  .topbar__list { width: 100%; justify-content: space-between; gap: 0 1rem; }
+}
 
 @media (min-width: 48em) {
   .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -356,19 +488,25 @@ h3, p { margin: 0; }
   .intro { padding-bottom: 7rem; }
 }
 @media (min-width: 60em) {
-  .pins__row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .rules { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rules { grid-template-columns: minmax(0, 1fr); max-width: 40rem; }
   .rels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .section { padding-block: 5rem; }
+  .section--lead { padding-top: 8rem; }
   .intro { padding-top: 6rem; padding-bottom: 11rem; }
   .intro h2 { max-width: 22ch; }
   .intro .intro__text { grid-column: 1 / span 7; }
-  .split__head { grid-column: 1 / span 4; align-self: start; position: sticky; top: 2rem; }
+  .split__head { grid-column: 1 / span 4; align-self: start; position: sticky; top: 5rem; }
   /* com um bloco em largura cheia embaixo, o título não acompanha a rolagem: ele desceria por cima do bloco */
   .split--wide .split__head { position: static; }
   .split__body { grid-column: 6 / span 7; }
   .split__wide { grid-column: 1 / -1; }
   .split h2 { margin-bottom: 0; }
+  /* contribuir: o relato de campo é o protagonista, deitado em largura cheia; os dois links embaixo */
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card--lead { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; }
+  .card--lead .card__img { grid-column: 1; grid-row: 1; border-bottom: 0; border-right: 2px solid var(--ink); }
+  .card--lead .card__body { grid-column: 2; grid-row: 1; align-content: center; padding: 2rem 2.5rem; }
+  .card--lead .card__title { font-size: 2rem; }
 }
 @media (max-width: 30em) {
   .btn { min-width: 0; width: 100%; white-space: normal; }
@@ -397,6 +535,8 @@ h3, p { margin: 0; }
   .card:focus-within { outline: 3px solid CanvasText; outline-offset: 4px; }
   .btn:focus-visible::after, .tab:focus-visible::after, .card:focus-within::after { display: none; }
   .tab[aria-selected="true"] { text-decoration: underline; }
+  .verb input:checked + span { text-decoration: underline; }
+  .verb input:focus-visible + span { outline-color: CanvasText; }
   .hero__tagline .tagline__text, .hero__tagline.is-textured .tagline__text { color: CanvasText; background: none; -webkit-background-clip: border-box; background-clip: border-box; }
   .tagline__halo { display: none; }
   .tagline__text .tagline__f { forced-color-adjust: none; background: CanvasText; }
@@ -440,6 +580,17 @@ h3, p { margin: 0; }
   <canvas class="hero__canvas" aria-hidden="true"></canvas>
 </header>
 
+<nav class="topbar page" aria-label="Seções da página" data-i18n-attr="aria-label:nav-label">
+  <div class="wrap topbar__row">
+    <a class="topbar__brand" href="#conteudo">DA11Y.md</a>
+    <ul class="topbar__list">
+      <li><a href="#pedidos" data-i18n="nav-ask">O que pedir</a></li>
+      <li><a href="#comecar" data-i18n="nav-start">Como começar</a></li>
+      <li><a href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener">GitHub<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+    </ul>
+  </div>
+</nav>
+
 <main class="page" id="conteudo" tabindex="-1">
   <div class="wrap">
     <section class="section intro grid12" aria-labelledby="sobre">
@@ -449,44 +600,201 @@ h3, p { margin: 0; }
         <div class="actions">
           <a class="btn btn--primary" href="#comecar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="start">Como começar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></a>
           <a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
-          <a class="btn" href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="repo-btn">Repositório no GitHub</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
         </div>
+        <ul class="facts" aria-label="O projeto em números" data-i18n-attr="aria-label:facts-label">
+          <li data-i18n="fact-1"><strong>0.1.0</strong>, em teste</li>
+          <li data-i18n="fact-2"><strong>27</strong> guias de componente</li>
+          <li data-i18n="fact-3">português e inglês</li>
+          <li data-i18n="fact-4"><strong>4</strong> testes de campo</li>
+        </ul>
       </div>
     </section>
 
-    <section class="section split" aria-labelledby="por-que">
+    <section class="section split split--wide" aria-labelledby="por-que">
       <div class="split__head">
         <h2 id="por-que" data-i18n="why-title">Por que começar pelo design</h2>
       </div>
       <div class="split__body">
         <p data-i18n="why-p1">Muitas decisões de acessibilidade são tomadas antes de o código existir. Quando o desenho chega a quem desenvolve, estas já estão nele:</p>
-        <ul class="topics">
-          <li><span class="topics__name" data-i18n="topic1-name">Contraste</span><span class="topics__text" data-i18n="topic1-text">A cor do texto e dos ícones contra o fundo.</span></li>
-          <li><span class="topics__name" data-i18n="topic2-name">Área de toque</span><span class="topics__text" data-i18n="topic2-text">O tamanho de cada botão e de cada link.</span></li>
-          <li><span class="topics__name" data-i18n="topic3-name">Estados de foco</span><span class="topics__text" data-i18n="topic3-text">Como cada controle aparece quando o teclado chega nele.</span></li>
-          <li><span class="topics__name" data-i18n="topic4-name">Mensagens de erro</span><span class="topics__text" data-i18n="topic4-text">O que avisa que algo deu errado e como resolver.</span></li>
-          <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela.</span></li>
-        </ul>
-        <p data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</p>
       </div>
+        <figure class="decisions-fig split__wide">
+          <div class="mock-screen mock-screen--order" aria-hidden="true">
+            <div class="mock-row"><span class="mock-order">1</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock-input"></span></div></div>
+            <div class="mock-row"><span class="mock-order">2</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-password">Senha</span><span class="mock-input mock-input--focus"></span><span class="mock-error"><b>!</b><span data-i18n="mock-error">Senha incorreta. Tente de novo ou redefina a senha.</span></span></div></div>
+            <div class="mock-row"><span class="mock-order">3</span><span class="btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-enter">Entrar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
+          </div>
+          <ul class="topics topics--column">
+            <li><span class="topics__name" data-i18n="topic1-name">Contraste</span><span class="topics__text" data-i18n="topic1-text">A cor do texto e dos ícones contra o fundo. Aqui, 15,18:1.</span></li>
+            <li><span class="topics__name" data-i18n="topic2-name">Área de toque</span><span class="topics__text" data-i18n="topic2-text">O tamanho de cada botão e de cada link. Aqui, 48 px de altura.</span></li>
+            <li><span class="topics__name" data-i18n="topic3-name">Estados de foco</span><span class="topics__text" data-i18n="topic3-text">Como cada controle aparece quando o teclado chega nele. Aqui, um contorno de 3 px.</span></li>
+            <li><span class="topics__name" data-i18n="topic4-name">Mensagens de erro</span><span class="topics__text" data-i18n="topic4-text">O que avisa que algo deu errado e como resolver, em texto, perto do campo.</span></li>
+            <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela: 1, 2, 3.</span></li>
+          </ul>
+          <figcaption data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</figcaption>
+        </figure>
     </section>
 
-    <section class="section split" aria-labelledby="pedidos">
-      <div class="split__head">
+    <section class="section" aria-labelledby="pedidos">
+      <div class="section__intro">
         <h2 id="pedidos" data-i18n="ask-title">O que pedir ao agente</h2>
-      </div>
-      <div class="split__body">
         <p data-i18n="ask-intro">O protocolo atende três pedidos. Cada um grava uma coisa diferente no arquivo, e o que o agente mediu não se mistura com o que ele propõe.</p>
-        <ul class="topics">
-          <li><span class="topics__name" data-i18n="ask1-name">Criar</span><span class="topics__text" data-i18n="ask1-text">Você pede um componente ou uma tela. O agente procura o que a biblioteca já tem, desenha com ele e entrega a tela com a leitura anotada: em cada elemento em que o leitor de tela para, uma proposta do que é lido e em que ordem.</span></li>
-          <li><span class="topics__name" data-i18n="ask2-name">Analisar</span><span class="topics__text" data-i18n="ask2-text">Você pede a análise de uma tela que já existe. O agente mede contraste, área de toque, estados e texto, e anota o que precisa mudar: o que se corrige neste arquivo e o que é erro do design system. O que o desenho não responde, como se um card é um botão, vira uma pergunta. A leitura fica no relatório, como rascunho.</span></li>
-          <li><span class="topics__name" data-i18n="ask3-name">Anotar a leitura</span><span class="topics__text" data-i18n="ask3-text">Você pede a leitura quando o desenho fechou. É a entrega para quem desenvolve, o <span lang="en">handoff</span>. Cada elemento em que o leitor de tela para recebe uma proposta com a ordem e o que é lido. Você confere, edita se quiser e confirma com ✓ e o seu nome. Quem desenvolve implementa o que tem ✓ e pergunta sobre o que não tem.</span></li>
-        </ul>
-        <p data-i18n="ask-outro">Nos três pedidos, a tela recebe uma anotação com o status, as contagens do que há para fazer e onde está o relatório completo.</p>
       </div>
+      <figure class="flow">
+        <div class="flow__head" aria-hidden="true">
+          <p data-i18n="flow-you">Você pede</p>
+          <p data-i18n="flow-agent">O agente faz</p>
+          <p data-i18n="flow-file">No arquivo fica</p>
+        </div>
+
+        <article class="flow__row">
+          <div class="flow__ask">
+            <h3 data-i18n="ask1-name">Criar</h3>
+            <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
+            <p class="flow__say" data-i18n="ask1-say">“Crie este componente seguindo as regras do DA11Y.md.”</p>
+          </div>
+          <div class="flow__steps">
+            <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask1-s1">Procura o que a biblioteca já tem.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask1-s2">Desenha com ela, sem trocar token nem recriar componente.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask1-s3">Entrega a tela com a leitura anotada em cada elemento.</p></div></li>
+            </ol>
+          </div>
+          <div class="flow__file">
+            <h4 class="flow__label" data-i18n="flow-file">No arquivo fica</h4>
+            <div class="pin pin--decision">
+              <div class="pin__node" aria-hidden="true"><span class="mock btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
+              <div class="pin__line" aria-hidden="true"></div>
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-decision">Proposta</span>
+                <p class="pin__type" data-i18n="flow1-type">3 · botão</p>
+                <p data-i18n="flow1-a">🔊 botão "Continuar"</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="flow__row">
+          <div class="flow__ask">
+            <h3 data-i18n="ask2-name">Analisar</h3>
+            <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
+            <p class="flow__say" data-i18n="ask2-say">“Analise esta tela seguindo as regras do DA11Y.md.”</p>
+          </div>
+          <div class="flow__steps">
+            <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask2-s1">Mede contraste, área de toque, estados e texto, com código.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask2-s2">Anota o que precisa mudar e o que o desenho não responde.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask2-s3">Escreve o relatório numa página do arquivo. A leitura fica nele, como rascunho.</p></div></li>
+            </ol>
+          </div>
+          <div class="flow__file">
+            <h4 class="flow__label" data-i18n="flow-file">No arquivo fica</h4>
+            <div class="pin pin--frame">
+              <div class="pin__card">
+                <span class="chip">Accessibility</span>
+                <p class="pin__type" data-i18n="flow2-status">CONDICIONAL</p>
+                <p data-i18n="flow2-c1">Perguntas abertas — 1</p>
+                <p data-i18n="flow2-c2">Leituras — não anotadas</p>
+                <p data-i18n="flow2-c3">Corrigir aqui — 1</p>
+                <p data-i18n="flow2-c4">Erros do design system — 0</p>
+                <p data-i18n="flow2-c5">Não lidos — 2</p>
+              </div>
+            </div>
+            <div class="pin pin--fix">
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
+                <p class="pin__type" data-i18n="pin2-type">🟠 HIGH · Aqui: borda do campo E-mail com a cor trocada</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="flow__row">
+          <div class="flow__ask">
+            <h3 data-i18n="ask3-name">Anotar a leitura</h3>
+            <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
+            <p class="flow__say" data-i18n="ask3-say">“Anote a leitura desta tela seguindo as regras do DA11Y.md.”</p>
+          </div>
+          <div class="flow__steps">
+            <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask3-s1">Lê cada elemento em que o leitor de tela para.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask3-s2">Propõe a ordem e o que é lido, numa lista fechada.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask3-s3">Você confere, edita se quiser e confirma com ✓ e o seu nome.</p></div></li>
+            </ol>
+          </div>
+          <div class="flow__file">
+            <h4 class="flow__label" data-i18n="flow-file">No arquivo fica</h4>
+            <div class="pin pin--decision">
+              <div class="pin__node" aria-hidden="true"><div class="mock mock-status"><span class="mock-status__title" data-i18n="mock-status-title">Status da solicitação</span><span data-i18n="mock-status-l1">Número do protocolo: 48213</span><span data-i18n="mock-status-l2">Situação: Em análise</span></div></div>
+              <div class="pin__line" aria-hidden="true"></div>
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-decision">Proposta</span>
+                <p class="pin__type" data-i18n="flow3-type">5–7 · status da solicitação</p>
+                <p data-i18n="flow3-a">5) 🔊 título "Status da solicitação"</p>
+                <p data-i18n="flow3-b">6) 🔊 "Número do protocolo, 48213"</p>
+                <p data-i18n="flow3-c">7) 🔊 "Situação, Em análise"</p>
+                <p class="pin__done" data-i18n="flow3-d">✓ Marina</p>
+              </div>
+            </div>
+          </div>
+        </article>
+        <figcaption data-i18n="ask-outro">Nos três pedidos, a tela recebe a anotação com o status, as contagens do que há para fazer e onde está o relatório completo. Ilustração feita para esta página.</figcaption>
+      </figure>
     </section>
 
-    <section class="section split" aria-labelledby="comecar">
+    <section class="section section--tight" aria-labelledby="anotacoes">
+      <div class="section__intro">
+        <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
+        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Corrigir aqui é um defeito de uso neste arquivo. Erro do design system é um defeito da biblioteca, para quem cuida dela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta uma linha com ✓ e o seu nome.</p>
+      </div>
+      <figure class="pins">
+        <div class="canvas">
+          <div class="mock-screen mock-screen--pinned" aria-hidden="true">
+            <div class="mock-toast mock mock--decision"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock-x">×</span></div>
+            <div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock--fix mock-input"></span></div>
+            <span class="mock mock--ds btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span>
+          </div>
+          <div class="canvas__cards">
+            <div class="pin pin--decision">
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-decision">Proposta</span>
+                <p class="pin__type" data-i18n="type-decision">3 · aviso</p>
+                <p data-i18n="pin1-a">📢 "Aviso salvo"</p>
+                <p data-i18n="pin1-b">🔊 botão "Fechar aviso"</p>
+              </div>
+            </div>
+            <div class="pin pin--fix">
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
+                <p class="pin__type" data-i18n="pin2-type">🟠 HIGH · Aqui: borda do campo E-mail com a cor trocada</p>
+              </div>
+            </div>
+            <div class="pin pin--ds">
+              <div class="pin__card">
+                <span class="chip" data-i18n="cat-ds">Erro do design system</span>
+                <p class="pin__type" data-i18n="pin3-type">🟠 HIGH · Biblioteca: texto do botão abaixo do contraste mínimo</p>
+              </div>
+            </div>
+            <div class="pin pin--frame">
+              <div class="pin__card">
+                <span class="chip">Accessibility</span>
+                <p class="pin__type" data-i18n="flow2-status">CONDICIONAL</p>
+                <p data-i18n="pin4-c1">Perguntas abertas — 0</p>
+                <p data-i18n="pin4-c2">Leituras a confirmar — 1</p>
+                <p data-i18n="pin4-c3">Corrigir aqui — 1</p>
+                <p data-i18n="pin4-c4">Erros do design system — 1</p>
+                <p data-i18n="pin4-c5">Não lidos — 0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption data-i18n="notes-caption">Os quatro tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. O contorno de cada componente tem a cor da anotação presa a ele, e o contorno da tela é o da anotação do frame. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section split section--lead" aria-labelledby="comecar">
       <div class="split__head">
         <h2 id="comecar" data-i18n="start">Como começar</h2>
       </div>
@@ -498,28 +806,36 @@ h3, p { margin: 0; }
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
                 <p data-i18n="chat-step1">Escreva o pedido como sempre e acrescente o link do protocolo. Por exemplo:</p>
-                <div class="copy">
-                    <span class="copy__label" data-i18n="create-label">Para criar</span>
-                    <pre><code id="pedido-criar" data-i18n="create-prompt">Crie este componente seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
-                    <div class="copy__row">
-                      <button type="button" class="btn" data-copy="pedido-criar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-create-sr"> para criar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
-                      <span class="copy__status" role="status"></span>
+                <div class="prompts">
+                    <fieldset class="verbs">
+                      <legend class="verbs__legend" data-i18n="verbs-legend">O pedido</legend>
+                      <label class="verb"><input type="radio" name="verbo" value="criar" checked><span data-i18n="create-label">Para criar</span></label>
+                      <label class="verb"><input type="radio" name="verbo" value="analisar"><span data-i18n="analyze-label">Para analisar</span></label>
+                      <label class="verb"><input type="radio" name="verbo" value="anotar"><span data-i18n="annotate-label">Para anotar a leitura</span></label>
+                    </fieldset>
+                    <div class="copy" data-verb="criar">
+                      <span class="copy__label" data-i18n="create-label">Para criar</span>
+                      <pre><code id="pedido-criar" data-i18n="create-prompt">Crie este componente seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
+                      <div class="copy__row">
+                        <button type="button" class="btn" data-copy="pedido-criar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-create-sr"> para criar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                        <span class="copy__status" role="status"></span>
+                      </div>
                     </div>
-                  </div>
-                <div class="copy">
-                    <span class="copy__label" data-i18n="analyze-label">Para analisar</span>
-                    <pre><code id="pedido-analisar" data-i18n="analyze-prompt">Analise esta tela seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
-                    <div class="copy__row">
-                      <button type="button" class="btn" data-copy="pedido-analisar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-analyze-sr"> para analisar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
-                      <span class="copy__status" role="status"></span>
+                    <div class="copy" data-verb="analisar">
+                      <span class="copy__label" data-i18n="analyze-label">Para analisar</span>
+                      <pre><code id="pedido-analisar" data-i18n="analyze-prompt">Analise esta tela seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
+                      <div class="copy__row">
+                        <button type="button" class="btn" data-copy="pedido-analisar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-analyze-sr"> para analisar</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                        <span class="copy__status" role="status"></span>
+                      </div>
                     </div>
-                  </div>
-                <div class="copy">
-                    <span class="copy__label" data-i18n="annotate-label">Para anotar a leitura</span>
-                    <pre><code id="pedido-anotar" data-i18n="annotate-prompt">Anote a leitura desta tela seguindo estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
-                    <div class="copy__row">
-                      <button type="button" class="btn" data-copy="pedido-anotar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-annotate-sr"> para anotar a leitura</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
-                      <span class="copy__status" role="status"></span>
+                    <div class="copy" data-verb="anotar">
+                      <span class="copy__label" data-i18n="annotate-label">Para anotar a leitura</span>
+                      <pre><code id="pedido-anotar" data-i18n="annotate-prompt">Anote a leitura desta tela seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
+                      <div class="copy__row">
+                        <button type="button" class="btn" data-copy="pedido-anotar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-annotate-sr"> para anotar a leitura</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                        <span class="copy__status" role="status"></span>
+                      </div>
                     </div>
                   </div>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
@@ -555,7 +871,7 @@ h3, p { margin: 0; }
                   </div>
                 <div class="copy">
                     <span class="copy__label" data-i18n="instr-label">Instruções</span>
-                    <pre><code id="skill-instrucoes" data-i18n="skill-instr">Ao desenhar ou avaliar jornadas, telas ou componentes, siga estritamente as regras de acessibilidade do arquivo https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/pt-BR/DA11Y.md</code></pre>
+                    <pre><code id="skill-instrucoes" data-i18n="skill-instr">Ao desenhar ou avaliar jornadas, telas ou componentes, siga estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
                     <div class="copy__row">
                       <button type="button" class="btn" data-copy="skill-instrucoes"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-instr">Copiar instruções</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
                       <span class="copy__status" role="status"></span>
@@ -585,56 +901,23 @@ h3, p { margin: 0; }
       </div>
     </section>
 
-    <section class="section" aria-labelledby="anotacoes">
-      <div class="section__intro">
-        <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Corrigir aqui é um defeito de uso neste arquivo. Erro do design system é um defeito da biblioteca, para quem cuida dela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta uma linha com ✓ e o seu nome.</p>
-      </div>
-      <figure class="pins">
-        <div class="pins__row">
-          <div class="pin pin--decision">
-            <div class="pin__node" aria-hidden="true"><div class="mock-toast"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock mock-x">×</span></div></div>
-            <div class="pin__line" aria-hidden="true"></div>
-            <div class="pin__card">
-              <span class="chip" data-i18n="cat-decision">Proposta</span>
-              <p class="pin__type" data-i18n="type-decision">3 · aviso</p>
-              <p data-i18n="pin1-a">📢 "Aviso salvo"</p>
-              <p data-i18n="pin1-b">🔊 botão "Fechar aviso"</p>
-            </div>
-          </div>
-          <div class="pin pin--fix">
-            <div class="pin__node" aria-hidden="true"><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock-input"></span></div></div>
-            <div class="pin__line" aria-hidden="true"></div>
-            <div class="pin__card">
-              <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
-              <p class="pin__type" data-i18n="pin2-type">🟠 HIGH · Aqui: borda do campo E-mail com a cor trocada</p>
-            </div>
-          </div>
-          <div class="pin pin--ds">
-            <div class="pin__node" aria-hidden="true"><span class="mock btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
-            <div class="pin__line" aria-hidden="true"></div>
-            <div class="pin__card">
-              <span class="chip" data-i18n="cat-ds">Erro do design system</span>
-              <p class="pin__type" data-i18n="pin3-type">🟠 HIGH · Biblioteca: texto do botão abaixo do contraste mínimo</p>
-            </div>
-          </div>
-        </div>
-        <figcaption data-i18n="notes-caption">Os três tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
-      </figure>
-    </section>
-
     <section class="section" aria-labelledby="pede">
       <div class="section__intro">
         <h2 id="pede" data-i18n="rules-title">O que ele pede ao agente</h2>
         <p data-i18n="rules-intro">O DA11Y.md é um arquivo Markdown que o agente lê por link e carrega só as partes que a tarefa pede. São cinco regras.</p>
       </div>
       <ul class="rules">
-          <li class="rule">
+          <li class="rule rule--vig">
             <h3 data-i18n="rule1-title">O que já existe vem primeiro</h3>
+            <div class="rule__vig vig-two" aria-hidden="true">
+              <span class="vig-btn"><span data-i18n="mock-enter">Entrar</span></span><span class="vig-cap" data-i18n="vig-lib">da biblioteca ✓</span>
+              <span class="vig-btn vig-btn--fake"><span data-i18n="mock-enter">Entrar</span></span><span class="vig-cap" data-i18n="vig-fake">recriado ✗</span>
+            </div>
             <p data-i18n="rule1-text">O agente procura os componentes, as variáveis e os estilos da biblioteca, e as regras já registradas, como um <code>DESIGN.md</code>. Ele aplica tudo como está e depois confere o resultado. Ele avisa cada decisão prévia que afeta a acessibilidade, com a origem e a medida, e só corrige com autorização expressa.</p>
           </li>
-          <li class="rule">
+          <li class="rule rule--vig">
             <h3 data-i18n="rule2-title">Calcular, nunca estimar</h3>
+            <div class="rule__vig vig-pair" aria-hidden="true"><span class="vig-pair__sample">Aa</span><span class="vig-pair__ratio">15,18:1</span></div>
             <p data-i18n="rule2-text">O contraste é calculado por um script que roda dentro do Figma, a partir dos valores dos tokens, em todo estado e em todo modo. Quando um par reprova, você confere o mesmo par na checagem de contraste do próprio Figma.</p>
           </li>
           <li class="rule">
@@ -661,28 +944,40 @@ h3, p { margin: 0; }
         <img src="img/a11ymd-site.webp" alt="" width="2160" height="730" data-i18n-attr="src:banner-src">
         <figcaption data-i18n="banner-caption">A marca do A11Y.md e o selo “Apoiado pelo Claude for Open Source Program”, redesenhados em caracteres.</figcaption>
       </figure>
-      <div class="rels">
-        <div class="rel">
-          <p class="rel__kind" data-i18n="rel-inherits">[herda]</p>
-          <h3 data-i18n="rel1-title">Os mesmos números</h3>
-          <p data-i18n="rel1-text">Os perfis de conformidade, os limites de contraste e de área de toque e o modelo de severidade vêm do A11Y.md. Um script confere que os dois nunca se afastam, em inglês e em português.</p>
+      <figure class="kin" aria-labelledby="kin-cap">
+        <div class="kin__node">
+          <p class="kin__title">A11Y.md</p>
+          <p class="kin__sub" data-i18n="kin-a-sub">para o agente de código</p>
         </div>
-        <div class="rel">
-          <p class="rel__kind" data-i18n="rel-inherits">[herda]</p>
-          <h3 data-i18n="rel2-title">O mesmo jeito de usar</h3>
-          <p data-i18n="rel2-text">Um arquivo que o agente lê por link e que carrega cada guia só quando a tarefa pede. Nada para instalar.</p>
-        </div>
-        <div class="rel">
-          <p class="rel__kind" data-i18n="rel-own">[só dele]</p>
+        <ol class="kin__links">
+          <li class="kin__link kin__link--to">
+            <p class="kin__kind" data-i18n="rel-inherits">Herda do A11Y.md</p>
+            <h3 data-i18n="rel1-title">Os mesmos números</h3>
+            <p data-i18n="rel1-text">Os perfis de conformidade, os limites de contraste e de área de toque e o modelo de severidade vêm do A11Y.md. Um script confere que os dois nunca se afastam, em inglês e em português.</p>
+            <span class="kin__arrow" aria-hidden="true"></span>
+          </li>
+          <li class="kin__link kin__link--to">
+            <p class="kin__kind" data-i18n="rel-inherits">Herda do A11Y.md</p>
+            <h3 data-i18n="rel2-title">O mesmo jeito de usar</h3>
+            <p data-i18n="rel2-text">Um arquivo que o agente lê por link e que carrega cada guia só quando a tarefa pede. Nada para instalar.</p>
+            <span class="kin__arrow" aria-hidden="true"></span>
+          </li>
+          <li class="kin__link kin__link--back">
+            <p class="kin__kind" data-i18n="rel-meet">Onde os dois se encontram</p>
+            <h3 data-i18n="rel4-title">Do desenho para o código</h3>
+            <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</p>
+            <span class="kin__arrow" aria-hidden="true"></span>
+          </li>
+        </ol>
+        <div class="kin__node kin__node--b">
+          <p class="kin__title">DA11Y.md</p>
+          <p class="kin__sub" data-i18n="kin-b-sub">para o agente do Figma</p>
+          <p class="kin__kind" data-i18n="rel-own">Só do DA11Y.md</p>
           <h3 data-i18n="rel3-title">O que só existe no canvas</h3>
           <p data-i18n="rel3-text">Ler um arquivo do Figma, avaliar o que o design system já decidiu e deixar a evidência em anotações no próprio arquivo.</p>
         </div>
-        <div class="rel">
-          <p class="rel__kind" data-i18n="rel-meet">[encontro]</p>
-          <h3 data-i18n="rel4-title">Do desenho para o código</h3>
-          <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</p>
-        </div>
-      </div>
+        <figcaption id="kin-cap" data-i18n="kin-cap">Dois arquivos, um link de ida: o DA11Y.md compila os números do A11Y.md e nunca o contrário. O relatório de design é a volta.</figcaption>
+      </figure>
     </section>
   </div>
 
@@ -719,10 +1014,9 @@ h3, p { margin: 0; }
         <p data-i18n="contrib-intro">A contribuição mais útil é um relato de campo. Conte o que aconteceu quando você usou o DA11Y.md num desenho real. O <a href="https://github.com/fecarrico/DA11Y.md/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">guia de contribuição<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> explica o resto.</p>
       </div>
       <div class="split__wide cards">
-        <article class="card">
+        <article class="card card--lead">
           <img class="card__img" src="img/relato.webp" alt="" width="720" height="480">
           <div class="card__body">
-            <span class="card__tag" data-i18n="contrib-tag">Contribuir</span>
             <h3 class="card__title"><a class="card__link" href="https://github.com/fecarrico/DA11Y.md/issues/new?template=field-report.yml" target="_blank" rel="noopener"><span data-i18n="card1-title">Enviar um relato de campo</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></a></h3>
             <svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg>
             <p class="card__text" data-i18n="card1-text">O que o agente fez, o que você esperava e o que aconteceu.</p>
@@ -796,7 +1090,7 @@ h3, p { margin: 0; }
       return '<a href="' + href + '" target="_blank" rel="noopener">' + text + '<span class="sr-only" data-i18n="newtab">' + NEWTAB + '</span>' + EXT + '</a>';
     }
     var A11Y = link('https://github.com/fecarrico/A11Y.md', 'A11Y.md');
-    var CORE = 'https://raw.githubusercontent.com/fecarrico/DA11Y.md/main/docs/en/DA11Y.md';
+    var CORE = 'https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>en/<wbr>DA11Y.md';
 
     var EN_TITLE = 'DA11Y.md · Accessibility before the first pixel';
     var EN = {
@@ -814,30 +1108,64 @@ h3, p { margin: 0; }
       'why-title': 'Why start with design',
       'why-p1': 'Many accessibility decisions are made before the code exists. By the time the design reaches whoever builds it, these are already in it:',
       'topic1-name': 'Contrast',
-      'topic1-text': 'The color of text and icons against the background.',
+      'topic1-text': 'The color of text and icons against the background. Here, 15.18:1.',
       'topic2-name': 'Touch target',
-      'topic2-text': 'The size of each button and each link.',
+      'topic2-text': 'The size of each button and each link. Here, 48 px tall.',
       'topic3-name': 'Focus states',
-      'topic3-text': 'How each control looks when the keyboard reaches it.',
+      'topic3-text': 'How each control looks when the keyboard reaches it. Here, a 3 px outline.',
       'topic4-name': 'Error messages',
-      'topic4-text': 'What says something went wrong and how to fix it.',
+      'topic4-text': 'What says something went wrong and how to fix it, in text, next to the field.',
+      'mock-password': 'Password',
+      'mock-error': 'Wrong password. Try again or reset your password.',
+      'mock-enter': 'Sign in',
+      'vig-lib': 'from the library ✓',
+      'vig-fake': 'recreated ✗',
       'topic5-name': 'Reading order',
-      'topic5-text': 'The sequence in which the screen reader goes through the screen.',
+      'topic5-text': 'The sequence in which the screen reader goes through the screen: 1, 2, 3.',
       'why-p2': 'When the design ignores these decisions, the developer fixes them in code, and the product ends up different from what was designed. DA11Y.md brings the rules to the moment the screen is drawn. That way design and code answer to the same numbers.',
 
       'ask-title': 'What to ask the agent',
       'ask-intro': 'The protocol answers three requests. Each one writes something different in the file, and what the agent measured never mixes with what it proposes.',
+      'flow-you': 'You ask',
+      'flow-agent': 'The agent does',
+      'flow-file': 'In the file',
       'ask1-name': 'Create',
-      'ask1-text': 'You ask for a component or a screen. The agent looks up what the library already has, designs with it and delivers the screen with its reading annotated: on each element where the screen reader stops, a proposal of what is read and in which order.',
+      'ask1-say': '“Create this component following the DA11Y.md rules.”',
+      'ask1-s1': 'Looks up what the library already has.',
+      'ask1-s2': 'Designs with it, without swapping tokens or recreating components.',
+      'ask1-s3': 'Delivers the screen with the reading annotated on each element.',
+      'flow1-type': '3 · button',
+      'flow1-a': '🔊 button "Continue"',
       'ask2-name': 'Analyze',
-      'ask2-text': 'You ask for the analysis of a screen that already exists. The agent measures contrast, touch targets, states and text, and annotates what needs to change: what is fixed in this file and what is a design system error. What the design does not answer, such as whether a card is a button, becomes a question. The reading stays in the report, as a draft.',
+      'ask2-say': '“Analyze this screen following the DA11Y.md rules.”',
+      'ask2-s1': 'Measures contrast, touch targets, states and text, with code.',
+      'ask2-s2': 'Annotates what needs to change and what the design does not answer.',
+      'ask2-s3': 'Writes the report on a page of the file. The reading stays there, as a draft.',
+      'flow2-status': 'CONDITIONAL',
+      'flow2-c1': 'Open questions — 1',
+      'flow2-c2': 'Readings — not annotated',
+      'flow2-c3': 'Fix here — 1',
+      'flow2-c4': 'Design system errors — 0',
+      'flow2-c5': 'Not read — 2',
       'ask3-name': 'Annotate the reading',
-      'ask3-text': 'You ask for the reading once the design is settled. It is the handoff to whoever builds. Each element where the screen reader stops gets a proposal with the order and what is read. You check it, edit it if you want and confirm with ✓ and your name. Whoever builds implements what has a ✓ and asks about what does not.',
-      'ask-outro': 'In all three requests, the screen gets an annotation with the status, the counts of what there is to do and where the full report is.',
+      'ask3-say': '“Annotate the reading of this screen following the DA11Y.md rules.”',
+      'ask3-s1': 'Reads each element where the screen reader stops.',
+      'ask3-s2': 'Proposes the order and what is read, as a closed list.',
+      'ask3-s3': 'You check it, edit it if you want and confirm with ✓ and your name.',
+      'mock-status-title': 'Request status',
+      'mock-status-l1': 'Protocol number: 48213',
+      'mock-status-l2': 'Status: Under review',
+      'flow3-type': '5–7 · request status',
+      'flow3-a': '5) 🔊 heading "Request status"',
+      'flow3-b': '6) 🔊 "Protocol number, 48213"',
+      'flow3-c': '7) 🔊 "Status, Under review"',
+      'flow3-d': '✓ Marina',
+      'ask-outro': 'In all three requests, the screen gets the annotation with the status, the counts of what there is to do and where the full report is. An illustration made for this page.',
 
       'chat-title': 'In the agent’s chat',
       'chat-lead': 'For one request at a time, with nothing to set up first.',
       'chat-step1': 'Write your prompt as usual and add the link to the protocol. For example:',
+      'verbs-legend': 'The request',
       'create-label': 'To create',
       'create-prompt': 'Create this component strictly following the accessibility rules in the file ' + CORE,
       'copy-prompt': 'Copy prompt',
@@ -888,7 +1216,12 @@ h3, p { margin: 0; }
       'pin2-type': '🟠 HIGH · Here: Email field border in the wrong color',
       'cat-ds': 'Design system error',
       'pin3-type': '🟠 HIGH · Library: button text below the minimum contrast',
-      'notes-caption': 'The three annotation types, each in its own category, as Figma annotations look. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
+      'pin4-c1': 'Open questions — 0',
+      'pin4-c2': 'Readings to confirm — 1',
+      'pin4-c3': 'Fix here — 1',
+      'pin4-c4': 'Design system errors — 1',
+      'pin4-c5': 'Not read — 0',
+      'notes-caption': 'The four annotation types, each in its own category, as Figma annotations look. Each component’s outline takes the color of the annotation pinned to it, and the screen’s outline is the frame annotation’s. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
 
       'rules-title': 'What it asks of the agent',
       'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
@@ -907,9 +1240,20 @@ h3, p { margin: 0; }
       'sib-intro': A11Y + ' is a file that teaches coding AI (Cursor, Claude, Copilot) to build accessible interfaces from the first line, following the Web Content Accessibility Guidelines (<abbr>WCAG</abbr> 2.2). DA11Y.md is its sibling for whoever designs. It brings the same rules to Figma, before the code exists.',
       'banner-src': 'img/a11ymd-site-en.webp',
       'banner-caption': 'The A11Y.md mark and the “Backed by Claude for Open Source Program” badge, redrawn in characters.',
-      'rel-inherits': '[inherits]',
-      'rel-own': '[its own]',
-      'rel-meet': '[meeting point]',
+      'nav-label': 'Page sections',
+      'nav-ask': 'What to ask',
+      'nav-start': 'Getting started',
+      'facts-label': 'The project in numbers',
+      'fact-1': '<strong>0.1.0</strong>, under test',
+      'fact-2': '<strong>27</strong> component guides',
+      'fact-3': 'Portuguese and English',
+      'fact-4': '<strong>4</strong> field tests',
+      'kin-a-sub': 'for the coding agent',
+      'kin-b-sub': 'for the Figma agent',
+      'kin-cap': 'Two files, one link going one way: DA11Y.md compiles the numbers from A11Y.md, never the other way round. The design report is the way back.',
+      'rel-inherits': 'Inherited from A11Y.md',
+      'rel-own': 'Only in DA11Y.md',
+      'rel-meet': 'Where the two meet',
       'rel1-title': 'The same numbers',
       'rel1-text': 'The compliance profiles, the contrast and touch target thresholds and the severity model come from A11Y.md. A script checks that the two never drift apart, in English and in Portuguese.',
       'rel2-title': 'The same way to use it',
