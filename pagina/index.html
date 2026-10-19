@@ -234,30 +234,34 @@ h3, p { margin: 0; }
 .mock-screen .mock-toast { justify-self: start; }
 .canvas__cards { display: grid; gap: 1.5rem; align-content: start; }
 
-/* as regras com vinheta: a figura à direita do texto */
-.vig-two { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 0.75rem; align-items: center; }
-.vig-btn { display: inline-grid; place-items: center; min-width: 6rem; min-height: 44px; padding: 0 1rem; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); font: 700 0.9375rem/1.2 var(--body); }
-.vig-btn--fake { border-style: dashed; border-radius: 10px; background: var(--paper); color: var(--ink); }
-.vig-cap { font-size: 0.9375rem; color: var(--ink-2); white-space: nowrap; }
-.vig-pair { display: grid; justify-items: center; gap: 0.25rem; padding: 1rem 1.25rem; border: 2px solid var(--ink); background: var(--paper-2); }
-.vig-pair__sample { font: 400 2.5rem/1 var(--display); }
-.vig-pair__ratio { font: 500 0.9375rem/1.4 var(--mono); }
+/* as regras, cada uma com um exemplo no formato do protocolo */
+.rule__ex { margin-top: 0.5rem; }
+.rule__ex pre { font-size: 0.875rem; }
 
-/* irmão do A11Y.md: os dois arquivos e as três ligações, no fio com nó quadrado do hero */
-.kin { margin: 3rem 0 0; display: grid; gap: 2rem; }
-.kin__node { display: grid; gap: 0.5rem; align-content: start; padding: 1.5rem; border: 2px solid var(--ink); background: var(--paper-2); }
+/* detalhe sob demanda: o caminho secundário fica fechado até a pessoa querer */
+.more { margin-top: 0.5rem; }
+.more summary { display: inline-flex; align-items: center; gap: 0.625rem; min-height: 44px; list-style: none; font-weight: 700; cursor: pointer; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary::before { content: ""; width: 0.5rem; height: 0.5rem; margin-left: 0.125rem; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(-45deg); transition: transform 0.15s; }
+.more[open] summary::before { transform: rotate(45deg); }
+.more summary:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.more__body { display: grid; gap: 2em; margin-top: 1.25rem; }
+
+/* irmão do A11Y.md: os dois arquivos nas pontas e três setas de borda a borda, no fio com nó quadrado do hero */
+.kin { margin: 3rem 0 0; display: grid; gap: 2.5rem; }
+.kin__diagram { display: grid; gap: 1.25rem; }
+.kin__node { display: grid; gap: 0.25rem; align-content: center; padding: 1.25rem 1.5rem; border: 2px solid var(--ink); background: var(--paper-2); }
 .kin__title { font: 400 1.75rem/1.1 var(--display); }
 .kin__sub { color: var(--ink-2); }
-.kin__node h3 { font: 400 1.25rem/1.25 var(--display); }
-.kin__node p:last-child { color: var(--ink-2); }
-.kin__node .kin__kind { margin-top: 1rem; }
-.kin__links { display: grid; gap: 1.75rem; margin: 0; padding: 0; list-style: none; align-content: center; }
-.kin__link { display: grid; gap: 0.375rem; }
-.kin__kind { font-weight: 700; }
-.kin__link h3 { font: 400 1.25rem/1.25 var(--display); }
-.kin__link > p:last-of-type { color: var(--ink-2); }
-.kin__arrow { display: none; }
-.kin figcaption { margin-top: 0.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+.kin__links { display: grid; gap: 1.25rem; margin: 0; padding: 0 0.5rem; list-style: none; }
+.kin__link { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 0.75rem; align-items: center; }
+.kin__label { font-weight: 700; }
+.kin__arrow { position: relative; display: block; height: 2px; min-width: 3rem; background: var(--ink); }
+.kin__arrow::before { content: ""; position: absolute; left: 0; top: -3px; width: 8px; height: 8px; background: var(--ink); }
+.kin__arrow::after { content: ""; position: absolute; right: 1px; top: -4px; width: 8px; height: 8px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); transform: rotate(45deg); }
+.kin__link--back .kin__arrow::before { left: auto; right: 0; }
+.kin__link--back .kin__arrow::after { right: auto; left: 1px; transform: rotate(-135deg); }
+.kin figcaption { font-size: 0.9375rem; color: var(--ink-2); }
 @media (min-width: 60em) {
   .flow__head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 5fr); gap: 2rem; padding-bottom: 0.75rem; font-weight: 700; }
   .flow__head p { margin: 0; }
@@ -269,17 +273,14 @@ h3, p { margin: 0; }
   .decisions-fig .mock-screen { justify-self: end; }
   .canvas { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
   .canvas__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .rules { max-width: 54rem; }
-  .rule--vig { grid-template-columns: minmax(0, 1fr) 14rem; column-gap: 2.5rem; }
-  .rule--vig h3, .rule--vig p { grid-column: 1; }
-  .rule__vig { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
-  .kin { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); gap: 2.5rem; }
-  .kin figcaption { grid-column: 1 / -1; }
-  .kin__arrow { display: block; position: relative; height: 2px; margin-top: 0.75rem; background: var(--ink); }
-  .kin__arrow::before { content: ""; position: absolute; left: 0; top: -3px; width: 8px; height: 8px; background: var(--ink); }
-  .kin__arrow::after { content: ""; position: absolute; right: 1px; top: -4px; width: 8px; height: 8px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); transform: rotate(45deg); }
-  .kin__link--back .kin__arrow::before { left: auto; right: 0; }
-  .kin__link--back .kin__arrow::after { right: auto; left: 1px; transform: rotate(-135deg); }
+  .rule { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); column-gap: 3rem; }
+  .rule h3, .rule > p { grid-column: 1; }
+  .rule__ex { grid-column: 2; grid-row: 1 / span 2; align-self: start; margin-top: 0.4rem; }
+  .kin__diagram { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); gap: 0; align-items: stretch; }
+  .kin__links { align-content: center; gap: 1.75rem; padding: 0; }
+  .kin__link { grid-template-columns: minmax(0, 1fr); gap: 0.375rem; }
+  .kin__label { justify-self: center; text-align: center; }
+  .kin__arrow { min-width: 0; }
 }
 
 /* curiosidade: faixa escura, papel sobre tinta, como a ilustração em ASCII */
@@ -488,7 +489,7 @@ h3, p { margin: 0; }
   .intro { padding-bottom: 7rem; }
 }
 @media (min-width: 60em) {
-  .rules { grid-template-columns: minmax(0, 1fr); max-width: 40rem; }
+  .rules { grid-template-columns: minmax(0, 1fr); max-width: 66rem; }
   .rels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .section { padding-block: 5rem; }
   .section--lead { padding-top: 8rem; }
@@ -528,6 +529,7 @@ h3, p { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn__tex { transition: none; }
+  .more summary::before { transition: none; }
 }
 @media (forced-colors: active) {
   .btn::before, .btn__tex { display: none; }
@@ -852,6 +854,9 @@ h3, p { margin: 0; }
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
                 <p data-i18n="skill-step1">Abra a página da skill na Comunidade do Figma e salve a skill na sua conta.</p>
                 <div class="actions"><a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a></div>
+                <details class="more">
+                  <summary data-i18n="skill-manual">Criar a skill à mão</summary>
+                  <div class="more__body">
                 <p data-i18n="skill-step2">Se preferir criar a skill você mesmo, clique na caixa do pedido, no chat do agente, e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>. Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
                 <div class="copy copy--small">
                     <span class="copy__label" data-i18n="name-label">Nome</span>
@@ -877,6 +882,8 @@ h3, p { margin: 0; }
                       <span class="copy__status" role="status"></span>
                     </div>
                   </div>
+                  </div>
+                </details>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
                 <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code> ou <code>/da11y anote a leitura</code>. A skill fica disponível em todos os seus arquivos.</p>
               </div></li>
@@ -907,30 +914,49 @@ h3, p { margin: 0; }
         <p data-i18n="rules-intro">O DA11Y.md é um arquivo Markdown que o agente lê por link e carrega só as partes que a tarefa pede. São cinco regras.</p>
       </div>
       <ul class="rules">
-          <li class="rule rule--vig">
+          <li class="rule">
             <h3 data-i18n="rule1-title">O que já existe vem primeiro</h3>
-            <div class="rule__vig vig-two" aria-hidden="true">
-              <span class="vig-btn"><span data-i18n="mock-enter">Entrar</span></span><span class="vig-cap" data-i18n="vig-lib">da biblioteca ✓</span>
-              <span class="vig-btn vig-btn--fake"><span data-i18n="mock-enter">Entrar</span></span><span class="vig-cap" data-i18n="vig-fake">recriado ✗</span>
-            </div>
             <p data-i18n="rule1-text">O agente procura os componentes, as variáveis e os estilos da biblioteca, e as regras já registradas, como um <code>DESIGN.md</code>. Ele aplica tudo como está e depois confere o resultado. Ele avisa cada decisão prévia que afeta a acessibilidade, com a origem e a medida, e só corrige com autorização expressa.</p>
+            <div class="copy copy--small rule__ex">
+              <span class="copy__label" data-i18n="ex-label">Exemplo</span>
+              <pre><code data-i18n="ex1">Origem: token border/default · medida 2,9:1 · piso 3:1 · 🟡 MEDIUM · corrijo?</code></pre>
+            </div>
           </li>
-          <li class="rule rule--vig">
+          <li class="rule">
             <h3 data-i18n="rule2-title">Calcular, nunca estimar</h3>
-            <div class="rule__vig vig-pair" aria-hidden="true"><span class="vig-pair__sample">Aa</span><span class="vig-pair__ratio">15,18:1</span></div>
             <p data-i18n="rule2-text">O contraste é calculado por um script que roda dentro do Figma, a partir dos valores dos tokens, em todo estado e em todo modo. Quando um par reprova, você confere o mesmo par na checagem de contraste do próprio Figma.</p>
+            <div class="copy copy--small rule__ex">
+              <span class="copy__label" data-i18n="ex-label">Exemplo</span>
+              <pre><code data-i18n="ex2">text/primary sobre surface/default · 11,84:1 · piso 7:1 · passa</code></pre>
+            </div>
           </li>
           <li class="rule">
             <h3 data-i18n="rule3-title">A evidência fica no arquivo</h3>
             <p data-i18n="rule3-text">Cada tela analisada recebe uma anotação curta, nativa do Figma, com o status e o que há para fazer. O relatório completo vai para uma página do próprio arquivo, e se repete no chat, para você salvar e entregar a quem desenvolve.</p>
+            <div class="copy copy--small rule__ex">
+              <span class="copy__label" data-i18n="ex-label">Exemplo</span>
+              <pre><code data-i18n="ex3">CONDICIONAL
+Corrigir aqui — 1
+Relatório completo na página DA11Y — relatórios</code></pre>
+            </div>
           </li>
           <li class="rule">
             <h3 data-i18n="rule4-title">Cada anotação pede uma ação</h3>
             <p data-i18n="rule4-text">Quando você pede a leitura, uma anotação por elemento, com a ordem de leitura e o que o leitor de tela lê. Numa análise, o canvas recebe só os erros e as perguntas de estrutura. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório, fora do canvas.</p>
+            <div class="copy copy--small rule__ex">
+              <span class="copy__label" data-i18n="ex-label">Exemplo</span>
+              <pre><code data-i18n="ex4">4 · card
+🔊 botão "Seguro residencial, Ativo"
+✓ Marina</code></pre>
+            </div>
           </li>
           <li class="rule">
             <h3 data-i18n="rule5-title">Design system com contexto para agentes</h3>
             <p data-i18n="rule5-text">Quando a tarefa é criar componentes, o agente também escreve o que o próximo agente precisa ler: a descrição, os apelidos, o contrato de acessibilidade e a anatomia na ordem de leitura.</p>
+            <div class="copy copy--small rule__ex">
+              <span class="copy__label" data-i18n="ex-label">Exemplo</span>
+              <pre><code data-i18n="ex5">Switch. Liga ou desliga algo na hora. Não use para escolher entre opções (use Radio). Apelidos: toggle, liga/desliga.</code></pre>
+            </div>
           </li>
       </ul>
     </section>
@@ -945,37 +971,27 @@ h3, p { margin: 0; }
         <figcaption data-i18n="banner-caption">A marca do A11Y.md e o selo “Apoiado pelo Claude for Open Source Program”, redesenhados em caracteres.</figcaption>
       </figure>
       <figure class="kin" aria-labelledby="kin-cap">
-        <div class="kin__node">
-          <p class="kin__title">A11Y.md</p>
-          <p class="kin__sub" data-i18n="kin-a-sub">para o agente de código</p>
+        <div class="kin__diagram">
+          <div class="kin__node">
+            <p class="kin__title">A11Y.md</p>
+            <p class="kin__sub" data-i18n="kin-a-sub">para o agente de código</p>
+          </div>
+          <ol class="kin__links">
+            <li class="kin__link kin__link--to"><span class="kin__label"><span data-i18n="rel1-title">Os mesmos números</span><span class="sr-only" data-i18n="kin-to"> (do A11Y.md para o DA11Y.md)</span></span><span class="kin__arrow" aria-hidden="true"></span></li>
+            <li class="kin__link kin__link--to"><span class="kin__label"><span data-i18n="rel2-title">O mesmo jeito de usar</span><span class="sr-only" data-i18n="kin-to"> (do A11Y.md para o DA11Y.md)</span></span><span class="kin__arrow" aria-hidden="true"></span></li>
+            <li class="kin__link kin__link--back"><span class="kin__label"><span data-i18n="rel4-title">Do desenho para o código</span><span class="sr-only" data-i18n="kin-back"> (do DA11Y.md para o A11Y.md)</span></span><span class="kin__arrow" aria-hidden="true"></span></li>
+          </ol>
+          <div class="kin__node kin__node--b">
+            <p class="kin__title">DA11Y.md</p>
+            <p class="kin__sub" data-i18n="kin-b-sub">para o agente do Figma</p>
+          </div>
         </div>
-        <ol class="kin__links">
-          <li class="kin__link kin__link--to">
-            <p class="kin__kind" data-i18n="rel-inherits">Herda do A11Y.md</p>
-            <h3 data-i18n="rel1-title">Os mesmos números</h3>
-            <p data-i18n="rel1-text">Os perfis de conformidade, os limites de contraste e de área de toque e o modelo de severidade vêm do A11Y.md. Um script confere que os dois nunca se afastam, em inglês e em português.</p>
-            <span class="kin__arrow" aria-hidden="true"></span>
-          </li>
-          <li class="kin__link kin__link--to">
-            <p class="kin__kind" data-i18n="rel-inherits">Herda do A11Y.md</p>
-            <h3 data-i18n="rel2-title">O mesmo jeito de usar</h3>
-            <p data-i18n="rel2-text">Um arquivo que o agente lê por link e que carrega cada guia só quando a tarefa pede. Nada para instalar.</p>
-            <span class="kin__arrow" aria-hidden="true"></span>
-          </li>
-          <li class="kin__link kin__link--back">
-            <p class="kin__kind" data-i18n="rel-meet">Onde os dois se encontram</p>
-            <h3 data-i18n="rel4-title">Do desenho para o código</h3>
-            <p data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</p>
-            <span class="kin__arrow" aria-hidden="true"></span>
-          </li>
-        </ol>
-        <div class="kin__node kin__node--b">
-          <p class="kin__title">DA11Y.md</p>
-          <p class="kin__sub" data-i18n="kin-b-sub">para o agente do Figma</p>
-          <p class="kin__kind" data-i18n="rel-own">Só do DA11Y.md</p>
-          <h3 data-i18n="rel3-title">O que só existe no canvas</h3>
-          <p data-i18n="rel3-text">Ler um arquivo do Figma, avaliar o que o design system já decidiu e deixar a evidência em anotações no próprio arquivo.</p>
-        </div>
+        <ul class="topics kin__notes">
+          <li><span class="topics__name" data-i18n="rel1-title">Os mesmos números</span><span class="topics__text" data-i18n="rel1-text">Os perfis de conformidade, os limites de contraste e de área de toque e o modelo de severidade vêm do A11Y.md. Um script confere que os dois nunca se afastam, em inglês e em português.</span></li>
+          <li><span class="topics__name" data-i18n="rel2-title">O mesmo jeito de usar</span><span class="topics__text" data-i18n="rel2-text">Um arquivo que o agente lê por link e que carrega cada guia só quando a tarefa pede. Nada para instalar.</span></li>
+          <li><span class="topics__name" data-i18n="rel4-title">Do desenho para o código</span><span class="topics__text" data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</span></li>
+          <li><span class="topics__name" data-i18n="rel3-title">O que só existe no canvas</span><span class="topics__text" data-i18n="rel3-text">Ler um arquivo do Figma, avaliar o que o design system já decidiu e deixar a evidência em anotações no próprio arquivo.</span></li>
+        </ul>
         <figcaption id="kin-cap" data-i18n="kin-cap">Dois arquivos, um link de ida: o DA11Y.md compila os números do A11Y.md e nunca o contrário. O relatório de design é a volta.</figcaption>
       </figure>
     </section>
@@ -1118,8 +1134,15 @@ h3, p { margin: 0; }
       'mock-password': 'Password',
       'mock-error': 'Wrong password. Try again or reset your password.',
       'mock-enter': 'Sign in',
-      'vig-lib': 'from the library ✓',
-      'vig-fake': 'recreated ✗',
+      'ex-label': 'Example',
+      'ex1': 'Origin: token border/default · measured 2.9:1 · floor 3:1 · 🟡 MEDIUM · shall I fix it?',
+      'ex2': 'text/primary on surface/default · 11.84:1 · floor 7:1 · pass',
+      'ex3': 'CONDITIONAL\nFix here — 1\nFull report on the page DA11Y — reports',
+      'ex4': '4 · card\n🔊 button "Home insurance, Active"\n✓ Marina',
+      'ex5': 'Switch. Turns something on or off right away. Do not use it to choose between options (use Radio). Aliases: toggle, on/off.',
+      'skill-manual': 'Create the skill by hand',
+      'kin-to': ' (from A11Y.md to DA11Y.md)',
+      'kin-back': ' (from DA11Y.md to A11Y.md)',
       'topic5-name': 'Reading order',
       'topic5-text': 'The sequence in which the screen reader goes through the screen: 1, 2, 3.',
       'why-p2': 'When the design ignores these decisions, the developer fixes them in code, and the product ends up different from what was designed. DA11Y.md brings the rules to the moment the screen is drawn. That way design and code answer to the same numbers.',
