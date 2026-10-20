@@ -67,7 +67,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { background: var(--paper); color: var(--ink); scroll-padding-top: 4.5rem; }
+html { background: var(--paper); color: var(--ink); scroll-padding-top: 4.5rem; scroll-padding-bottom: 1rem; }
+@media (max-width: 22.5em) { html { scroll-padding-top: 6.5rem; } }
 /* em inglês, a página espera a tradução (script de idioma) para aparecer; se o script falhar,
    ela aparece assim mesmo em 1,5 s, em português (A11Y.md §6, Content Held Hostage) */
 .lang-pending body { visibility: hidden; animation: lang-reveal 0s 1.5s forwards; }
@@ -238,15 +239,6 @@ h3, p { margin: 0; }
 .rule__ex { margin-top: 0.5rem; }
 .rule__ex pre { font-size: 0.875rem; }
 
-/* detalhe sob demanda: o caminho secundário fica fechado até a pessoa querer */
-.more { margin-top: 0.5rem; }
-.more summary { display: inline-flex; align-items: center; gap: 0.625rem; min-height: 44px; list-style: none; font-weight: 700; cursor: pointer; }
-.more summary::-webkit-details-marker { display: none; }
-.more summary::before { content: ""; width: 0.5rem; height: 0.5rem; margin-left: 0.125rem; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(-45deg); transition: transform 0.15s; }
-.more[open] summary::before { transform: rotate(45deg); }
-.more summary:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
-.more__body { display: grid; gap: 2em; margin-top: 1.25rem; }
-
 /* irmão do A11Y.md: os dois arquivos nas pontas e três setas de borda a borda, no fio com nó quadrado do hero */
 .kin { margin: 3rem 0 0; display: grid; gap: 2.5rem; }
 .kin__diagram { display: grid; gap: 1.25rem; }
@@ -342,12 +334,20 @@ h3, p { margin: 0; }
 
 /* abas */
 .tabs { margin-top: 1.75rem; }
-.tabs__list { display: flex; flex-wrap: nowrap; gap: 0 2rem; padding: 0 0.75rem 0.25rem; margin: 0 -0.75rem; border-bottom: 1px solid var(--ink); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.start { margin-top: 2.5rem; }
+.start__title { font: 400 1.5rem/1.25 var(--display); }
+.start .stepper { margin-top: 1.5rem; }
+.start .step__body > .actions { margin-top: 0; }
+.start .topics { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+.start__more { margin-top: 2rem; max-width: 32em; }
+/* a lista rola de lado (GOSTO 21) e corta o que passa da borda: 8 px em cima e embaixo cabem o colchete de foco
+   e o contorno de cores forçadas (3 px a 4 px), e o scroll-padding deixa os 12 px das laterais no encaixe da rolagem */
+.tabs__list { display: flex; flex-wrap: nowrap; gap: 0 2rem; padding: 0.5rem 0.75rem; margin: 0 -0.75rem; scroll-padding-inline: 0.75rem; border-bottom: 1px solid var(--ink); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
 .tab { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 48px; white-space: nowrap; scroll-snap-align: start; padding: 0 0.25rem; border: 0; background: none; color: var(--ink); font: 400 1.0625rem/1.2 var(--body); cursor: pointer; }
 .tab::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; }
 .tab[aria-selected="true"] { font-weight: 700; }
 .tab[aria-selected="true"]::before { background: var(--ink); }
-.tab__mark { position: absolute; left: -0.25rem; right: -0.25rem; bottom: -4px; height: 7px; background: var(--tex-tab, var(--ink)) center / 100% 100% no-repeat; opacity: 0; }
+.tab__mark { position: absolute; left: -0.25rem; right: -0.25rem; bottom: -0.5rem; height: 7px; background: var(--tex-tab, var(--ink)) center / 100% 100% no-repeat; opacity: 0; }
 .tab[aria-selected="true"] .tab__mark { opacity: 1; }
 /* o painel desce 0,75rem para o contorno de foco (3 px, a 3 px) não encostar na linha das abas */
 .tabs__panel { margin-top: 0.75rem; padding-top: 1.25rem; }
@@ -465,12 +465,12 @@ h3, p { margin: 0; }
 .prompts:has(.verb input:checked) .copy__label { display: none; }
 .prompts:has(input[value="criar"]:checked) .copy[data-verb]:not([data-verb="criar"]) { display: none; }
 .prompts:has(input[value="analisar"]:checked) .copy[data-verb]:not([data-verb="analisar"]) { display: none; }
-.prompts:has(input[value="anotar"]:checked) .copy[data-verb]:not([data-verb="anotar"]) { display: none; }
+.prompts:has(input[value="handoff"]:checked) .copy[data-verb]:not([data-verb="handoff"]) { display: none; }
 
 /* barra de seções: vem depois do hero e fica no topo durante a rolagem */
 .topbar { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--ink); }
 .topbar__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; min-height: 3.5rem; }
-.topbar__brand { font: 400 1.25rem/1 var(--display); color: var(--ink); text-decoration: none; }
+.topbar__brand { display: inline-flex; align-items: center; min-height: 44px; font: 400 1.25rem/1 var(--display); color: var(--ink); text-decoration: none; }
 .topbar__list { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
 .topbar__list a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); font-weight: 700; text-decoration: none; }
 .topbar__brand:hover, .topbar__list a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
@@ -529,7 +529,6 @@ h3, p { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn__tex { transition: none; }
-  .more summary::before { transition: none; }
 }
 @media (forced-colors: active) {
   .btn::before, .btn__tex { display: none; }
@@ -586,8 +585,8 @@ h3, p { margin: 0; }
   <div class="wrap topbar__row">
     <a class="topbar__brand" href="#conteudo">DA11Y.md</a>
     <ul class="topbar__list">
-      <li><a href="#pedidos" data-i18n="nav-ask">O que pedir</a></li>
       <li><a href="#comecar" data-i18n="nav-start">Como começar</a></li>
+      <li><a href="#pedidos" data-i18n="nav-ask">O que pedir</a></li>
       <li><a href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener">GitHub<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
     </ul>
   </div>
@@ -599,41 +598,30 @@ h3, p { margin: 0; }
       <div class="intro__text">
         <h2 id="sobre" data-i18n="intro-title">Acessibilidade antes do primeiro pixel</h2>
         <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar, analisar e anotar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código. Assim a interface já nasce acessível no protótipo, e quem desenvolve recebe no arquivo o que o leitor de tela vai ler.</p>
-        <div class="actions">
-          <a class="btn btn--primary" href="#comecar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="start">Como começar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></a>
-          <a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
-        </div>
         <ul class="facts" aria-label="O projeto em números" data-i18n-attr="aria-label:facts-label">
           <li data-i18n="fact-1"><strong>0.1.0</strong>, em teste</li>
           <li data-i18n="fact-2"><strong>27</strong> guias de componente</li>
           <li data-i18n="fact-3">português e inglês</li>
           <li data-i18n="fact-4"><strong>4</strong> testes de campo</li>
         </ul>
+        <div class="start">
+          <h3 class="start__title" id="comecar" data-i18n="start">Como começar</h3>
+          <ol class="stepper">
+            <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+              <p data-i18n="start-step1">Abra a skill na Comunidade do Figma e salve na sua conta.</p>
+              <div class="actions"><a class="btn btn--primary" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Abrir a skill</span><span class="sr-only" data-i18n="community-sr"> na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a></div>
+            </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+              <p data-i18n="start-step2">No chat do agente do Figma, digite <code>/da11y</code> e escreva o pedido. Por exemplo:</p>
+              <ul class="topics">
+                <li><span class="topics__name" data-i18n="create-label">Para criar</span><span class="topics__text"><code data-i18n="ex-create">/da11y crie este componente</code></span></li>
+                <li><span class="topics__name" data-i18n="analyze-label">Para analisar</span><span class="topics__text"><code data-i18n="ex-analyze">/da11y analise esta tela</code></span></li>
+                <li><span class="topics__name" data-i18n="annotate-label">Para o handoff de acessibilidade</span><span class="topics__text"><code data-i18n="ex-handoff">/da11y prepare o handoff de acessibilidade desta tela</code></span></li>
+              </ul>
+            </div></li>
+          </ol>
+          <p class="start__more" data-i18n="start-more">Também dá para usar sem instalar nada, ou deixar a regra na sua biblioteca. Veja as <a href="#outras-formas">outras formas de usar</a>.</p>
+        </div>
       </div>
-    </section>
-
-    <section class="section split split--wide" aria-labelledby="por-que">
-      <div class="split__head">
-        <h2 id="por-que" data-i18n="why-title">Por que começar pelo design</h2>
-      </div>
-      <div class="split__body">
-        <p data-i18n="why-p1">Muitas decisões de acessibilidade são tomadas antes de o código existir. Quando o desenho chega a quem desenvolve, estas já estão nele:</p>
-      </div>
-        <figure class="decisions-fig split__wide">
-          <div class="mock-screen mock-screen--order" aria-hidden="true">
-            <div class="mock-row"><span class="mock-order">1</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock-input"></span></div></div>
-            <div class="mock-row"><span class="mock-order">2</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-password">Senha</span><span class="mock-input mock-input--focus"></span><span class="mock-error"><b>!</b><span data-i18n="mock-error">Senha incorreta. Tente de novo ou redefina a senha.</span></span></div></div>
-            <div class="mock-row"><span class="mock-order">3</span><span class="btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-enter">Entrar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
-          </div>
-          <ul class="topics topics--column">
-            <li><span class="topics__name" data-i18n="topic1-name">Contraste</span><span class="topics__text" data-i18n="topic1-text">A cor do texto e dos ícones contra o fundo. Aqui, 15,18:1.</span></li>
-            <li><span class="topics__name" data-i18n="topic2-name">Área de toque</span><span class="topics__text" data-i18n="topic2-text">O tamanho de cada botão e de cada link. Aqui, 48 px de altura.</span></li>
-            <li><span class="topics__name" data-i18n="topic3-name">Estados de foco</span><span class="topics__text" data-i18n="topic3-text">Como cada controle aparece quando o teclado chega nele. Aqui, um contorno de 3 px.</span></li>
-            <li><span class="topics__name" data-i18n="topic4-name">Mensagens de erro</span><span class="topics__text" data-i18n="topic4-text">O que avisa que algo deu errado e como resolver, em texto, perto do campo.</span></li>
-            <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela: 1, 2, 3.</span></li>
-          </ul>
-          <figcaption data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</figcaption>
-        </figure>
     </section>
 
     <section class="section" aria-labelledby="pedidos">
@@ -652,7 +640,7 @@ h3, p { margin: 0; }
           <div class="flow__ask">
             <h3 data-i18n="ask1-name">Criar</h3>
             <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
-            <p class="flow__say" data-i18n="ask1-say">“Crie este componente seguindo as regras do DA11Y.md.”</p>
+            <p class="flow__say" data-i18n="ask1-say">“/da11y crie este componente”</p>
           </div>
           <div class="flow__steps">
             <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
@@ -680,7 +668,7 @@ h3, p { margin: 0; }
           <div class="flow__ask">
             <h3 data-i18n="ask2-name">Analisar</h3>
             <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
-            <p class="flow__say" data-i18n="ask2-say">“Analise esta tela seguindo as regras do DA11Y.md.”</p>
+            <p class="flow__say" data-i18n="ask2-say">“/da11y analise esta tela”</p>
           </div>
           <div class="flow__steps">
             <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
@@ -714,15 +702,15 @@ h3, p { margin: 0; }
 
         <article class="flow__row">
           <div class="flow__ask">
-            <h3 data-i18n="ask3-name">Anotar a leitura</h3>
+            <h3 data-i18n="ask3-name">Handoff de acessibilidade</h3>
             <h4 class="flow__label" data-i18n="flow-you">Você pede</h4>
-            <p class="flow__say" data-i18n="ask3-say">“Anote a leitura desta tela seguindo as regras do DA11Y.md.”</p>
+            <p class="flow__say" data-i18n="ask3-say">“/da11y prepare o handoff de acessibilidade desta tela”</p>
           </div>
           <div class="flow__steps">
             <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask3-s1">Lê cada elemento em que o leitor de tela para.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask3-s2">Propõe a ordem e o que é lido, numa lista fechada.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask3-s2">Propõe a ordem de leitura e o que é lido, numa lista fechada. A ordem do Tab e o que fica em silêncio vão para o relatório.</p></div></li>
               <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask3-s3">Você confere, edita se quiser e confirma com ✓ e o seu nome.</p></div></li>
             </ol>
           </div>
@@ -796,15 +784,15 @@ h3, p { margin: 0; }
       </figure>
     </section>
 
-    <section class="section split section--lead" aria-labelledby="comecar">
+    <section class="section split" aria-labelledby="outras-formas">
       <div class="split__head">
-        <h2 id="comecar" data-i18n="start">Como começar</h2>
+        <h2 id="outras-formas" data-i18n="other-title">Outras formas de usar</h2>
       </div>
       <div class="split__body">
         <div class="tabs tabs--first" data-tabs>
           <section class="tabs__panel" id="painel-chat" aria-labelledby="painel-chat-titulo">
-            <h3 class="tabs__heading" id="painel-chat-titulo" data-i18n="chat-title">No chat do agente</h3>
-            <p class="tabs__lead" data-i18n="chat-lead">Para um pedido de cada vez, sem preparar nada antes.</p>
+            <h3 class="tabs__heading" id="painel-chat-titulo" data-i18n="chat-title">Link no pedido</h3>
+            <p class="tabs__lead" data-i18n="chat-lead">Para um pedido de cada vez, sem instalar nada.</p>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
                 <p data-i18n="chat-step1">Escreva o pedido como sempre e acrescente o link do protocolo. Por exemplo:</p>
@@ -813,7 +801,7 @@ h3, p { margin: 0; }
                       <legend class="verbs__legend" data-i18n="verbs-legend">O pedido</legend>
                       <label class="verb"><input type="radio" name="verbo" value="criar" checked><span data-i18n="create-label">Para criar</span></label>
                       <label class="verb"><input type="radio" name="verbo" value="analisar"><span data-i18n="analyze-label">Para analisar</span></label>
-                      <label class="verb"><input type="radio" name="verbo" value="anotar"><span data-i18n="annotate-label">Para anotar a leitura</span></label>
+                      <label class="verb"><input type="radio" name="verbo" value="handoff"><span data-i18n="annotate-label">Para o handoff de acessibilidade</span></label>
                     </fieldset>
                     <div class="copy" data-verb="criar">
                       <span class="copy__label" data-i18n="create-label">Para criar</span>
@@ -831,33 +819,28 @@ h3, p { margin: 0; }
                         <span class="copy__status" role="status"></span>
                       </div>
                     </div>
-                    <div class="copy" data-verb="anotar">
-                      <span class="copy__label" data-i18n="annotate-label">Para anotar a leitura</span>
-                      <pre><code id="pedido-anotar" data-i18n="annotate-prompt">Anote a leitura desta tela seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
+                    <div class="copy" data-verb="handoff">
+                      <span class="copy__label" data-i18n="annotate-label">Para o handoff de acessibilidade</span>
+                      <pre><code id="pedido-anotar" data-i18n="annotate-prompt">Prepare o handoff de acessibilidade desta tela seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
                       <div class="copy__row">
-                        <button type="button" class="btn" data-copy="pedido-anotar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-annotate-sr"> para anotar a leitura</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                        <button type="button" class="btn" data-copy="pedido-anotar"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-annotate-sr"> para o handoff de acessibilidade</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
                         <span class="copy__status" role="status"></span>
                       </div>
                     </div>
                   </div>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
-                <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e grava no arquivo o resultado do pedido: a tela desenhada com a leitura, os erros da análise ou a leitura anotada para quem desenvolve.</p>
+                <p data-i18n="chat-step2">O agente lê o protocolo, aplica a sua biblioteca primeiro e grava no arquivo o resultado do pedido: a tela desenhada com a leitura, os erros da análise ou o handoff de acessibilidade para quem desenvolve.</p>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
                 <p data-i18n="chat-step3">Quando ele apontar um contraste reprovado, confira o mesmo par na checagem de contraste do Figma, no seletor de cor. Não use a correção automática, porque ela troca a cor que veio da biblioteca.</p>
               </div></li>
             </ol>
           </section>
           <section class="tabs__panel" id="painel-skill" aria-labelledby="painel-skill-titulo">
-            <h3 class="tabs__heading" id="painel-skill-titulo" data-i18n="skill-title">Como skill</h3>
-            <p class="tabs__lead" data-i18n="skill-lead">Para chamar o protocolo com uma barra, em qualquer arquivo. Funciona em todos os planos.</p>
+            <h3 class="tabs__heading" id="painel-skill-titulo" data-i18n="skill-title">Skill à mão</h3>
+            <p class="tabs__lead" data-i18n="skill-lead">Para criar a skill na sua conta, em vez de salvar a da Comunidade. Funciona em todos os planos.</p>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
-                <p data-i18n="skill-step1">Abra a página da skill na Comunidade do Figma e salve a skill na sua conta.</p>
-                <div class="actions"><a class="btn" href="https://www.figma.com/community/skill/136973/da11y" target="_blank" rel="noopener"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="community-btn">Skill na Comunidade do Figma</span><span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 14 14 6M7 6h7v7"/></svg></a></div>
-                <details class="more">
-                  <summary data-i18n="skill-manual">Criar a skill à mão</summary>
-                  <div class="more__body">
-                <p data-i18n="skill-step2">Se preferir criar a skill você mesmo, clique na caixa do pedido, no chat do agente, e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>. Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
+                                <p data-i18n="skill-step2">No chat do agente, clique na caixa do pedido e escolha <span lang="en">Skills</span> › <span lang="en">Add skill</span> › <span lang="en">Start from scratch</span>. Preencha os três campos com estes textos e clique em <span lang="en">Add</span>.</p>
                 <div class="copy copy--small">
                     <span class="copy__label" data-i18n="name-label">Nome</span>
                     <pre><code id="skill-nome">da11y</code></pre>
@@ -882,10 +865,8 @@ h3, p { margin: 0; }
                       <span class="copy__status" role="status"></span>
                     </div>
                   </div>
-                  </div>
-                </details>
               </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
-                <p data-i18n="skill-step3">Para usar, digite <code>/da11y</code> no pedido e escreva o que precisa, como <code>/da11y analise esta tela</code> ou <code>/da11y anote a leitura</code>. A skill fica disponível em todos os seus arquivos.</p>
+                <p data-i18n="skill-step3">Depois, digite <code>/da11y</code> e o pedido, como na skill da Comunidade. A skill fica disponível em todos os seus arquivos.</p>
               </div></li>
             </ol>
           </section>
@@ -906,6 +887,30 @@ h3, p { margin: 0; }
           </section>
         </div>
       </div>
+    </section>
+
+    <section class="section split split--wide" aria-labelledby="por-que">
+      <div class="split__head">
+        <h2 id="por-que" data-i18n="why-title">Por que começar pelo design</h2>
+      </div>
+      <div class="split__body">
+        <p data-i18n="why-p1">Muitas decisões de acessibilidade são tomadas antes de o código existir. Quando o desenho chega a quem desenvolve, estas já estão nele:</p>
+      </div>
+        <figure class="decisions-fig split__wide">
+          <div class="mock-screen mock-screen--order" aria-hidden="true">
+            <div class="mock-row"><span class="mock-order">1</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock-input"></span></div></div>
+            <div class="mock-row"><span class="mock-order">2</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-password">Senha</span><span class="mock-input mock-input--focus"></span><span class="mock-error"><b>!</b><span data-i18n="mock-error">Senha incorreta. Tente de novo ou redefina a senha.</span></span></div></div>
+            <div class="mock-row"><span class="mock-order">3</span><span class="btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-enter">Entrar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
+          </div>
+          <ul class="topics topics--column">
+            <li><span class="topics__name" data-i18n="topic1-name">Contraste</span><span class="topics__text" data-i18n="topic1-text">A cor do texto e dos ícones contra o fundo. Aqui, 15,18:1.</span></li>
+            <li><span class="topics__name" data-i18n="topic2-name">Área de toque</span><span class="topics__text" data-i18n="topic2-text">O tamanho de cada botão e de cada link. Aqui, 48 px de altura.</span></li>
+            <li><span class="topics__name" data-i18n="topic3-name">Estados de foco</span><span class="topics__text" data-i18n="topic3-text">Como cada controle aparece quando o teclado chega nele. Aqui, um contorno de 3 px.</span></li>
+            <li><span class="topics__name" data-i18n="topic4-name">Mensagens de erro</span><span class="topics__text" data-i18n="topic4-text">O que avisa que algo deu errado e como resolver, em texto, perto do campo.</span></li>
+            <li><span class="topics__name" data-i18n="topic5-name">Ordem de leitura</span><span class="topics__text" data-i18n="topic5-text">A sequência em que o leitor de tela percorre a tela: 1, 2, 3.</span></li>
+          </ul>
+          <figcaption data-i18n="why-p2">Quando o desenho ignora essas decisões, o dev corrige no código, e o produto acaba diferente do que foi desenhado. O DA11Y.md leva as regras para o momento em que a tela é desenhada. Assim design e código respondem aos mesmos números.</figcaption>
+        </figure>
     </section>
 
     <section class="section" aria-labelledby="pede">
@@ -1119,6 +1124,13 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'intro-title': 'Accessibility before the first pixel',
       'intro-lede': 'DA11Y.md is a protocol for Figma’s artificial intelligence (<abbr>AI</abbr>) agent to design, analyze and annotate accessible interfaces. It brings to the design file the same rules that ' + A11Y + ' brings to code. That way the interface is already accessible in the prototype, and whoever builds receives in the file what the screen reader will read.',
       'start': 'Getting started',
+      'start-step1': 'Open the skill in the Figma Community and save it to your account.',
+      'start-step2': 'In the Figma agent’s chat, type <code>/da11y</code> and write your request. For example:',
+      'ex-create': '/da11y create this component',
+      'ex-analyze': '/da11y analyze this screen',
+      'ex-handoff': '/da11y prepare the accessibility handoff for this screen',
+      'start-more': 'You can also use it without installing anything, or keep the rule in your library. See the <a href="#outras-formas">other ways to use it</a>.',
+      'other-title': 'Other ways to use it',
       'repo-btn': 'Repository on GitHub',
 
       'why-title': 'Why start with design',
@@ -1140,7 +1152,6 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'ex3': 'CONDITIONAL\nFix here — 1\nFull report on the page DA11Y — reports',
       'ex4': '4 · card\n🔊 button "Home insurance, Active"\n✓ Marina',
       'ex5': 'Switch. Turns something on or off right away. Do not use it to choose between options (use Radio). Aliases: toggle, on/off.',
-      'skill-manual': 'Create the skill by hand',
       'kin-to': ' (from A11Y.md to DA11Y.md)',
       'kin-back': ' (from DA11Y.md to A11Y.md)',
       'topic5-name': 'Reading order',
@@ -1153,14 +1164,14 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'flow-agent': 'The agent does',
       'flow-file': 'In the file',
       'ask1-name': 'Create',
-      'ask1-say': '“Create this component following the DA11Y.md rules.”',
+      'ask1-say': '“/da11y create this component”',
       'ask1-s1': 'Looks up what the library already has.',
       'ask1-s2': 'Designs with it, without swapping tokens or recreating components.',
       'ask1-s3': 'Delivers the screen with the reading annotated on each element.',
       'flow1-type': '3 · button',
       'flow1-a': '🔊 button "Continue"',
       'ask2-name': 'Analyze',
-      'ask2-say': '“Analyze this screen following the DA11Y.md rules.”',
+      'ask2-say': '“/da11y analyze this screen”',
       'ask2-s1': 'Measures contrast, touch targets, states and text, with code.',
       'ask2-s2': 'Annotates what needs to change and what the design does not answer.',
       'ask2-s3': 'Writes the report on a page of the file. The reading stays there, as a draft.',
@@ -1170,10 +1181,10 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'flow2-c3': 'Fix here — 1',
       'flow2-c4': 'Design system errors — 0',
       'flow2-c5': 'Not read — 2',
-      'ask3-name': 'Annotate the reading',
-      'ask3-say': '“Annotate the reading of this screen following the DA11Y.md rules.”',
+      'ask3-name': 'Accessibility handoff',
+      'ask3-say': '“/da11y prepare the accessibility handoff for this screen”',
       'ask3-s1': 'Reads each element where the screen reader stops.',
-      'ask3-s2': 'Proposes the order and what is read, as a closed list.',
+      'ask3-s2': 'Proposes the reading order and what is read, as a closed list. The Tab order and what stays silent go to the report.',
       'ask3-s3': 'You check it, edit it if you want and confirm with ✓ and your name.',
       'mock-status-title': 'Request status',
       'mock-status-l1': 'Protocol number: 48213',
@@ -1185,8 +1196,8 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'flow3-d': '✓ Marina',
       'ask-outro': 'In all three requests, the screen gets the annotation with the status, the counts of what there is to do and where the full report is. An illustration made for this page.',
 
-      'chat-title': 'In the agent’s chat',
-      'chat-lead': 'For one request at a time, with nothing to set up first.',
+      'chat-title': 'Link in the prompt',
+      'chat-lead': 'For one request at a time, without installing anything.',
       'chat-step1': 'Write your prompt as usual and add the link to the protocol. For example:',
       'verbs-legend': 'The request',
       'create-label': 'To create',
@@ -1196,17 +1207,17 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'analyze-label': 'To analyze',
       'analyze-prompt': 'Analyze this screen strictly following the accessibility rules in the file ' + CORE,
       'copy-analyze-sr': ' to analyze',
-      'annotate-label': 'To annotate the reading',
-      'annotate-prompt': 'Annotate the reading of this screen strictly following the accessibility rules in the file ' + CORE,
-      'copy-annotate-sr': ' to annotate the reading',
-      'chat-step2': 'The agent reads the protocol, applies your library first and writes the request’s result in the file: the designed screen with its reading, the analysis’s errors, or the reading annotated for whoever builds.',
+      'annotate-label': 'For the accessibility handoff',
+      'annotate-prompt': 'Prepare the accessibility handoff for this screen strictly following the accessibility rules in the file ' + CORE,
+      'copy-annotate-sr': ' for the accessibility handoff',
+      'chat-step2': 'The agent reads the protocol, applies your library first and writes the request’s result in the file: the designed screen with its reading, the analysis’s errors, or the accessibility handoff for whoever builds.',
       'chat-step3': 'When it points out a failing contrast, check the same pair in Figma’s contrast check, in the color picker. Do not use the auto-correct, because it changes the color that came from the library.',
 
-      'skill-title': 'As a skill',
-      'skill-lead': 'To call the protocol with a slash, in any file. It works on every plan.',
-      'skill-step1': 'Open the skill’s page in the Figma Community and save the skill to your account.',
-      'community-btn': 'Skill in the Figma Community',
-      'skill-step2': 'If you’d rather create the skill yourself, click the prompt box in the agent’s chat and choose Skills › Add skill › Start from scratch. Fill in the three fields with these texts and click Add.',
+      'skill-title': 'Skill by hand',
+      'skill-lead': 'To create the skill in your own account, instead of saving the one in the Community. It works on every plan.',
+      'community-btn': 'Open the skill',
+      'community-sr': ' in the Figma Community',
+      'skill-step2': 'In the agent’s chat, click the prompt box and choose Skills › Add skill › Start from scratch. Fill in the three fields with these texts and click Add.',
       'name-label': 'Name',
       'copy-name': 'Copy name',
       'desc-label': 'Description',
@@ -1215,7 +1226,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'instr-label': 'Instructions',
       'skill-instr': 'When designing or evaluating flows, screens or components, follow strictly the accessibility rules in the file ' + CORE,
       'copy-instr': 'Copy instructions',
-      'skill-step3': 'To use it, type <code>/da11y</code> in your prompt and write what you need, like <code>/da11y analyze this screen</code> or <code>/da11y annotate the reading</code>. The skill is available in all your files.',
+      'skill-step3': 'Then type <code>/da11y</code> and your request, as with the Community skill. The skill is available in all your files.',
 
       'lib-title': 'In the library',
       'lib-lead': 'So the rule comes in by itself in designs made with your library.',
@@ -1486,6 +1497,10 @@ Relatório completo na página DA11Y — relatórios</code></pre>
         if (focus) t.focus();
       }
       tabs.forEach(function (t, i) {
+        // o foco sozinho não rola a lista quando a aba está meio visível, nem quando ela volta pelo Shift+Tab depois
+        // de a lista rolar. A aba vai para o começo da lista, que é onde a rolagem encaixa (com 'nearest', o encaixe
+        // a puxava de volta e cortava a do meio em 320 px)
+        t.addEventListener('focus', function () { t.scrollIntoView({ block: 'nearest', inline: 'start' }); });
         t.addEventListener('click', function () { select(t, true); });
         t.addEventListener('keydown', function (e) {
           var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
