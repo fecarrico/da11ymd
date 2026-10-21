@@ -647,7 +647,7 @@ h3, p { margin: 0; }
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask1-s1">Procura o que a biblioteca já tem.</p></div></li>
               <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask1-s2">Desenha com ela, sem trocar token nem recriar componente.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask1-s3">Entrega a tela com a leitura anotada em cada elemento.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask1-s3">Entrega a tela e desenha a leitura numa página do arquivo, em cards numerados.</p></div></li>
             </ol>
           </div>
           <div class="flow__file">
@@ -674,8 +674,8 @@ h3, p { margin: 0; }
             <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask2-s1">Mede contraste, área de toque, estados e texto, com código.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask2-s2">Anota o que precisa mudar e o que o desenho não responde.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask2-s3">Escreve o relatório numa página do arquivo. A leitura fica nele, como rascunho.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask2-s2">Anota na tela só o que você corrige neste arquivo, com o número do achado.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask2-s3">Desenha o relatório numa página do arquivo, com a tela e os achados numerados. A leitura fica nele, como rascunho.</p></div></li>
             </ol>
           </div>
           <div class="flow__file">
@@ -710,8 +710,8 @@ h3, p { margin: 0; }
             <h4 class="flow__label" data-i18n="flow-agent">O agente faz</h4>
             <ol class="stepper">
               <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body"><p data-i18n="ask3-s1">Lê cada elemento em que o leitor de tela para.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask3-s2">Propõe a ordem de leitura e o que é lido, numa lista fechada. A ordem do Tab e o que fica em silêncio vão para o relatório.</p></div></li>
-              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask3-s3">Você confere, edita se quiser e confirma com ✓ e o seu nome.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body"><p data-i18n="ask3-s2">Desenha numa página do arquivo a ordem de leitura, em cards numerados ao lado de uma cópia da tela, numa lista fechada. Também mede as áreas de toque e mostra os estados de foco da biblioteca.</p></div></li>
+              <li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body"><p data-i18n="ask3-s3">Você confere, edita se quiser e confirma no card com ✓ e o seu nome.</p></div></li>
             </ol>
           </div>
           <div class="flow__file">
@@ -737,7 +737,7 @@ h3, p { margin: 0; }
     <section class="section section--tight" aria-labelledby="anotacoes">
       <div class="section__intro">
         <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Corrigir aqui é um defeito de uso neste arquivo. Erro do design system é um defeito da biblioteca, para quem cuida dela. Cada tipo tem a sua categoria, e assim cada pessoa filtra o que precisa fazer. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta uma linha com ✓ e o seu nome.</p>
+        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Corrigir aqui é um defeito de uso neste arquivo, e ele fica na tela, com o número do achado. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Erro do design system é um defeito da biblioteca, para quem cuida dela. No agente do Figma, esses dois viram cards numerados nas páginas de relatório e de handoff, ao lado de uma cópia da tela, para a tela não se encher de anotações. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta ao card uma linha com ✓ e o seu nome.</p>
       </div>
       <figure class="pins">
         <div class="canvas">
@@ -780,7 +780,7 @@ h3, p { margin: 0; }
             </div>
           </div>
         </div>
-        <figcaption data-i18n="notes-caption">Os quatro tipos de anotação, cada um na sua categoria, na aparência das anotações do Figma. O contorno de cada componente tem a cor da anotação presa a ele, e o contorno da tela é o da anotação do frame. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
+        <figcaption data-i18n="notes-caption">Os quatro tipos de anotação, cada um na sua categoria, como ficam quando todos vão para o canvas. O contorno de cada componente tem a cor da anotação presa a ele, e o contorno da tela é o da anotação do frame. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
       </figure>
     </section>
 
@@ -851,7 +851,7 @@ h3, p { margin: 0; }
                   </div>
                 <div class="copy copy--small">
                     <span class="copy__label" data-i18n="desc-label">Descrição</span>
-                    <pre><code id="skill-descricao" data-i18n="skill-desc">Obrigatória para desenhar, editar, analisar ou revisar a acessibilidade de telas, fluxos ou componentes no Figma. Aplica o protocolo DA11Y.md, lido do GitHub, mede contraste, alvos e texto com código, e só termina com as anotações gravadas no arquivo.</code></pre>
+                    <pre><code id="skill-descricao" data-i18n="skill-desc">Obrigatória para desenhar, editar, analisar ou revisar a acessibilidade de telas, fluxos ou componentes no Figma. Aplica o protocolo DA11Y.md, lido do GitHub, mede contraste, alvos e texto com código, e só termina com a evidência gravada no arquivo: as anotações e as páginas de relatório e de handoff.</code></pre>
                     <div class="copy__row">
                       <button type="button" class="btn" data-copy="skill-descricao"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-desc">Copiar descrição</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
                       <span class="copy__status" role="status"></span>
@@ -937,7 +937,7 @@ h3, p { margin: 0; }
           </li>
           <li class="rule">
             <h3 data-i18n="rule3-title">A evidência fica no arquivo</h3>
-            <p data-i18n="rule3-text">Cada tela analisada recebe uma anotação curta, nativa do Figma, com o status e o que há para fazer. O relatório completo vai para uma página do próprio arquivo, e se repete no chat, para você salvar e entregar a quem desenvolve.</p>
+            <p data-i18n="rule3-text">Cada tela analisada recebe uma anotação curta, nativa do Figma, com o status, o que há para fazer e o link para o relatório. O relatório completo é desenhado numa página do próprio arquivo, com a tela e os achados numerados, e se repete no chat, para você salvar e entregar a quem desenvolve.</p>
             <div class="copy copy--small rule__ex">
               <span class="copy__label" data-i18n="ex-label">Exemplo</span>
               <pre><code data-i18n="ex3">CONDICIONAL
@@ -946,13 +946,11 @@ Relatório completo na página DA11Y — relatórios</code></pre>
             </div>
           </li>
           <li class="rule">
-            <h3 data-i18n="rule4-title">Cada anotação pede uma ação</h3>
-            <p data-i18n="rule4-text">Quando você pede a leitura, uma anotação por elemento, com a ordem de leitura e o que o leitor de tela lê. Numa análise, o canvas recebe só os erros e as perguntas de estrutura. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório, fora do canvas.</p>
+            <h3 data-i18n="rule4-title">A tela guarda só o que você corrige</h3>
+            <p data-i18n="rule4-text">Na tela ficam a anotação com o status e um Corrigir aqui para cada defeito deste arquivo, com o número do achado. Os erros do design system e as perguntas ficam numerados no relatório, e a leitura vai para o handoff. Um erro cabe numa linha. Medidas, ressalvas e o que passou ficam no relatório.</p>
             <div class="copy copy--small rule__ex">
               <span class="copy__label" data-i18n="ex-label">Exemplo</span>
-              <pre><code data-i18n="ex4">4 · card
-🔊 botão "Seguro residencial, Ativo"
-✓ Marina</code></pre>
+              <pre><code data-i18n="ex4">🟠 HIGH · Aqui: seta branca sobre branco · achado 2</code></pre>
             </div>
           </li>
           <li class="rule">
@@ -1150,7 +1148,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'ex1': 'Origin: token border/default · measured 2.9:1 · floor 3:1 · 🟡 MEDIUM · shall I fix it?',
       'ex2': 'text/primary on surface/default · 11.84:1 · floor 7:1 · pass',
       'ex3': 'CONDITIONAL\nFix here — 1\nFull report on the page DA11Y — reports',
-      'ex4': '4 · card\n🔊 button "Home insurance, Active"\n✓ Marina',
+      'ex4': '🟠 HIGH · Here: white arrow on white · finding 2',
       'ex5': 'Switch. Turns something on or off right away. Do not use it to choose between options (use Radio). Aliases: toggle, on/off.',
       'kin-to': ' (from A11Y.md to DA11Y.md)',
       'kin-back': ' (from DA11Y.md to A11Y.md)',
@@ -1167,14 +1165,14 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'ask1-say': '“/da11y create this component”',
       'ask1-s1': 'Looks up what the library already has.',
       'ask1-s2': 'Designs with it, without swapping tokens or recreating components.',
-      'ask1-s3': 'Delivers the screen with the reading annotated on each element.',
+      'ask1-s3': 'Delivers the screen and draws the reading on a page of the file, as numbered cards.',
       'flow1-type': '3 · button',
       'flow1-a': '🔊 button "Continue"',
       'ask2-name': 'Analyze',
       'ask2-say': '“/da11y analyze this screen”',
       'ask2-s1': 'Measures contrast, touch targets, states and text, with code.',
-      'ask2-s2': 'Annotates what needs to change and what the design does not answer.',
-      'ask2-s3': 'Writes the report on a page of the file. The reading stays there, as a draft.',
+      'ask2-s2': 'Annotates on the screen only what you fix in this file, with the finding’s number.',
+      'ask2-s3': 'Draws the report on a page of the file, with the screen and the numbered findings. The reading stays there, as a draft.',
       'flow2-status': 'CONDITIONAL',
       'flow2-c1': 'Open questions — 1',
       'flow2-c2': 'Readings — not annotated',
@@ -1184,8 +1182,8 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'ask3-name': 'Accessibility handoff',
       'ask3-say': '“/da11y prepare the accessibility handoff for this screen”',
       'ask3-s1': 'Reads each element where the screen reader stops.',
-      'ask3-s2': 'Proposes the reading order and what is read, as a closed list. The Tab order and what stays silent go to the report.',
-      'ask3-s3': 'You check it, edit it if you want and confirm with ✓ and your name.',
+      'ask3-s2': 'Draws the reading order on a page of the file, as numbered cards beside a copy of the screen, in a closed list. It also measures the touch areas and shows the library’s focus states.',
+      'ask3-s3': 'You check it, edit it if you want and confirm on the card with ✓ and your name.',
       'mock-status-title': 'Request status',
       'mock-status-l1': 'Protocol number: 48213',
       'mock-status-l2': 'Status: Under review',
@@ -1221,7 +1219,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'name-label': 'Name',
       'copy-name': 'Copy name',
       'desc-label': 'Description',
-      'skill-desc': 'Required to design, edit, analyze or review the accessibility of screens, flows or components in Figma. Applies the DA11Y.md protocol, read from GitHub, measures contrast, targets and text with code, and ends only with the annotations written in the file.',
+      'skill-desc': 'Required to design, edit, analyze or review the accessibility of screens, flows or components in Figma. Applies the DA11Y.md protocol, read from GitHub, measures contrast, targets and text with code, and ends only with the evidence written in the file: the annotations and the report and handoff pages.',
       'copy-desc': 'Copy description',
       'instr-label': 'Instructions',
       'skill-instr': 'When designing or evaluating flows, screens or components, follow strictly the accessibility rules in the file ' + CORE,
@@ -1238,7 +1236,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'lib-note': 'Library guidelines are a feature of the Professional, Organization and Enterprise plans, and they apply to design requests with the library. To analyze a screen that already exists, use the chat or the skill.',
 
       'notes-title': 'How annotations appear in the file',
-      'notes-intro': 'The annotations are native to Figma and pinned to the element. A Proposal is what the agent proposes and you confirm: an element’s reading or a structural question. Fix here is a defect of use in this file. Design system error is a defect of the library, for whoever maintains it. Each type has its own category, so each person can filter what they have to do. The screen gets an annotation with its status, in the Accessibility category. When you confirm a proposal, you add a line with ✓ and your name.',
+      'notes-intro': 'The annotations are native to Figma and pinned to the element. Fix here is a defect of use in this file, and it stays on the screen, with the finding’s number. A Proposal is what the agent proposes and you confirm: an element’s reading or a structural question. Design system error is a defect of the library, for whoever maintains it. In the Figma agent, these two become numbered cards on the report and handoff pages, beside a copy of the screen, so the screen does not fill with annotations. The screen gets an annotation with its status, in the Accessibility category. When you confirm a proposal, you add a line with ✓ and your name to the card.',
       'mock-toast': 'Notice saved',
       'mock-email': 'Email',
       'mock-continue': 'Continue',
@@ -1255,7 +1253,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'pin4-c3': 'Fix here — 1',
       'pin4-c4': 'Design system errors — 1',
       'pin4-c5': 'Not read — 0',
-      'notes-caption': 'The four annotation types, each in its own category, as Figma annotations look. Each component’s outline takes the color of the annotation pinned to it, and the screen’s outline is the frame annotation’s. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
+      'notes-caption': 'The four annotation types, each in its own category, as they look when all of them go onto the canvas. Each component’s outline takes the color of the annotation pinned to it, and the screen’s outline is the frame annotation’s. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
 
       'rules-title': 'What it asks of the agent',
       'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
@@ -1264,9 +1262,9 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'rule2-title': 'Compute, never estimate',
       'rule2-text': 'Contrast is calculated by a script that runs inside Figma, from the token values, in every state and every mode. When a pair fails, you check the same pair in Figma’s own contrast check.',
       'rule3-title': 'The evidence lives in the file',
-      'rule3-text': 'Each analyzed screen gets a short native Figma annotation, with the status and what there is to do. The full report goes onto a page of the file itself, and is repeated in the chat, for you to save and hand to whoever builds.',
-      'rule4-title': 'Every annotation asks for an action',
-      'rule4-text': 'When you ask for the reading, one annotation per element, with the reading order and what the screen reader reads. In an analysis, the canvas gets only the errors and the structural questions. An error fits on one line. Measurements, caveats and what passed stay in the report, off the canvas.',
+      'rule3-text': 'Each analyzed screen gets a short native Figma annotation, with the status, what there is to do and the link to the report. The full report is drawn on a page of the file itself, with the screen and the numbered findings, and is repeated in the chat, for you to save and hand to whoever builds.',
+      'rule4-title': 'The screen keeps only what you fix',
+      'rule4-text': 'The screen keeps the annotation with its status and one Fix here for each defect in this file, with the finding’s number. Design system errors and questions stay numbered in the report, and the reading goes to the handoff. An error fits on one line. Measurements, caveats and what passed stay in the report.',
       'rule5-title': 'Design system with context for agents',
       'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order.',
 
