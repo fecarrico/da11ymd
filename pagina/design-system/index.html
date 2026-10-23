@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system pronto para o agente · DA11Y.md</title>
+<script>
+  // Idioma, antes da primeira pintura: a escolha salva no botão vence; sem ela,
+  // o primeiro idioma do navegador que a página tem (português ou inglês); sem
+  // nenhum dos dois, inglês. Os textos trocam no script de idioma, no fim da página.
+  (function () {
+    var d = document.documentElement, lang;
+    try { lang = localStorage.getItem('dally-lang'); } catch (e) { /* vale só nesta visita */ }
+    if (lang !== 'pt' && lang !== 'en') {
+      var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+      lang = 'en';
+      for (var i = 0; i < list.length; i++) {
+        var code = String(list[i]).toLowerCase();
+        if (code.indexOf('pt') === 0) { lang = 'pt'; break; }
+        if (code.indexOf('en') === 0) break;
+      }
+    }
+    d.dataset.lang = lang;
+    d.lang = lang === 'en' ? 'en' : 'pt-BR';
+    if (lang === 'en') d.classList.add('lang-pending');
+    d.classList.add('js');
+  })();
+</script>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+/* Design system pronto para o agente: a página nova do site, na estética de ../index.html.
+   Tokens, grade, barra do topo, passos, bloco de cópia, botão, controles do hero e rodapé
+   vêm de lá, já medidos no perfil Shield (A11Y-DECISIONS.md). Um tema só, como a home.
+   Cópia dos componentes da home: o próximo passo é um CSS compartilhado pelas duas. */
+:root {
+  --paper: #d1cfcb;   /* tinta sobre papel: 11,84:1 */
+  --paper-2: #ebe9e4; /* tinta sobre ele: 15,18:1 */
+  --ink: #141414;
+  --ink-2: #3a3834;   /* sobre papel: 7,51:1 */
+  --rule: #a9a6a0;    /* fio decorativo, não é componente */
+  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, "DejaVu Sans Mono", monospace;
+  --gutter: 2rem;
+  --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1C12.6 8.2 15.8 11.4 23 12 15.8 12.6 12.6 15.8 12 23 11.4 15.8 8.2 12.6 1 12 8.2 11.4 11.4 8.2 12 1Z'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+html { background: var(--paper); color: var(--ink); scroll-padding-top: 5rem; }
+/* em inglês, a página espera a tradução (script de idioma) para aparecer; se o script falhar,
+   ela aparece assim mesmo em 1,5 s, em português (A11Y.md §6, Content Held Hostage) */
+.lang-pending body { visibility: hidden; animation: lang-reveal 0s 1.5s forwards; }
+@keyframes lang-reveal { to { visibility: visible; } } /* o título de destino não fica embaixo da barra fixa */
+body { position: relative; margin: 0; background: var(--paper); color: var(--ink); font: 1.0625rem/1.6 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+.ext { width: 0.8em; height: 0.8em; margin-left: 0.2em; vertical-align: -0.05em; fill: currentColor; }
+code { font-family: var(--mono); font-size: 0.92em; }
+main p { max-width: 34em; } /* no máximo ~80 caracteres em Atkinson Hyperlegible */
+h1, h2, h3, p { margin: 0; }
+
+.page { padding-left: max(1rem, env(safe-area-inset-left, 0px)); padding-right: max(1rem, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 72rem; margin-inline: auto; }
+.skip-link { position: absolute; left: 1rem; top: 1rem; z-index: 20; display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.25rem; background: var(--ink); color: var(--paper); font: 700 1rem/1.2 var(--body); text-decoration: none; transform: translateY(-200%); }
+.skip-link:focus-visible, .skip-link:focus { transform: none; outline: 3px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 6px var(--paper); }
+
+
+/* barra do topo, a mesma do site, com a página nova no menu */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--ink); }
+.topbar__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 2rem; min-height: 3.5rem; }
+.topbar__brand { display: inline-flex; align-items: center; min-height: 44px; font: 400 1.25rem/1 var(--display); color: var(--ink); text-decoration: none; }
+.topbar__list { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
+.topbar__list a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); font-weight: 700; text-decoration: none; }
+.topbar__brand:hover, .topbar__list a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.topbar__list a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.35em; }
+
+/* abertura: o retrato do Dalí em ASCII entra pela direita, espelhado; o texto nunca fica sobre ele */
+:root { --art-w: min(88vw, 26rem); }
+@media (min-width: 60em) { :root { --art-w: min(44vw, 37.5rem); } }
+.lead-band { position: relative; }
+.art { position: relative; width: var(--art-w); aspect-ratio: 323 / 400; margin: 0 calc(-1 * max(1rem, env(safe-area-inset-right, 0px))) 0 auto; }
+.art__poster, .art canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.art.is-drawn .art__poster { visibility: hidden; }
+.hero__controls { position: absolute; top: 1rem; right: 1rem; left: 1rem; z-index: 3; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; pointer-events: none; }
+.hero__ctrl { pointer-events: auto; display: inline-flex; align-items: center; gap: 0.5rem; min-width: 3rem; min-height: 3rem; padding: 0.5rem 1rem; border: 2px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
+.hero__ctrl[hidden] { display: none; }
+.hero__ctrl:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 8px var(--paper); }
+.hero__ctrl-icon { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
+.hero__lang .hero__ctrl-icon { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.hero__motion[data-state="running"] .icon-play, .hero__motion[data-state="paused"] .icon-pause { display: none; }
+.lead__text { display: grid; gap: 1.75rem; }
+/* o índice dos quatro lugares fica na coluna do texto, ao lado do retrato e nunca sobre ele */
+.index { margin-top: 1rem; }
+.index__title { margin-bottom: 1.25rem; font: 400 1.5rem/1.25 var(--display); }
+.lead .topics { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+
+.lead { padding-block: 2.5rem 3rem; }
+.lead h1 { max-width: 16ch; font: 400 3.25rem/1.08 var(--display); text-wrap: balance; }
+.lead__body { display: grid; gap: 2em; }
+.index { padding-bottom: 1rem; }
+.lede { font-size: 1.25rem; line-height: 1.55; }
+.topics { display: grid; gap: 1.25rem 2.5rem; margin: 0; padding: 0; list-style: none; }
+.topics li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.125rem 0; align-content: start; }
+.topics li::before { content: ""; grid-row: 1; width: 0.6rem; height: 0.6rem; margin-top: 0.5rem; background: var(--ink); transform: rotate(45deg); }
+.topics__name { grid-column: 2; font-weight: 700; }
+.topics__name a { text-decoration-thickness: 1px; }
+.topics__text { grid-column: 2; color: var(--ink-2); }
+
+/* cada lugar do design system: título e passos */
+.section { padding-block: 4.5rem; }
+.tut__kicker { margin-bottom: 0.75rem; font: 500 0.875rem/1.5 var(--mono); color: var(--ink-2); }
+.tut h2 { max-width: 18ch; font: 400 2.25rem/1.15 var(--display); text-wrap: balance; }
+.tut__intro { margin-top: 1.25rem; }
+.tut__body { margin-top: 2.5rem; }
+
+.stepper { display: grid; gap: 2.75rem; margin: 0; padding: 0; list-style: none; }
+.step { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 1.25rem; }
+.step__num { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); font: 400 1.25rem/1 var(--display); }
+.step__body { min-width: 0; display: grid; gap: 2em; align-content: start; padding-top: 0.55rem; }
+.step:not(:last-child)::after { content: ""; position: absolute; left: 21px; top: 50px; bottom: calc(-2.75rem + 6px); border-left: 2px dotted var(--ink-2); }
+
+/* print do Figma: a captura como ela é, com contorno de tinta */
+.shot { display: grid; gap: 0.625rem; margin: 0; justify-items: start; }
+.shot img { display: block; max-width: 100%; height: auto; border: 2px solid var(--ink); background: #fff; }
+.shot figcaption { font-size: 0.9375rem; color: var(--ink-2); max-width: 34em; }
+.pair { display: grid; gap: 1.25rem; }
+
+/* bloco de cópia do site: rótulo, linha e texto com cara de código (GOSTO 23) */
+.copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; min-width: 0; }
+.copy__label { display: flex; align-items: center; gap: 0.75rem; font: 500 0.875rem/1.4 var(--mono); color: var(--ink); }
+.copy__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
+.copy pre { margin: 0; min-width: 0; padding: 0.875rem 1rem; border: 2px solid var(--ink); background: var(--paper) var(--tex-corner, none) right top / 64px 40px no-repeat; font: 0.9375rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: break-word; }
+.copy pre code { font-size: 1em; }
+.copy__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 0.5rem; }
+.copy__status { min-height: 1.6em; font-size: 0.9375rem; }
+.copy--avoid pre { border-style: dashed; }
+.copy__note { font-size: 0.9375rem; color: var(--ink-2); }
+
+/* botão do site: textura em pontilhado numa faixa à esquerda, nunca sob o texto */
+.btn { --tex-w: 56px; position: relative; display: inline-grid; grid-template-columns: var(--tex-w) 1fr var(--tex-w); align-items: center; min-width: 15rem; min-height: 48px; padding: 0; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
+/* o rótulo quebra linha quando a pessoa aumenta o espaçamento do texto (SC 1.4.12); no tamanho normal, cabe numa linha */
+.btn__label { grid-column: 2; min-width: 0; padding: 0.375rem 0.5rem; text-align: center; }
+.btn .ico { grid-column: 3; justify-self: end; width: 1.25rem; height: 1.25rem; margin-right: 1.125rem; fill: none; stroke: currentColor; stroke-width: 2; }
+.btn::before, .btn__tex { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: var(--tex-w); background-repeat: no-repeat; background-size: 100% 100%; pointer-events: none; }
+.btn::before { background-image: var(--tex-a, none); }
+.btn__tex { opacity: 0; background-image: var(--tex-b, none); transition: opacity 320ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.btn:hover .btn__tex { opacity: 1; }
+.btn:hover .btn__label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.btn:focus-visible { outline: none; }
+.btn:focus-visible::after {
+  content: ""; position: absolute; inset: -9px; pointer-events: none;
+  background:
+    linear-gradient(var(--ink), var(--ink)) top left / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top left / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top right / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top right / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom left / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom left / 3px 35% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom right / 35% 3px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom right / 3px 35% no-repeat;
+}
+
+/* o card que o handoff desenha no Figma: papel, contorno de tinta, rótulo à esquerda */
+.hcard { display: grid; gap: 0.375rem; max-width: 26rem; padding: 0.75rem; border: 1px solid var(--ink); border-radius: 8px; background: var(--paper-2); font-size: 0.9375rem; }
+.hcard__head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-weight: 700; }
+.hcard__mark { padding: 0.0625rem 0.5rem; border: 1px solid var(--ink); border-radius: 4px; font: 500 0.875rem/1.6 var(--mono); }
+
+.footer { padding-block: 3rem 4rem; }
+.footer__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
+.footer p { margin: 0; color: var(--ink-2); }
+.footer__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
+.footer__links a { display: inline-flex; align-items: center; min-height: 48px; }
+.footer__version { font-family: var(--mono); font-size: 0.9375rem; }
+
+@media (min-width: 48em) {
+  .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+/* o título de cada lugar fica ao lado, nas colunas 1 a 4, e os passos nas colunas 6 a 12,
+   como em "Outras formas de usar" na home */
+@media (min-width: 60em) {
+  .section { padding-block: 5rem; }
+  .tut { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+  .tut__head { grid-column: 1 / span 4; align-self: start; position: sticky; top: 5rem; }
+  .tut__body { grid-column: 6 / span 7; margin-top: 0; }
+  .lead-band { min-height: calc(var(--art-w) / 0.8075); }
+  .art { position: absolute; top: 0; right: calc(-1 * max(1rem, env(safe-area-inset-right, 0px))); width: var(--art-w); margin: 0; }
+  .lead { padding-block: 5rem 4rem; }
+  .lead__text { max-width: min(40rem, calc(100vw - var(--art-w) - max(1rem, (100vw - 72rem) / 2) - 3rem)); }
+
+}
+@media (max-width: 30em) {
+  .lead h1 { font-size: 2.5rem; }
+  .tut h2 { font-size: 1.875rem; }
+  .hero__ctrl { padding-inline: 0.75rem; font-size: 0.875rem; }
+  .hero__lang .hero__ctrl-icon { display: none; }
+  .btn { min-width: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .btn__tex { transition: none; } }
+@media (forced-colors: active) {
+  .btn::before, .btn__tex { display: none; }
+  .btn:focus-visible { outline: 3px solid CanvasText; outline-offset: 4px; }
+  .btn:focus-visible::after { display: none; }
+  .topics li::before { forced-color-adjust: none; background: CanvasText; }
+}
+</style>
+</head>
+<body>
+<div lang="pt-BR" data-lang-root>
+<a class="skip-link" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<nav class="topbar page" aria-label="Seções do site" data-i18n-attr="aria-label:nav-label">
+  <div class="wrap topbar__row">
+    <a class="topbar__brand" href="../">DA11Y.md<span class="sr-only" data-i18n="home-sr">, página inicial</span></a>
+    <ul class="topbar__list">
+      <li><a href="../#comecar" data-i18n="nav-start">Como começar</a></li>
+      <li><a href="../#pedidos" data-i18n="nav-ask">O que pedir</a></li>
+      <li><a href="./" aria-current="page" data-i18n="nav-ds">Design system</a></li>
+      <li><a href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener">GitHub<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="page" id="conteudo" tabindex="-1">
+  <div class="lead-band">
+    <!-- o retrato é decorativo (confirmado pelo Felipe em 23/10): imagem parada com alt vazio, canvas fora da árvore -->
+    <div class="art" data-dali="img/dali-fonte.png">
+      <img class="art__poster" src="img/dali-ascii.png" width="1200" height="1486" alt="">
+      <canvas aria-hidden="true"></canvas>
+      <div class="hero__controls">
+        <!-- o botão diz o outro idioma, escrito nele mesmo e com o lang dele (script de idioma) -->
+        <button type="button" class="hero__ctrl hero__lang" lang="en" hidden>
+          <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25"/><path d="M1.75 8h12.5M8 1.75c-1.9 1.7-2.75 3.7-2.75 6.25S6.1 12.55 8 14.25M8 1.75c1.9 1.7 2.75 3.7 2.75 6.25S9.9 12.55 8 14.25"/></svg>
+          <span class="hero__lang-label">English</span>
+        </button>
+        <button type="button" class="hero__ctrl hero__motion" data-state="running" hidden>
+          <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="icon-pause" d="M4 3h3v10H4zM9 3h3v10H9z"/><path class="icon-play" d="M4 2.5v11l9-5.5z"/></svg>
+          <span class="hero__motion-label">Pausar animação</span>
+        </button>
+        <span class="sr-only" role="status" data-lang-status></span>
+      </div>
+    </div>
+    <div class="wrap lead"><div class="lead__text"><h1 data-i18n="ds-h1">Design system pronto para o agente</h1><p class="lede" data-i18n="ds-lede">O agente do Figma lê a descrição de cada componente antes de desenhar ou avaliar. O que está escrito vira regra. O que falta vira pergunta, e a pergunta segura o handoff.</p>
+      <div class="index"><h2 class="index__title" data-i18n="ds-index">Onde escrever</h2><ul class="topics"><li><span class="topics__name"><a href="#conjunto" data-i18n="topic0-name">No conjunto de variantes</a></span><span class="topics__text" data-i18n="topic0-text">O que vale para todas as variantes: papel, área de toque, leitura, estados, zoom e cor.</span></li><li><span class="topics__name"><a href="#variante" data-i18n="topic1-name">Na variante</a></span><span class="topics__text" data-i18n="topic1-text">Só o que muda nela.</span></li><li><span class="topics__name"><a href="#variaveis" data-i18n="topic2-name">Nas variáveis</a></span><span class="topics__text" data-i18n="topic2-text">Os tokens que o componente usa e o que ele faz em cada modo.</span></li><li><span class="topics__name"><a href="#guidelines" data-i18n="topic3-name">Nas guidelines da biblioteca</a></span><span class="topics__text" data-i18n="topic3-text">O que vale para mais de um componente.</span></li></ul></div></div></div>
+  </div>
+  <div class="wrap">
+<section class="section tut" aria-labelledby="conjunto">
+  <div class="tut__head"><p class="tut__kicker" data-i18n="s0-kicker">1 de 4 · no conjunto</p><h2 id="conjunto" data-i18n="s0-h2">Descreva o conjunto</h2><p class="tut__intro" data-i18n="s0-intro">O conjunto guarda o que vale para todas as variantes. Escreva uma linha por regra, com o nome da regra no começo da linha.</p></div>
+  <div class="tut__body"><ol class="stepper">
+<li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+<p class="step__text" data-i18n="s0-p0-text">Abra o arquivo da biblioteca e selecione o conjunto, pela borda roxa que envolve as variantes. Não selecione uma variante só.</p>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+<p class="step__text" data-i18n="s0-p1-text">No painel Design, à direita, clique em <strong>Component configuration</strong>, o ícone ao lado do nome do conjunto.</p>
+<figure class="shot"><img src="prints/p1-conjunto-painel.png" width="240" height="180" alt="Topo do painel Design com o conjunto Card de pedido selecionado: o nome, quatro ícones, a prévia da descrição e as propriedades State e Detalhes." data-i18n-attr="src:s0-p1-img0-src width:s0-p1-img0-width height:s0-p1-img0-height alt:s0-p1-img0-alt"><figcaption data-i18n="s0-p1-img0-cap">Component configuration é o ícone de ajustes, o terceiro ao lado do nome.</figcaption></figure>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+<p class="step__text" data-i18n="s0-p2-text">Escreva no campo <strong>Description</strong> a partir do modelo. Troque o que está depois de cada nome de regra pelo comportamento do seu componente, e clique fora do painel para salvar.</p>
+<figure class="shot"><img src="prints/p1-conjunto.png" width="560" height="465" alt="Painel Component configuration do Figma com o conjunto Card de pedido. O campo Description tem seis linhas, uma por regra: Card clicável de um pedido, Área de toque, Leitura, Estados, Zoom e Cor. Embaixo, o campo Link, vazio." data-i18n-attr="src:s0-p2-img0-src width:s0-p2-img0-width height:s0-p2-img0-height alt:s0-p2-img0-alt"><figcaption data-i18n="s0-p2-img0-cap">O campo aceita formatação: negrito, título, listas, link e código.</figcaption></figure>
+<div class="copy">
+<span class="copy__label" data-i18n="s0-p2-copy0-label">Modelo para copiar</span>
+<pre><code id="modelo-conjunto" data-i18n="s0-p2-copy0-text">Papel: card clicável, botão, link ou campo.
+Área de toque: o que se toca, e o tamanho.
+Leitura: o que o leitor de tela lê, em ordem.
+Estados: as variantes de estado que existem.
+Zoom: a coleção, os modos e o que muda em cada um.
+Cor: as variáveis de texto e de fundo.</code></pre>
+<div class="copy__row"><button type="button" class="btn" data-copy="modelo-conjunto"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="s0-p2-copy0-button">Copiar modelo</span><span class="sr-only" data-i18n="s0-p2-copy0-sr"> do conjunto</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button><span class="copy__status" role="status"></span></div>
+</div>
+<div class="copy copy--avoid"><span class="copy__label" data-i18n="s0-p2-avoid-label">Evite</span><pre><code data-i18n="s0-p2-avoid-text">Card de pedido.</code></pre><p class="copy__note" data-i18n="s0-p2-avoid-note">O agente não sabe se o card é tocável nem o que ele lê. Então ele pergunta, e o handoff espera a resposta.</p></div>
+</div></li>
+  </ol></div>
+</section>
+<section class="section tut" aria-labelledby="variante">
+  <div class="tut__head"><p class="tut__kicker" data-i18n="s1-kicker">2 de 4 · na variante</p><h2 id="variante" data-i18n="s1-h2">Descreva a variante só no que muda</h2><p class="tut__intro" data-i18n="s1-intro">A variante herda o que o conjunto diz. Escreva nela só a diferença. Se nada muda, deixe o campo vazio.</p></div>
+  <div class="tut__body"><ol class="stepper">
+<li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+<p class="step__text" data-i18n="s1-p0-text">Selecione a variante dentro do conjunto.</p>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+<p class="step__text" data-i18n="s1-p1-text">Em <strong>Component configuration</strong>, abra a aba <strong>Selected variant</strong> e escreva o que esta variante faz de diferente.</p>
+<figure class="shot"><img src="prints/p2-variante.png" width="560" height="445" alt="Painel Component configuration com a aba Selected variant ativa. A descrição diz: Detalhes=True, o botão Detalhes é a ação do card, a área de toque continua sendo o card inteiro, e Detalhes entra no fim do nome lido." data-i18n-attr="src:s1-p1-img0-src width:s1-p1-img0-width height:s1-p1-img0-height alt:s1-p1-img0-alt"><figcaption data-i18n="s1-p1-img0-cap">A aba Component set, ao lado, abre a descrição do conjunto.</figcaption></figure>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+<p class="step__text" data-i18n="s1-p2-text">Confira o que quem usa vai ver. A descrição aparece embaixo do nome da instância, no painel Design, e é ali que o agente também lê.</p>
+<figure class="shot"><img src="prints/p3-instancia.png" width="240" height="300" alt="Painel Design com uma instância de Card de pedido selecionada. Embaixo do nome, a prévia da descrição da variante, e as propriedades State e Detalhes." data-i18n-attr="src:s1-p2-img0-src width:s1-p2-img0-width height:s1-p2-img0-height alt:s1-p2-img0-alt"><figcaption data-i18n="s1-p2-img0-cap">Ali aparece o começo da descrição, e o texto inteiro abre na janela de documentação.</figcaption></figure>
+</div></li>
+  </ol></div>
+</section>
+<section class="section tut" aria-labelledby="variaveis">
+  <div class="tut__head"><p class="tut__kicker" data-i18n="s2-kicker">3 de 4 · nas variáveis</p><h2 id="variaveis" data-i18n="s2-h2">Ligue o componente às variáveis e diga os modos</h2><p class="tut__intro" data-i18n="s2-intro">Zoom, tema e densidade costumam ser modos de variáveis. Se a descrição não cita o modo, o agente não sabe que precisa olhar o componente nele.</p></div>
+  <div class="tut__body"><ol class="stepper">
+<li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+<p class="step__text" data-i18n="s2-p0-text">Ligue o tamanho do texto a uma variável, numa coleção com um modo para cada nível de zoom do seu design system. O WCAG pede que o texto chegue a 200% sem perder conteúdo nem função.</p>
+<figure class="shot"><img src="prints/p5-variaveis.png" width="540" height="152" alt="Janela de variáveis do Figma com a coleção Tipografia. A variável texto/corpo vale 16 no modo Padrão e 32 no modo 200%." data-i18n-attr="src:s2-p0-img0-src width:s2-p0-img0-width height:s2-p0-img0-height alt:s2-p0-img0-alt"><figcaption data-i18n="s2-p0-img0-cap">Cada modo é uma coluna, e cada variável guarda um valor por modo.</figcaption></figure>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+<p class="step__text" data-i18n="s2-p1-text">Selecione uma tela com o componente e troque o modo em <strong>Appearance</strong>, no painel Design.</p>
+<figure class="shot"><img src="prints/p4-modo-painel.png" width="240" height="125" alt="Seção Appearance do painel Design, com o modo da coleção Tipografia em 200%." data-i18n-attr="src:s2-p1-img0-src width:s2-p1-img0-width height:s2-p1-img0-height alt:s2-p1-img0-alt"><figcaption data-i18n="s2-p1-img0-cap">O modo vale para a tela inteira e para tudo dentro dela.</figcaption></figure>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+<p class="step__text" data-i18n="s2-p2-text">Olhe o componente em cada modo, decida o que ele faz e escreva isso na linha Zoom do conjunto.</p>
+<div class="pair"><figure class="shot"><img src="prints/p4-antes.png" width="528" height="210" alt="O card no modo Padrão e no 200%. No 200%, o botão Detalhes fica ao lado do texto, e a palavra separação quebra no meio." data-i18n-attr="src:s2-p2-pair0-src width:s2-p2-pair0-width height:s2-p2-pair0-height alt:s2-p2-pair0-alt"><figcaption data-i18n="s2-p2-pair0-cap">Antes.</figcaption></figure><figure class="shot"><img src="prints/p4-depois.png" width="528" height="175" alt="O mesmo card depois do ajuste. No 200%, o botão Detalhes desce para baixo do texto, e nenhuma palavra quebra." data-i18n-attr="src:s2-p2-pair1-src width:s2-p2-pair1-width height:s2-p2-pair1-height alt:s2-p2-pair1-alt"><figcaption data-i18n="s2-p2-pair1-cap">Depois.</figcaption></figure></div>
+<div class="copy">
+<span class="copy__label" data-i18n="s2-p2-copy0-label">Prefira</span>
+<pre><code data-i18n="s2-p2-copy0-text">Zoom: variável texto/corpo, coleção Tipografia, modos Padrão e 200%. No 200%, o botão Detalhes desce para baixo do texto e o card cresce em altura. Nenhum texto quebra no meio da palavra.</code></pre>
+</div>
+<div class="copy copy--avoid"><span class="copy__label" data-i18n="s2-p2-avoid-label">Evite</span><pre><code data-i18n="s2-p2-avoid-text">Suporta zoom.</code></pre><p class="copy__note" data-i18n="s2-p2-avoid-note">Não diz a coleção, nem os modos, nem o que muda. O agente não tem o que conferir.</p></div>
+</div></li>
+  </ol></div>
+</section>
+<section class="section tut" aria-labelledby="guidelines">
+  <div class="tut__head"><p class="tut__kicker" data-i18n="s3-kicker">4 de 4 · nas guidelines</p><h2 id="guidelines" data-i18n="s3-h2">Regras de vários componentes vão para as guidelines</h2><p class="tut__intro" data-i18n="s3-intro">Uma regra que vale para mais de um componente não se repete em cada descrição. Ela vai uma vez para as guidelines de acessibilidade da biblioteca.</p></div>
+  <div class="tut__body"><ol class="stepper">
+<li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+<p class="step__text" data-i18n="s3-p0-text">Escreva as regras num arquivo Markdown, uma por linha.</p>
+<div class="copy">
+<span class="copy__label" data-i18n="s3-p0-copy0-label">Exemplo para copiar</span>
+<pre><code id="modelo-guidelines" data-i18n="s3-p0-copy0-text">Card com uma ação dentro é uma parada só. O nome lido termina com a ação.
+Ícone sozinho é botão, e o nome dele está na descrição do componente.
+Todo texto usa as variáveis da coleção Tipografia e cresce até o modo 200% sem corte.</code></pre>
+<div class="copy__row"><button type="button" class="btn" data-copy="modelo-guidelines"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="s3-p0-copy0-button">Copiar exemplo</span><span class="sr-only" data-i18n="s3-p0-copy0-sr"> das guidelines</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button><span class="copy__status" role="status"></span></div>
+</div>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+<p class="step__text" data-i18n="s3-p1-text">Na biblioteca, envie o arquivo em <strong>Library</strong>, depois <strong>Manage guidelines</strong>. O recurso está em beta e pede plano Professional, Organization ou Enterprise.</p>
+</div></li>
+  </ol></div>
+</section>
+<section class="section tut" aria-labelledby="conferir">
+  <div class="tut__head"><p class="tut__kicker" data-i18n="s4-kicker">Depois</p><h2 id="conferir" data-i18n="s4-h2">Confira com o agente</h2><p class="tut__intro" data-i18n="s4-intro">O handoff mostra onde ainda falta descrição.</p></div>
+  <div class="tut__body"><ol class="stepper">
+<li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+<p class="step__text" data-i18n="s4-p0-text">Selecione o componente e peça ao agente:</p>
+<div class="copy">
+<span class="copy__label" data-i18n="s4-p0-copy0-label">Pedido</span>
+<pre><code id="pedido-handoff" data-i18n="s4-p0-copy0-text">/da11y prepare o handoff deste componente</code></pre>
+<div class="copy__row"><button type="button" class="btn" data-copy="pedido-handoff"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="s4-p0-copy0-button">Copiar pedido</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button><span class="copy__status" role="status"></span></div>
+</div>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+<p class="step__text" data-i18n="s4-p1-text">Na página DA11Y — handoff, cada descrição que falta vira um card, com o texto sugerido e o lugar onde ele entra.</p>
+<div class="hcard" role="img" aria-label="Card da página de handoff: Conjunto, Card de pedido. Na descrição do conjunto, porque vale para todas as variantes. Vem da biblioteca. Área de toque: o card inteiro, também com o botão Detalhes." data-i18n-attr="aria-label:s4-p1-hcard-label"><p class="hcard__head" aria-hidden="true"><span class="hcard__mark" data-i18n="s4-p1-hcard-mark">Conjunto</span> <span data-i18n="s4-p1-hcard-name">Card de pedido</span></p><p aria-hidden="true" data-i18n="s4-p1-hcard-l0">Na descrição do conjunto Card de pedido, porque vale para todas as variantes.</p><p aria-hidden="true" data-i18n="s4-p1-hcard-l1">Vem da biblioteca: a descrição é editada no arquivo dela, por quem cuida dele.</p><p aria-hidden="true" data-i18n="s4-p1-hcard-l2">Área de toque: o card inteiro, também com o botão Detalhes, que é a ação do card.</p></div>
+</div></li>
+<li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+<p class="step__text" data-i18n="s4-p2-text">O agente não grava no design system. Você revisa o texto e cola no lugar que o card indica.</p>
+</div></li>
+  </ol></div>
+</section>
+  </div>
+</main>
+
+<footer class="footer page">
+  <div class="wrap footer__row">
+    <p>Felipe A. Carriço</p>
+    <ul class="footer__links">
+      <li><a href="https://linkedin.com/in/fecarrico" target="_blank" rel="noopener">LinkedIn<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+      <li><a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+      <li data-i18n="license">Licença MIT</li>
+    </ul>
+    <p class="footer__version">DA11Y.md 0.2.0</p>
+  </div>
+</footer>
+</div>
+
+<script>
+  // Idioma (A11Y-DECISIONS.md, Troca de idioma): o mesmo mecanismo da home. O português é o
+  // que está no HTML; o inglês vem deste dicionário, por chave data-i18n e data-i18n-attr.
+  (function () {
+    'use strict';
+    var STORAGE_KEY = 'dally-lang';
+    var root = document.documentElement;
+    var box = document.querySelector('[data-lang-root]');
+    var EN_TITLE = "A design system ready for the agent · DA11Y.md";
+    var EN = {
+      "topic0-name": "In the variant set",
+      "topic0-text": "What holds for every variant: role, touch target, reading, states, zoom and color.",
+      "topic1-name": "In the variant",
+      "topic1-text": "Only what changes in it.",
+      "topic2-name": "In the variables",
+      "topic2-text": "The tokens the component uses and what it does in each mode.",
+      "topic3-name": "In the library guidelines",
+      "topic3-text": "What holds for more than one component.",
+      "newtab": " (opens in a new tab)",
+      "skip": "Skip to content",
+      "nav-start": "Getting started",
+      "nav-ask": "What to ask",
+      "nav-ds": "Design system",
+      "home-sr": ", home page",
+      "license": "MIT License",
+      "ds-h1": "A design system ready for the agent",
+      "ds-lede": "The Figma agent reads the description of every component before it designs or evaluates. What is written becomes a rule. What is missing becomes a question, and the question holds up the handoff.",
+      "ds-index": "Where to write",
+      "nav-label": "Site sections",
+      "s0-kicker": "1 of 4 · in the set",
+      "s0-h2": "Describe the set",
+      "s0-intro": "The set holds what is true for every variant. Write one line per rule, with the rule&#x27;s name at the start of the line.",
+      "s0-p0-text": "Open the library file and select the set, by the purple border around the variants. Do not select a single variant.",
+      "s0-p1-text": "In the Design panel, on the right, click <strong>Component configuration</strong>, the icon next to the set's name.",
+      "s0-p1-img0-src": "prints-en/p1-conjunto-painel.png",
+      "s0-p1-img0-width": "240",
+      "s0-p1-img0-height": "180",
+      "s0-p1-img0-alt": "Top of the Design panel with the Order card set selected: the name, four icons, a preview of the description and the State and Details properties.",
+      "s0-p1-img0-cap": "Component configuration is the settings icon, the third next to the name.",
+      "s0-p2-text": "Write in the <strong>Description</strong> field from the template. Replace what follows each rule name with your component's behavior, and click outside the panel to save.",
+      "s0-p2-img0-src": "prints-en/p1-conjunto.png",
+      "s0-p2-img0-width": "560",
+      "s0-p2-img0-height": "465",
+      "s0-p2-img0-alt": "The Figma Component configuration panel with the Order card set. The Description field has six lines, one per rule: Clickable card for an order, Touch target, Reading, States, Zoom and Color. Below it, an empty Link field.",
+      "s0-p2-img0-cap": "The field takes formatting: bold, heading, lists, link and code.",
+      "s0-p2-copy0-label": "Template to copy",
+      "s0-p2-copy0-text": "Role: clickable card, button, link or field.\nTouch target: what is touched, and its size.\nReading: what the screen reader reads, in order.\nStates: the state variants that exist.\nZoom: the collection, the modes and what changes in each.\nColor: the text and background variables.",
+      "s0-p2-copy0-button": "Copy template",
+      "s0-p2-copy0-sr": " for the set",
+      "s0-p2-avoid-label": "Avoid",
+      "s0-p2-avoid-text": "Order card.",
+      "s0-p2-avoid-note": "The agent cannot tell whether the card is tappable or what it reads. So it asks, and the handoff waits for the answer.",
+      "s1-kicker": "2 of 4 · in the variant",
+      "s1-h2": "Describe the variant only where it differs",
+      "s1-intro": "The variant inherits what the set says. Write only the difference in it. If nothing changes, leave the field empty.",
+      "s1-p0-text": "Select the variant inside the set.",
+      "s1-p1-text": "In <strong>Component configuration</strong>, open the <strong>Selected variant</strong> tab and write what this variant does differently.",
+      "s1-p1-img0-src": "prints-en/p2-variante.png",
+      "s1-p1-img0-width": "560",
+      "s1-p1-img0-height": "445",
+      "s1-p1-img0-alt": "The Component configuration panel with the Selected variant tab active. The description says: Details=True, the Details button is the card's action, the touch target is still the whole card, and Details comes last in the name that is read.",
+      "s1-p1-img0-cap": "The Component set tab, next to it, opens the set&#x27;s description.",
+      "s1-p2-text": "Check what people using it will see. The description shows under the instance name, in the Design panel, and that is where the agent reads it too.",
+      "s1-p2-img0-src": "prints-en/p3-instancia.png",
+      "s1-p2-img0-width": "240",
+      "s1-p2-img0-height": "300",
+      "s1-p2-img0-alt": "The Design panel with an Order card instance selected. Under the name, a preview of the variant's description, and the State and Details properties.",
+      "s1-p2-img0-cap": "It shows the start of the description, and the full text opens in the documentation window.",
+      "s2-kicker": "3 of 4 · in the variables",
+      "s2-h2": "Bind the component to variables and name the modes",
+      "s2-intro": "Zoom, theme and density are usually variable modes. If the description does not name the mode, the agent does not know it has to look at the component in it.",
+      "s2-p0-text": "Bind the text size to a variable, in a collection with one mode for each zoom level of your design system. WCAG asks for text to reach 200% without losing content or function.",
+      "s2-p0-img0-src": "prints-en/p5-variaveis.png",
+      "s2-p0-img0-width": "540",
+      "s2-p0-img0-height": "152",
+      "s2-p0-img0-alt": "The Figma variables window with the Typography collection. The text/body variable is 16 in the Default mode and 32 in the 200% mode.",
+      "s2-p0-img0-cap": "Each mode is a column, and each variable keeps one value per mode.",
+      "s2-p1-text": "Select a screen with the component and switch the mode in <strong>Appearance</strong>, in the Design panel.",
+      "s2-p1-img0-src": "prints-en/p4-modo-painel.png",
+      "s2-p1-img0-width": "240",
+      "s2-p1-img0-height": "125",
+      "s2-p1-img0-alt": "The Appearance section of the Design panel, with the Typography collection's mode set to 200%.",
+      "s2-p1-img0-cap": "The mode applies to the whole screen and everything inside it.",
+      "s2-p2-text": "Look at the component in each mode, decide what it does and write it on the set's Zoom line.",
+      "s2-p2-pair0-src": "prints-en/p4-antes.png",
+      "s2-p2-pair0-width": "540",
+      "s2-p2-pair0-height": "200",
+      "s2-p2-pair0-alt": "The card in the Default mode and at 200%. At 200%, the Details button stays beside the text, and the word Processing breaks in the middle.",
+      "s2-p2-pair0-cap": "Before.",
+      "s2-p2-pair1-src": "prints-en/p4-depois.png",
+      "s2-p2-pair1-width": "540",
+      "s2-p2-pair1-height": "175",
+      "s2-p2-pair1-alt": "The same card after the fix. At 200%, the Details button moves below the text, and no word breaks.",
+      "s2-p2-pair1-cap": "After.",
+      "s2-p2-copy0-label": "Prefer",
+      "s2-p2-copy0-text": "Zoom: variable text/body, collection Typography, modes Default and 200%. At 200%, the Details button moves below the text and the card grows taller. No word breaks in the middle.",
+      "s2-p2-avoid-label": "Avoid",
+      "s2-p2-avoid-text": "Supports zoom.",
+      "s2-p2-avoid-note": "It names no collection, no mode and no change. The agent has nothing to check.",
+      "s3-kicker": "4 of 4 · in the guidelines",
+      "s3-h2": "Rules for many components go in the guidelines",
+      "s3-intro": "A rule that holds for more than one component is not repeated in every description. It goes once into the library&#x27;s accessibility guidelines.",
+      "s3-p0-text": "Write the rules in a Markdown file, one per line.",
+      "s3-p0-copy0-label": "Example to copy",
+      "s3-p0-copy0-text": "A card with one action inside is a single stop. The name read ends with the action.\nA lone icon is a button, and its name is in the component&#x27;s description.\nAll text uses the Typography collection&#x27;s variables and grows to the 200% mode without clipping.",
+      "s3-p0-copy0-button": "Copy example",
+      "s3-p0-copy0-sr": " of the guidelines",
+      "s3-p1-text": "In the library, upload the file under <strong>Library</strong>, then <strong>Manage guidelines</strong>. The feature is in beta and needs a Professional, Organization or Enterprise plan.",
+      "s4-kicker": "Then",
+      "s4-h2": "Check with the agent",
+      "s4-intro": "The handoff shows where descriptions are still missing.",
+      "s4-p0-text": "Select the component and ask the agent:",
+      "s4-p0-copy0-label": "Prompt",
+      "s4-p0-copy0-text": "/da11y prepare the accessibility handoff for this component",
+      "s4-p0-copy0-button": "Copy prompt",
+      "s4-p1-text": "On the DA11Y — handoff page, each missing description becomes a card, with the suggested text and where it goes.",
+      "s4-p1-hcard-label": "A card from the handoff page: Set, Order card. In the description of the set, because it holds for every variant. From the library. Touch target: the whole card, also with the Details button.",
+      "s4-p1-hcard-mark": "Set",
+      "s4-p1-hcard-name": "Order card",
+      "s4-p1-hcard-l0": "In the description of the set Order card, because it holds for every variant.",
+      "s4-p1-hcard-l1": "From the library: the description is edited in its file, by whoever maintains it.",
+      "s4-p1-hcard-l2": "Touch target: the whole card, also with the Details button, which is the card&#x27;s action.",
+      "s4-p2-text": "The agent does not write to the design system. You review the text and paste it where the card says."
+};
+    var TEXT = {
+      pt: { 'lang-name': 'Português', 'lang-status': 'Página em português.', 'motion-pause': 'Pausar animação', 'motion-resume': 'Retomar animação', 'copied': 'Copiado.', 'copy-failed': 'Não deu para copiar sozinho. O texto já está selecionado. Copie com Ctrl+C, ou Command+C no Mac.' },
+      en: { 'lang-name': 'English', 'lang-status': 'Page in English.', 'motion-pause': 'Pause animation', 'motion-resume': 'Resume animation', 'copied': 'Copied.', 'copy-failed': 'Could not copy it automatically. The text is already selected. Copy it with Ctrl+C, or Command+C on a Mac.' }
+    };
+    var CODE = { pt: 'pt-BR', en: 'en' };
+    function attrPairs(el) { return el.dataset.i18nAttr.split(/\s+/).map(function (pair) { return pair.split(':'); }); }
+    var PT = {};
+    var ptTitle = document.title;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { if (!(el.dataset.i18n in PT)) PT[el.dataset.i18n] = el.innerHTML; });
+    document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+      attrPairs(el).forEach(function (p) { if (!(p[1] in PT)) PT[p[1]] = el.getAttribute(p[0]); });
+    });
+    var current = root.dataset.lang === 'en' ? 'en' : 'pt';
+    window.dallyText = function (key) { return TEXT[current][key]; };
+    var button = document.querySelector('.hero__lang');
+    var label = button && button.querySelector('.hero__lang-label');
+    var status = document.querySelector('[data-lang-status]');
+    function apply(lang) {
+      current = lang;
+      var dict = lang === 'en' ? EN : PT;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var html = dict[el.dataset.i18n];
+        if (html === undefined) { console.warn('[dally.md idioma] sem texto para', el.dataset.i18n); return; }
+        el.innerHTML = html;
+      });
+      document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+        attrPairs(el).forEach(function (p) { if (dict[p[1]] !== undefined) el.setAttribute(p[0], dict[p[1]]); });
+      });
+      document.querySelectorAll('.copy__status').forEach(function (el) { el.textContent = ''; });
+      root.lang = CODE[lang];
+      root.dataset.lang = lang;
+      if (box) box.lang = CODE[lang];
+      document.title = lang === 'en' ? EN_TITLE : ptTitle;
+      if (button) {
+        var other = lang === 'en' ? 'pt' : 'en';
+        button.lang = CODE[other];
+        label.textContent = TEXT[other]['lang-name'];
+      }
+    }
+    try {
+      if (current === 'en') apply('en');
+      else if (box) box.lang = CODE.pt;
+    } finally {
+      root.classList.remove('lang-pending');
+    }
+    if (!button) return;
+    button.hidden = false;
+    button.addEventListener('click', function () {
+      var next = current === 'en' ? 'pt' : 'en';
+      try { localStorage.setItem(STORAGE_KEY, next); } catch (e) { /* vale só nesta visita */ }
+      apply(next);
+      if (status) {
+        status.lang = CODE[next];
+        status.textContent = '';
+        setTimeout(function () { status.textContent = TEXT[next]['lang-status']; }, 120);
+      }
+      document.dispatchEvent(new CustomEvent('dally:lang', { detail: { lang: next } }));
+    });
+  })();
+</script>
+<script>
+  // Texturas em pontilhado de grão fino (pontos de 1 px numa grade de 2 px),
+  // sorteadas ponto a ponto: a faixa dos botões, a marca da aba ativa e o
+  // canto do bloco de cópia. Sem JavaScript, os componentes ficam sem textura.
+  (function () {
+    var INK = '#141414', PAPER = '#d1cfcb';
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), STEP = 2, seed = 11;
+    function rand() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function canvas(w, h) { var c = document.createElement('canvas'); c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); return c; }
+    var size = Math.max(1, Math.round(dpr));
+    // faixa do botão: p(u) é a chance de um ponto, de 0 (borda esquerda) a 1 (fim da faixa)
+    function strip(ground, dot, p) {
+      var W = 72, H = 44, c = canvas(W, H), g = c.getContext('2d');
+      g.fillStyle = ground; g.fillRect(0, 0, c.width, c.height); g.fillStyle = dot;
+      for (var y = 0; y < H; y += STEP) for (var x = 0; x < W; x += STEP) {
+        if (rand() < p(x / W)) g.fillRect(Math.round((x + rand() * 0.8) * dpr), Math.round((y + rand() * 0.8) * dpr), size, size);
+      }
+      return 'url(' + c.toDataURL() + ')';
+    }
+    // pontilhado livre sobre fundo transparente: p(u, v)
+    function free(w, h, p) {
+      var c = canvas(w, h), g = c.getContext('2d');
+      g.fillStyle = INK;
+      for (var y = 0; y < h; y += STEP / 2) for (var x = 0; x < w; x += STEP) {
+        if (rand() < p(x / w, y / h)) g.fillRect(Math.round((x + rand()) * dpr), Math.round((y + rand() * 0.5) * dpr), size, size);
+      }
+      return 'url(' + c.toDataURL() + ')';
+    }
+    var root = document.documentElement.style;
+    root.setProperty('--tex-a', strip(PAPER, INK, function (u) { return 0.75 * Math.pow(1 - u, 2); }));
+    root.setProperty('--tex-b', strip(PAPER, INK, function (u) { return 0.95 * Math.pow(1 - u, 1.3); }));
+    root.setProperty('--tex-a-ink', strip(INK, PAPER, function (u) { return 0.7 * Math.pow(1 - u, 2); }));
+    root.setProperty('--tex-b-ink', strip(INK, PAPER, function (u) { return 0.92 * Math.pow(1 - u, 1.3); }));
+    root.setProperty('--tex-tab', free(120, 7, function (u, v) { return (0.95 - Math.abs(v - 0.5)) * Math.min(1, Math.min(u, 1 - u) * 9); }));
+    root.setProperty('--tex-corner', free(64, 40, function (u, v) { return 0.6 * Math.pow(Math.max(0, 1 - Math.hypot(1 - u, v * 0.8)), 2.2); }));
+  })();
+
+  // Abas (A11Y.md, guide-tabs-accordion). Sem JavaScript, os três blocos ficam
+  // um embaixo do outro, cada um com o seu título (guide-loading-skeleton: o
+  // estado padrão é o legível). Aqui eles viram abas: um ponto de Tab para a
+  // lista inteira, na aba selecionada; as setas, Home e End trocam de aba e
+  // só o painel dela aparece; Tab numa aba entra no painel. Pelo APG, o
+  // painel recebe foco quando o primeiro conteúdo dele não é focável (abaixo).
+  (function () {
+    var FOCUSABLE = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    document.querySelectorAll('[data-tabs]').forEach(function (box) {
+      var panels = Array.prototype.slice.call(box.querySelectorAll('.tabs__panel'));
+      var list = document.createElement('div');
+      list.className = 'tabs__list';
+      list.setAttribute('role', 'tablist');
+      var say = function (key, pt) { return window.dallyText ? window.dallyText(key) : pt; };
+      list.setAttribute('aria-label', say('tablist', 'Como chamar o protocolo'));
+      var tabs = panels.map(function (panel, i) {
+        var heading = panel.querySelector('.tabs__heading');
+        var tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'tab';
+        tab.id = panel.id + '-aba';
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        tab.innerHTML = '<span class="tab__name"></span><span class="tab__mark" aria-hidden="true"></span>';
+        tab.firstChild.textContent = heading.textContent;
+        list.appendChild(tab);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        heading.hidden = true;
+        // padrão de abas do APG (W3C): o painel entra na ordem do Tab quando não
+        // tem nada focável dentro ou quando o primeiro conteúdo dele não é focável
+        var first = Array.prototype.find.call(panel.children, function (el) { return el !== heading; });
+        if (!panel.querySelector(FOCUSABLE) || !(first && first.matches(FOCUSABLE))) panel.tabIndex = 0;
+        return tab;
+      });
+      box.insertBefore(list, panels[0]);
+      function select(t, focus) {
+        tabs.forEach(function (x, i) {
+          var on = x === t;
+          x.setAttribute('aria-selected', String(on));
+          x.tabIndex = on ? 0 : -1;
+          panels[i].hidden = !on;
+        });
+        if (focus) t.focus();
+      }
+      tabs.forEach(function (t, i) {
+        // o foco sozinho não rola a lista quando a aba está meio visível, nem quando ela volta pelo Shift+Tab depois
+        // de a lista rolar. A aba vai para o começo da lista, que é onde a rolagem encaixa (com 'nearest', o encaixe
+        // a puxava de volta e cortava a do meio em 320 px)
+        t.addEventListener('focus', function () { t.scrollIntoView({ block: 'nearest', inline: 'start' }); });
+        t.addEventListener('click', function () { select(t, true); });
+        t.addEventListener('keydown', function (e) {
+          var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+          if (k === undefined) return;
+          e.preventDefault();
+          select(tabs[(k + tabs.length) % tabs.length], true);
+        });
+      });
+      select(tabs[0], false);
+      box.classList.add('is-ready');
+      // troca de idioma: o nome de cada aba vem do título do painel, já traduzido
+      document.addEventListener('dally:lang', function () {
+        list.setAttribute('aria-label', say('tablist', 'Como chamar o protocolo'));
+        tabs.forEach(function (t, i) { t.firstChild.textContent = panels[i].querySelector('.tabs__heading').textContent; });
+      });
+    });
+  })();
+</script>
+<script>
+  // copiar: o texto copiado é sempre o mesmo que está à vista no bloco (o mesmo da home)
+  document.querySelectorAll('[data-copy]').forEach(function (button) {
+    var source = document.getElementById(button.dataset.copy);
+    var status = button.parentNode.querySelector('.copy__status');
+    function say(key, pt) {
+      var text = window.dallyText ? window.dallyText(key) : pt;
+      status.textContent = ''; setTimeout(function () { status.textContent = text; }, 120);
+    }
+    button.addEventListener('click', function () {
+      var fallback = function () {
+        window.getSelection().selectAllChildren(source);
+        say('copy-failed', 'Não deu para copiar sozinho. O texto já está selecionado. Copie com Ctrl+C, ou Command+C no Mac.');
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(source.textContent).then(function () { say('copied', 'Copiado.'); }, fallback);
+      } else { fallback(); }
+    });
+  });
+</script>
+<script src="dali-ascii.js"></script>
+</body>
+</html>

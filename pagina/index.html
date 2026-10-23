@@ -587,6 +587,7 @@ h3, p { margin: 0; }
     <ul class="topbar__list">
       <li><a href="#comecar" data-i18n="nav-start">Como começar</a></li>
       <li><a href="#pedidos" data-i18n="nav-ask">O que pedir</a></li>
+      <li><a href="design-system/" data-i18n="nav-ds">Design system</a></li>
       <li><a href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener">GitHub<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
     </ul>
   </div>
@@ -599,7 +600,7 @@ h3, p { margin: 0; }
         <h2 id="sobre" data-i18n="intro-title">Acessibilidade antes do primeiro pixel</h2>
         <p class="lede" data-i18n="intro-lede">O DA11Y.md é um protocolo para o agente de inteligência artificial (<abbr>IA</abbr>) do Figma desenhar, analisar e anotar interfaces acessíveis. Ele leva ao arquivo de design as mesmas regras que o <a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a> leva ao código. Assim a interface já nasce acessível no protótipo, e quem desenvolve recebe no arquivo o que o leitor de tela vai ler.</p>
         <ul class="facts" aria-label="O projeto em números" data-i18n-attr="aria-label:facts-label">
-          <li data-i18n="fact-1"><strong>0.1.0</strong>, em teste</li>
+          <li data-i18n="fact-1"><strong>0.2.0</strong>, em teste</li>
           <li data-i18n="fact-2"><strong>27</strong> guias de componente</li>
           <li data-i18n="fact-3">português e inglês</li>
           <li data-i18n="fact-4"><strong>4</strong> testes de campo</li>
@@ -955,7 +956,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
           </li>
           <li class="rule">
             <h3 data-i18n="rule5-title">Design system com contexto para agentes</h3>
-            <p data-i18n="rule5-text">Quando a tarefa é criar componentes, o agente também escreve o que o próximo agente precisa ler: a descrição, os apelidos, o contrato de acessibilidade e a anatomia na ordem de leitura.</p>
+            <p data-i18n="rule5-text">Quando a tarefa é criar componentes, o agente também escreve o que o próximo agente precisa ler: a descrição, os apelidos, o contrato de acessibilidade e a anatomia na ordem de leitura. Para fazer isso à mão, o passo a passo está em <a href="design-system/">Design system pronto para o agente</a>.</p>
             <div class="copy copy--small rule__ex">
               <span class="copy__label" data-i18n="ex-label">Exemplo</span>
               <pre><code data-i18n="ex5">Switch. Liga ou desliga algo na hora. Não use para escolher entre opções (use Radio). Apelidos: toggle, liga/desliga.</code></pre>
@@ -1070,7 +1071,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       <li><a href="https://github.com/fecarrico/A11Y.md" target="_blank" rel="noopener">A11Y.md<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
       <li data-i18n="license">Licença MIT</li>
     </ul>
-    <p class="footer__version">DA11Y.md 0.1.0</p>
+    <p class="footer__version">DA11Y.md 0.2.0</p>
   </div>
 </footer>
 </div>
@@ -1266,7 +1267,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'rule4-title': 'The screen keeps only what you fix',
       'rule4-text': 'The screen keeps the annotation with its status and one Fix here for each defect in this file, with the finding’s number. Design system errors and questions stay numbered in the report, and the reading goes to the handoff. An error fits on one line. Measurements, caveats and what passed stay in the report.',
       'rule5-title': 'Design system with context for agents',
-      'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order.',
+      'rule5-text': 'When the task is to create components, the agent also writes what the next agent needs to read: the description, the aliases, the accessibility contract and the anatomy in reading order. To do it by hand, follow the steps in <a href="design-system/">A design system ready for the agent</a>.',
 
       'sib-title': 'Sibling of A11Y.md',
       'sib-intro': A11Y + ' is a file that teaches coding AI (Cursor, Claude, Copilot) to build accessible interfaces from the first line, following the Web Content Accessibility Guidelines (<abbr>WCAG</abbr> 2.2). DA11Y.md is its sibling for whoever designs. It brings the same rules to Figma, before the code exists.',
@@ -1274,9 +1275,10 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'banner-caption': 'The A11Y.md mark and the “Backed by Claude for Open Source Program” badge, redrawn in characters.',
       'nav-label': 'Page sections',
       'nav-ask': 'What to ask',
+      'nav-ds': 'Design system',
       'nav-start': 'Getting started',
       'facts-label': 'The project in numbers',
-      'fact-1': '<strong>0.1.0</strong>, under test',
+      'fact-1': '<strong>0.2.0</strong>, under test',
       'fact-2': '<strong>27</strong> component guides',
       'fact-3': 'Portuguese and English',
       'fact-4': '<strong>4</strong> field tests',
