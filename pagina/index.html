@@ -68,7 +68,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { background: var(--paper); color: var(--ink); scroll-padding-top: 4.5rem; scroll-padding-bottom: 1rem; }
-@media (max-width: 22.5em) { html { scroll-padding-top: 6.5rem; } }
+@media (max-width: 40em) { html { scroll-padding-top: 6.5rem; } }
+@media (max-width: 22.5em) { html { scroll-padding-top: 9rem; } } /* sem script; com ele, a folga segue a barra */
 /* em inglês, a página espera a tradução (script de idioma) para aparecer; se o script falhar,
    ela aparece assim mesmo em 1,5 s, em português (A11Y.md §6, Content Held Hostage) */
 .lang-pending body { visibility: hidden; animation: lang-reveal 0s 1.5s forwards; }
@@ -114,14 +115,13 @@ code { font-family: var(--mono); font-size: 0.92em; }
 .tagline__text .tagline__f { background-color: var(--ink); -webkit-mask: url(figma-f.svg) center / contain no-repeat; mask: url(figma-f.svg) center / contain no-repeat; }
 .hero__tagline.is-textured .tagline__text { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; }
 .hero__tagline.is-textured .tagline__text .tagline__f { background-repeat: no-repeat; }
-/* controles do topo, no canto direito, sobre o céu: o idioma e, na ponta, a pausa.
-   Um componente só para os dois. Quebram linha antes de sair da tela (SC 1.4.10, 1.4.12). */
+/* controle do topo, no canto direito, sobre o céu: a pausa. O idioma fica na barra de seções
+   (pedido do Felipe, 23/10). Quebra linha antes de sair da tela (SC 1.4.10, 1.4.12). */
 .hero__controls { position: absolute; top: 1rem; right: 1rem; left: 1rem; z-index: 3; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; pointer-events: none; }
 .hero__ctrl { pointer-events: auto; display: inline-flex; align-items: center; gap: 0.5rem; min-width: 3rem; min-height: 3rem; padding: 0.5rem 1rem; border: 2px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
 .hero__ctrl[hidden] { display: none; }
 .hero__ctrl:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 8px var(--paper); }
 .hero__ctrl-icon { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
-.hero__lang .hero__ctrl-icon { fill: none; stroke: currentColor; stroke-width: 1.5; }
 .hero__motion[data-state="running"] .icon-play, .hero__motion[data-state="paused"] .icon-pause { display: none; }
 /* abaixo de 64em, os controles chegariam até a frase (em 60em, a 9 px dela): os dois entram no
    fluxo do topo, os controles e embaixo deles a frase, que desce junto se eles quebrarem linha
@@ -474,6 +474,16 @@ h3, p { margin: 0; }
 .topbar__list { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 0; padding: 0; list-style: none; }
 .topbar__list a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); font-weight: 700; text-decoration: none; }
 .topbar__brand:hover, .topbar__list a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+/* idioma: um botão no fim do menu, com o peso dos links e o globo, que diz o outro idioma */
+.topbar__lang { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; padding: 0; border: 0; background: none; color: var(--ink); font: 700 1.0625rem/1.2 var(--body); cursor: pointer; }
+.topbar__lang[hidden] { display: none; }
+.topbar__lang:hover .topbar__lang-label { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.topbar__lang-icon { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.5; flex: none; }
+/* celular estreito: o globo sai e os itens se aproximam, para o menu caber em duas linhas */
+@media (max-width: 24em) {
+  .topbar__list { gap: 0 0.75rem; }
+  .topbar__lang-icon { display: none; }
+}
 @media (max-width: 40em) {
   .topbar__brand { display: none; }
   .topbar__list { width: 100%; justify-content: space-between; gap: 0 1rem; }
@@ -521,11 +531,10 @@ h3, p { margin: 0; }
   .lede { font-size: 1.125rem; }
   .hero__tagline { font-size: 0.875rem; }
 }
-/* celular: os dois controles numa linha só. Letra de 14 px (o mínimo do Shield), laterais menores
-   e o globo sai. Sem isso, "Português" e "Resume animation" quebravam em 375 px */
+/* celular: letra de 14 px (o mínimo do Shield) e laterais menores. Sem isso, "Resume animation"
+   quebrava em 375 px */
 @media (max-width: 24em) {
   .hero__ctrl { padding-inline: 0.75rem; font-size: 0.875rem; }
-  .hero__lang .hero__ctrl-icon { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn__tex { transition: none; }
@@ -553,11 +562,6 @@ h3, p { margin: 0; }
   <!-- o logotipo é o mesmo nas duas línguas: "design accessibility" fica em inglês -->
   <h1 class="sr-only">dally.md, <span lang="en">design accessibility</span></h1>
   <div class="hero__controls">
-    <!-- o botão diz o outro idioma, escrito nele mesmo e com o lang dele (script de idioma) -->
-    <button type="button" class="hero__ctrl hero__lang" lang="en" hidden>
-      <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25"/><path d="M1.75 8h12.5M8 1.75c-1.9 1.7-2.75 3.7-2.75 6.25S6.1 12.55 8 14.25M8 1.75c1.9 1.7 2.75 3.7 2.75 6.25S9.9 12.55 8 14.25"/></svg>
-      <span class="hero__lang-label">English</span>
-    </button>
     <button type="button" class="hero__ctrl hero__motion" data-state="running" hidden>
       <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
         <path class="icon-pause" d="M4 3h3v10H4zM9 3h3v10H9z"/>
@@ -565,7 +569,6 @@ h3, p { margin: 0; }
       </svg>
       <span class="hero__motion-label">Pausar animação</span>
     </button>
-    <span class="sr-only" role="status" data-lang-status></span>
   </div>
   <!-- o leitor de tela lê a frase inteira, com o nome da marca no lugar do "F": a parte visual fica fora da árvore -->
   <p class="hero__tagline">
@@ -589,7 +592,10 @@ h3, p { margin: 0; }
       <li><a href="#pedidos" data-i18n="nav-ask">O que pedir</a></li>
       <li><a href="design-system/" data-i18n="nav-ds">Design system</a></li>
       <li><a href="https://github.com/fecarrico/DA11Y.md" target="_blank" rel="noopener">GitHub<span class="sr-only" data-i18n="newtab"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a></li>
+      <!-- o botão diz o outro idioma, escrito nele mesmo e com o lang dele (script de idioma) -->
+      <li><button type="button" class="topbar__lang" lang="en" hidden><svg class="topbar__lang-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25"/><path d="M1.75 8h12.5M8 1.75c-1.9 1.7-2.75 3.7-2.75 6.25S6.1 12.55 8 14.25M8 1.75c1.9 1.7 2.75 3.7 2.75 6.25S9.9 12.55 8 14.25"/></svg><span class="topbar__lang-label">English</span></button></li>
     </ul>
+    <span class="sr-only" role="status" data-lang-status></span>
   </div>
 </nav>
 
@@ -1359,8 +1365,8 @@ Relatório completo na página DA11Y — relatórios</code></pre>
     var current = root.dataset.lang === 'en' ? 'en' : 'pt';
     window.dallyText = function (key) { return TEXT[current][key]; };
 
-    var button = document.querySelector('.hero__lang');
-    var label = button && button.querySelector('.hero__lang-label');
+    var button = document.querySelector('.topbar__lang');
+    var label = button && button.querySelector('.topbar__lang-label');
     var status = document.querySelector('[data-lang-status]');
 
     function apply(lang) {
@@ -1408,6 +1414,17 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       }
       document.dispatchEvent(new CustomEvent('dally:lang', { detail: { lang: next } }));
     });
+  })();
+</script>
+<script>
+  // a barra de seções muda de altura com a largura, o zoom e o espaçamento de texto: a folga de rolagem
+  // segue a altura real dela, para o foco nunca ficar embaixo da barra (SC 2.4.11 e, no Shield, 2.4.12)
+  (function () {
+    var bar = document.querySelector('.topbar');
+    if (!bar || !window.ResizeObserver) return;
+    new ResizeObserver(function () {
+      document.documentElement.style.scrollPaddingTop = Math.ceil(bar.getBoundingClientRect().height + 16) + 'px';
+    }).observe(bar);
   })();
 </script>
 <script type="module" src="hero.js"></script>
