@@ -101,6 +101,15 @@ h1, h2, h3, p { margin: 0; }
 .art { position: relative; width: var(--art-w); aspect-ratio: 323 / 400; margin: 0 calc(-1 * max(1rem, env(safe-area-inset-right, 0px))) 0 auto; }
 .art__poster, .art canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .art.is-drawn .art__poster { visibility: hidden; }
+/* o botão de pausa do hero da home, no canto de baixo à direita do retrato, sobre o paletó (pedido
+   do Felipe, 23/10). Sem JavaScript, nada se mexe e ele não aparece */
+.art__controls { position: absolute; right: 1rem; bottom: 1rem; z-index: 1; }
+.hero__ctrl { display: inline-flex; align-items: center; gap: 0.5rem; min-width: 3rem; min-height: 3rem; padding: 0.5rem 1rem; border: 2px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
+.hero__ctrl[hidden] { display: none; }
+.hero__ctrl:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 8px var(--paper); }
+.hero__ctrl-icon { width: 1rem; height: 1rem; fill: currentColor; flex: none; }
+.hero__motion[data-state="running"] .icon-play, .hero__motion[data-state="paused"] .icon-pause { display: none; }
+@media (max-width: 24em) { .hero__ctrl { padding-inline: 0.75rem; font-size: 0.875rem; } }
 .lead__text { display: grid; gap: 1.75rem; }
 /* o índice dos quatro lugares fica na coluna do texto, ao lado do retrato e nunca sobre ele */
 .index { margin-top: 1rem; }
@@ -218,6 +227,7 @@ h1, h2, h3, p { margin: 0; }
   .btn:focus-visible { outline: 3px solid CanvasText; outline-offset: 4px; }
   .btn:focus-visible::after { display: none; }
   .topics li::before { forced-color-adjust: none; background: CanvasText; }
+  .hero__ctrl:focus-visible { outline: 3px solid CanvasText; outline-offset: -7px; }
 }
 </style>
 </head>
@@ -242,10 +252,16 @@ h1, h2, h3, p { margin: 0; }
 <main class="page" id="conteudo" tabindex="-1">
   <div class="lead-band">
     <!-- o retrato é decorativo (confirmado pelo Felipe em 23/10): imagem parada com alt vazio, canvas fora da árvore.
-         O bigode balança 4,5 s ao abrir e para: sem botão de pausa, que fica só no hero da home -->
+         O bigode balança sem parar e os olhos seguem o mouse: o botão de pausa do hero, no canto de baixo à direita -->
     <div class="art" data-dali="img/dali-fonte.png">
       <img class="art__poster" src="img/dali-ascii.png" width="1200" height="1486" alt="">
       <canvas aria-hidden="true"></canvas>
+      <div class="art__controls">
+        <button type="button" class="hero__ctrl hero__motion" data-state="running" hidden>
+          <svg class="hero__ctrl-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="icon-pause" d="M4 3h3v10H4zM9 3h3v10H9z"/><path class="icon-play" d="M4 2.5v11l9-5.5z"/></svg>
+          <span class="hero__motion-label">Pausar animação</span>
+        </button>
+      </div>
     </div>
     <div class="wrap lead"><div class="lead__text"><h1 data-i18n="ds-h1">Design system pronto para o agente</h1><p class="lede" data-i18n="ds-lede">O agente do Figma lê a descrição de cada componente antes de desenhar ou avaliar. O que está escrito vira regra. O que falta vira pergunta, e a pergunta segura o handoff.</p>
       <div class="index"><h2 class="index__title" data-i18n="ds-index">Onde escrever</h2><ul class="topics"><li><span class="topics__name"><a href="#conjunto" data-i18n="topic0-name">No conjunto de variantes</a></span><span class="topics__text" data-i18n="topic0-text">O que vale para todas as variantes: papel, área de toque, leitura, estados, zoom e cor.</span></li><li><span class="topics__name"><a href="#variante" data-i18n="topic1-name">Na variante</a></span><span class="topics__text" data-i18n="topic1-text">Só o que muda nela.</span></li><li><span class="topics__name"><a href="#variaveis" data-i18n="topic2-name">Nas variáveis</a></span><span class="topics__text" data-i18n="topic2-text">Os tokens que o componente usa e o que ele faz em cada modo.</span></li><li><span class="topics__name"><a href="#guidelines" data-i18n="topic3-name">Nas guidelines da biblioteca</a></span><span class="topics__text" data-i18n="topic3-text">O que vale para mais de um componente.</span></li></ul></div></div></div>
