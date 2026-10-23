@@ -147,7 +147,11 @@ h1, h2, h3, p { margin: 0; }
 .copy__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 0.5rem; }
 .copy__status { min-height: 1.6em; font-size: 0.9375rem; }
 .copy--avoid pre { border-style: dashed; }
-.copy__note { font-size: 0.9375rem; color: var(--ink-2); }
+/* texto de apoio: o mesmo bloco da home, que destaca a nota do texto corrido sem crescer a letra
+   (tinta sobre papel claro: 15,18:1) */
+.note { display: grid; gap: 2em; max-width: 40rem; padding: 1.125rem 1.25rem; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); font-size: 0.9375rem; line-height: 1.6; }
+.note p, p.note { margin: 0; }
+.copy--avoid .note { margin-top: 0.25rem; }
 
 /* botão do site: textura em pontilhado numa faixa à esquerda, nunca sob o texto */
 .btn { --tex-w: 56px; position: relative; display: inline-grid; grid-template-columns: var(--tex-w) 1fr var(--tex-w); align-items: center; min-width: 15rem; min-height: 48px; padding: 0; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); font: 700 1rem/1.2 var(--body); cursor: pointer; }
@@ -270,7 +274,7 @@ Zoom: a coleção, os modos e o que muda em cada um.
 Cor: as variáveis de texto e de fundo.</code></pre>
 <div class="copy__row"><button type="button" class="btn" data-copy="modelo-conjunto"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="s0-p2-copy0-button">Copiar modelo</span><span class="sr-only" data-i18n="s0-p2-copy0-sr"> do conjunto</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button><span class="copy__status" role="status"></span></div>
 </div>
-<div class="copy copy--avoid"><span class="copy__label" data-i18n="s0-p2-avoid-label">Evite</span><pre><code data-i18n="s0-p2-avoid-text">Card de pedido.</code></pre><p class="copy__note" data-i18n="s0-p2-avoid-note">O agente não sabe se o card é tocável nem o que ele lê. Então ele pergunta, e o handoff espera a resposta.</p></div>
+<div class="copy copy--avoid"><span class="copy__label" data-i18n="s0-p2-avoid-label">Evite</span><pre><code data-i18n="s0-p2-avoid-text">Card de pedido.</code></pre><p class="copy__note note" data-i18n="s0-p2-avoid-note">O agente não sabe se o card é tocável nem o que ele lê. Então ele pergunta, e o handoff espera a resposta.</p></div>
 </div></li>
   </ol></div>
 </section>
@@ -308,7 +312,7 @@ Cor: as variáveis de texto e de fundo.</code></pre>
 <span class="copy__label" data-i18n="s2-p2-copy0-label">Prefira</span>
 <pre><code data-i18n="s2-p2-copy0-text">Zoom: variável texto/corpo, coleção Tipografia, modos Padrão e 200%. No 200%, o botão Detalhes desce para baixo do texto e o card cresce em altura. Nenhum texto quebra no meio da palavra.</code></pre>
 </div>
-<div class="copy copy--avoid"><span class="copy__label" data-i18n="s2-p2-avoid-label">Evite</span><pre><code data-i18n="s2-p2-avoid-text">Suporta zoom.</code></pre><p class="copy__note" data-i18n="s2-p2-avoid-note">Não diz a coleção, nem os modos, nem o que muda. O agente não tem o que conferir.</p></div>
+<div class="copy copy--avoid"><span class="copy__label" data-i18n="s2-p2-avoid-label">Evite</span><pre><code data-i18n="s2-p2-avoid-text">Suporta zoom.</code></pre><p class="copy__note note" data-i18n="s2-p2-avoid-note">Não diz a coleção, nem os modos, nem o que muda. O agente não tem o que conferir.</p></div>
 </div></li>
   </ol></div>
 </section>

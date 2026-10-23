@@ -187,7 +187,7 @@ h3, p { margin: 0; }
 .mock { display: inline-flex; align-items: center; gap: 0.75rem; outline: 2px solid var(--cat, var(--fig-pink)); outline-offset: 4px; }
 .mock-toast { display: inline-flex; align-items: center; gap: 1rem; padding: 0.625rem 0.75rem 0.625rem 1rem; border: 2px solid var(--ink); background: var(--paper); font-size: 0.9375rem; }
 .mock-x { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; font-size: 1.125rem; line-height: 1; }
-.pins figcaption { margin-top: 1.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+.pins figcaption { margin-top: 2rem; }
 .pin--frame { --cat: var(--fig-pink); }
 .pin__done { color: var(--fig-text); font-weight: 700; }
 .mock-status { display: grid; gap: 0.25rem; padding: 0.75rem 1rem; border: 2px solid var(--ink); background: var(--paper); font-size: 0.9375rem; }
@@ -210,7 +210,7 @@ h3, p { margin: 0; }
 .flow__file { display: grid; gap: 1.25rem; align-content: start; }
 .flow .pin__node { min-height: 0; padding-top: 0.25rem; }
 .flow .pin__card { max-width: 26rem; }
-.flow figcaption { margin-top: 1.5rem; font-size: 0.9375rem; color: var(--ink-2); }
+.flow figcaption { margin-top: 2rem; }
 
 /* a tela desenhada: o mesmo componente nas figuras das decisões e das anotações */
 .mock-screen { display: grid; gap: 1.25rem; width: min(24rem, 100%); padding: 1.5rem 1.25rem; border: 2px solid var(--ink); background: var(--paper-2); }
@@ -234,6 +234,21 @@ h3, p { margin: 0; }
 .mock--ds { --cat: var(--fig-violet); }
 .mock-screen .mock-toast { justify-self: start; }
 .canvas__cards { display: grid; gap: 1.5rem; align-content: start; }
+/* cada lado da figura diz o que é: a tela de exemplo, à esquerda, e as anotações, à direita */
+.canvas__side { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.canvas__label { display: flex; align-items: center; gap: 0.75rem; margin: 0; max-width: none; font: 500 0.875rem/1.4 var(--mono); }
+.canvas__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
+
+/* texto de apoio: a nota que explica a figura ou o passo ganha um bloco que a destaca do texto
+   corrido, sem crescer a letra. Papel claro e contorno de tinta, como o bloco de cópia (tinta sobre
+   papel claro: 15,18:1). O espaço entre parágrafos segue o 2× do texto corrido */
+.note { display: grid; gap: 2em; max-width: 40rem; padding: 1.125rem 1.25rem; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); font-size: 0.9375rem; line-height: 1.6; }
+.note p { margin: 0; max-width: none; }
+.note__title { font-weight: 700; }
+.legend { display: grid; gap: 0.875rem; margin: 0; padding: 0; list-style: none; }
+.legend li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 0.25rem 0.75rem; align-items: baseline; }
+.legend .chip { justify-self: start; }
+@media (max-width: 30em) { .legend li { grid-template-columns: minmax(0, 1fr); } .legend .chip { justify-self: start; } }
 
 /* as regras, cada uma com um exemplo no formato do protocolo */
 .rule__ex { margin-top: 0.5rem; }
@@ -253,7 +268,6 @@ h3, p { margin: 0; }
 .kin__arrow::after { content: ""; position: absolute; right: 1px; top: -4px; width: 8px; height: 8px; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); transform: rotate(45deg); }
 .kin__link--back .kin__arrow::before { left: auto; right: 0; }
 .kin__link--back .kin__arrow::after { right: auto; left: 1px; transform: rotate(-135deg); }
-.kin figcaption { font-size: 0.9375rem; color: var(--ink-2); }
 @media (min-width: 60em) {
   .flow__head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 5fr); gap: 2rem; padding-bottom: 0.75rem; font-weight: 700; }
   .flow__head p { margin: 0; }
@@ -420,7 +434,6 @@ h3, p { margin: 0; }
 .js .tabs:not(.is-ready) .tabs__heading { display: none; }
 .tabs__lead { color: var(--ink-2); }
 .tabs__panel .stepper { margin-top: 2em; }
-.tabs__note { margin-top: 2em; max-width: 34em; font-size: 0.9375rem; color: var(--ink-2); }
 .copy + .copy { margin-top: 0.5rem; }
 .copy--small pre { padding-right: 1rem; background-image: none; }
 
@@ -737,23 +750,28 @@ h3, p { margin: 0; }
             </div>
           </div>
         </article>
-        <figcaption data-i18n="ask-outro">Nos três pedidos, a tela recebe a anotação com o status, as contagens do que há para fazer e onde está o relatório completo. Ilustração feita para esta página.</figcaption>
+        <figcaption class="note" data-i18n="ask-outro">Nos três pedidos, a tela recebe a anotação com o status, as contagens do que há para fazer e onde está o relatório completo. Ilustração feita para esta página.</figcaption>
       </figure>
     </section>
 
     <section class="section section--tight" aria-labelledby="anotacoes">
       <div class="section__intro">
         <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">As anotações são nativas do Figma e ficam presas ao elemento. Corrigir aqui é um defeito de uso neste arquivo, e ele fica na tela, com o número do achado. Uma Proposta é o que o agente propõe e você confirma: a leitura de um elemento ou uma pergunta de estrutura. Erro do design system é um defeito da biblioteca, para quem cuida dela. No agente do Figma, esses dois viram cards numerados nas páginas de relatório e de handoff, ao lado de uma cópia da tela, para a tela não se encher de anotações. A tela recebe uma anotação com o status, na categoria <span lang="en">Accessibility</span>. Quando você confirma uma proposta, acrescenta ao card uma linha com ✓ e o seu nome.</p>
+        <p data-i18n="notes-intro">No Figma, cada anotação fica presa ao elemento que ela comenta. À esquerda, uma tela de exemplo. À direita, as anotações que o agente deixa nela, do jeito que o Figma mostra.</p>
       </div>
       <figure class="pins">
         <div class="canvas">
+          <div class="canvas__side">
+            <p class="canvas__label" aria-hidden="true" data-i18n="notes-label-screen">A tela, no Figma</p>
           <div class="mock-screen mock-screen--pinned" aria-hidden="true">
             <div class="mock-toast mock mock--decision"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock-x">×</span></div>
             <div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock--fix mock-input"></span></div>
             <span class="mock mock--ds btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span>
           </div>
-          <div class="canvas__cards">
+          </div>
+          <div class="canvas__side">
+            <p class="canvas__label" data-i18n="notes-label-cards">As anotações, como o Figma mostra</p>
+            <div class="canvas__cards">
             <div class="pin pin--decision">
               <div class="pin__card">
                 <span class="chip" data-i18n="cat-decision">Proposta</span>
@@ -785,9 +803,21 @@ h3, p { margin: 0; }
                 <p data-i18n="pin4-c5">Não lidos — 0</p>
               </div>
             </div>
+            </div>
           </div>
         </div>
-        <figcaption data-i18n="notes-caption">Os quatro tipos de anotação, cada um na sua categoria, como ficam quando todos vão para o canvas. O contorno de cada componente tem a cor da anotação presa a ele, e o contorno da tela é o da anotação do frame. Nelas, 🔊 marca o que o leitor de tela lê e 📢 o que ele anuncia. O que não é lido fica fora da anotação e vai para o relatório. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. Uma proposta vira decisão quando recebe o ✓. Ilustração feita para esta página.</figcaption>
+        <figcaption class="note">
+          <p class="note__title" data-i18n="legend-title">Como ler as anotações</p>
+          <ul class="legend">
+            <li class="pin--decision"><span class="chip" data-i18n="cat-decision">Proposta</span><span data-i18n="legend-decision">A leitura de um elemento ou uma pergunta de estrutura. Vira decisão quando você acrescenta ✓ e o seu nome.</span></li>
+            <li class="pin--fix"><span class="chip" data-i18n="cat-fix">Corrigir aqui</span><span data-i18n="legend-fix">Um defeito de uso neste arquivo. Fica na tela, com o número do achado.</span></li>
+            <li class="pin--ds"><span class="chip" data-i18n="cat-ds">Erro do design system</span><span data-i18n="legend-ds">Um defeito da biblioteca, para quem cuida dela.</span></li>
+            <li class="pin--frame"><span class="chip" lang="en">Accessibility</span><span data-i18n="legend-frame">O status da tela e as contagens do que há para fazer.</span></li>
+          </ul>
+          <p data-i18n="legend-marks">Nas anotações, 🔊 marca o que o leitor de tela lê, e 📢, o que ele anuncia. O que não está numa linha 🔊 não é lido. Num erro, a gravidade vem em cor e em texto, como 🟠 HIGH. O contorno de cada elemento da tela tem a cor da anotação presa a ele.</p>
+          <p data-i18n="legend-agent">No agente do Figma, só o Corrigir aqui fica na tela. A Proposta e o Erro do design system viram cards numerados nas páginas de relatório e de handoff, para a tela não se encher de anotações.</p>
+          <p data-i18n="legend-credit">Ilustração feita para esta página.</p>
+        </figcaption>
       </figure>
     </section>
 
@@ -890,7 +920,7 @@ h3, p { margin: 0; }
                 <p data-i18n="lib-step3">Quando alguém pedir ao agente um desenho com essa biblioteca, a regra entra sozinha.</p>
               </div></li>
             </ol>
-            <p class="tabs__note" data-i18n="lib-note">As guidelines de biblioteca são um recurso dos planos Professional, Organization e Enterprise, e valem para pedidos de desenho com a biblioteca. Para analisar uma tela que já existe, use o chat ou a skill.</p>
+            <p class="tabs__note note" data-i18n="lib-note">As guidelines de biblioteca são um recurso dos planos Professional, Organization e Enterprise, e valem para pedidos de desenho com a biblioteca. Para analisar uma tela que já existe, use o chat ou a skill.</p>
           </section>
           <section class="tabs__panel" id="painel-mcp" aria-labelledby="painel-mcp-titulo">
             <h3 class="tabs__heading" id="painel-mcp-titulo" data-i18n="mcp-title">Por <abbr>MCP</abbr></h3>
@@ -924,7 +954,7 @@ h3, p { margin: 0; }
                 <p data-i18n="mcp-step4-more">O agente lê o protocolo e, pelo plugin, mede, anota e desenha no arquivo as páginas de relatório e de handoff.</p>
               </div></li>
             </ol>
-            <p class="tabs__note" data-i18n="mcp-note">O agente roda fora do Figma, com a assinatura de inteligência artificial que você já usa. A ponte precisa do aplicativo do Figma para computador e não roda no navegador. O token abre todos os seus arquivos para o agente. Guarde-o só no seu computador e revogue quando parar de usar. Um servidor que não roda código no Figma só consegue anotar, e então o relatório fica no chat.</p>
+            <p class="tabs__note note" data-i18n="mcp-note">O agente roda fora do Figma, com a assinatura de inteligência artificial que você já usa. A ponte precisa do aplicativo do Figma para computador e não roda no navegador. O token abre todos os seus arquivos para o agente. Guarde-o só no seu computador e revogue quando parar de usar. Um servidor que não roda código no Figma só consegue anotar, e então o relatório fica no chat.</p>
           </section>
         </div>
       </div>
@@ -1036,7 +1066,7 @@ Relatório completo na página DA11Y — relatórios</code></pre>
           <li><span class="topics__name" data-i18n="rel4-title">Do desenho para o código</span><span class="topics__text" data-i18n="rel4-text">O relatório de design termina pedindo que o código siga o A11Y.md, e o agente de código continua de onde o design parou. O que tem ✓ chega como decisão, e o que não tem chega como pergunta. Quem programa não precisa carregar as regras de design.</span></li>
           <li><span class="topics__name" data-i18n="rel3-title">O que só existe no canvas</span><span class="topics__text" data-i18n="rel3-text">Ler um arquivo do Figma, avaliar o que o design system já decidiu e deixar a evidência em anotações no próprio arquivo.</span></li>
         </ul>
-        <figcaption id="kin-cap" data-i18n="kin-cap">Dois arquivos, um link de ida: o DA11Y.md compila os números do A11Y.md e nunca o contrário. O relatório de design é a volta.</figcaption>
+        <figcaption class="note" id="kin-cap" data-i18n="kin-cap">Dois arquivos, um link de ida: o DA11Y.md compila os números do A11Y.md e nunca o contrário. O relatório de design é a volta.</figcaption>
       </figure>
     </section>
   </div>
@@ -1293,7 +1323,17 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'mcp-note': 'The agent runs outside Figma, on the artificial intelligence subscription you already use. The bridge needs the Figma desktop app and does not run in the browser. The token opens all your files to the agent. Keep it on your computer only and revoke it when you stop using it. A server that does not run code in Figma can only annotate, and then the report stays in the chat.',
 
       'notes-title': 'How annotations appear in the file',
-      'notes-intro': 'The annotations are native to Figma and pinned to the element. Fix here is a defect of use in this file, and it stays on the screen, with the finding’s number. A Proposal is what the agent proposes and you confirm: an element’s reading or a structural question. Design system error is a defect of the library, for whoever maintains it. In the Figma agent, these two become numbered cards on the report and handoff pages, beside a copy of the screen, so the screen does not fill with annotations. The screen gets an annotation with its status, in the Accessibility category. When you confirm a proposal, you add a line with ✓ and your name to the card.',
+      'notes-intro': 'In Figma, each annotation is pinned to the element it comments on. On the left, an example screen. On the right, the annotations the agent leaves on it, the way Figma shows them.',
+      'notes-label-screen': 'The screen, in Figma',
+      'notes-label-cards': 'The annotations, as Figma shows them',
+      'legend-title': 'How to read the annotations',
+      'legend-decision': 'An element\'s reading or a structural question. It becomes a decision when you add ✓ and your name.',
+      'legend-fix': 'A defect of use in this file. It stays on the screen, with the finding\'s number.',
+      'legend-ds': 'A defect of the library, for whoever maintains it.',
+      'legend-frame': 'The screen\'s status and the counts of what there is to do.',
+      'legend-marks': 'In the annotations, 🔊 marks what the screen reader reads, and 📢 what it announces. What is not on a 🔊 line is not read. In an error, the severity comes in color and in text, such as 🟠 HIGH. Each element\'s outline on the screen takes the color of the annotation pinned to it.',
+      'legend-agent': 'In the Figma agent, only Fix here stays on the screen. Proposal and Design system error become numbered cards on the report and handoff pages, so the screen does not fill with annotations.',
+      'legend-credit': 'An illustration made for this page.',
       'mock-toast': 'Notice saved',
       'mock-email': 'Email',
       'mock-continue': 'Continue',
@@ -1310,7 +1350,6 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'pin4-c3': 'Fix here — 1',
       'pin4-c4': 'Design system errors — 1',
       'pin4-c5': 'Not read — 0',
-      'notes-caption': 'The four annotation types, each in its own category, as they look when all of them go onto the canvas. Each component’s outline takes the color of the annotation pinned to it, and the screen’s outline is the frame annotation’s. In them, 🔊 marks what the screen reader reads and 📢 what it announces. What is not read stays off the annotation and goes into the report. In an error, the severity comes in color and in text, such as 🟠 HIGH. A proposal becomes a decision when it gets the ✓. An illustration made for this page.',
 
       'rules-title': 'What it asks of the agent',
       'rules-intro': 'DA11Y.md is a Markdown file that the agent reads by link, loading only the parts the task calls for. There are five rules.',
