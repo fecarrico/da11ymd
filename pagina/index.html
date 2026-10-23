@@ -892,6 +892,40 @@ h3, p { margin: 0; }
             </ol>
             <p class="tabs__note" data-i18n="lib-note">As guidelines de biblioteca são um recurso dos planos Professional, Organization e Enterprise, e valem para pedidos de desenho com a biblioteca. Para analisar uma tela que já existe, use o chat ou a skill.</p>
           </section>
+          <section class="tabs__panel" id="painel-mcp" aria-labelledby="painel-mcp-titulo">
+            <h3 class="tabs__heading" id="painel-mcp-titulo" data-i18n="mcp-title">Por <abbr>MCP</abbr></h3>
+            <p class="tabs__lead" data-i18n="mcp-lead">Para usar outro agente de inteligência artificial, como o Claude ou o Cursor, sem os créditos do agente do Figma. Ele se liga ao arquivo por um servidor de <span lang="en">Model Context Protocol</span> (<abbr>MCP</abbr>).</p>
+            <ol class="stepper">
+              <li class="step"><span class="step__num" aria-hidden="true">1</span><div class="step__body">
+                <p data-i18n="mcp-step1">No Figma, abra o menu da conta e vá em <span lang="en">Settings</span> › <span lang="en">Security</span> › <span lang="en">Personal access tokens</span>. Crie um token com leitura do conteúdo dos arquivos, das versões e das variáveis, e com leitura e escrita dos comentários.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">2</span><div class="step__body">
+                <p data-i18n="mcp-step2">Ponha no seu agente o servidor <span lang="en">figma-console-mcp</span>. No Claude Code, rode este comando com o seu token no lugar de <code>figd_SEU_TOKEN</code>:</p>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="mcp-cmd-label">Comando</span>
+                    <pre><code id="mcp-comando" data-i18n="mcp-cmd">claude mcp add figma-console -s user -e FIGMA_ACCESS_TOKEN=figd_SEU_TOKEN -- npx -y figma-console-mcp@latest</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="mcp-comando"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label" data-i18n="copy-cmd">Copiar comando</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+                <p data-i18n="mcp-step2-more">No Claude Desktop e no Cursor, o mesmo servidor entra no arquivo de configuração, como mostra o <a href="https://github.com/southleft/figma-console-mcp" target="_blank" rel="noopener">repositório do figma-console-mcp<span class="sr-only"> (abre em nova aba)</span><svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3h8v8h-2V6.4l-6.3 6.3-1.4-1.4L9.6 5H5z"/></svg></a>.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">3</span><div class="step__body">
+                <p data-i18n="mcp-step3">No aplicativo do Figma para computador, abra o arquivo e importe o plugin da ponte em <span lang="en">Plugins</span> › <span lang="en">Development</span> › <span lang="en">Import plugin from manifest</span>, com o arquivo <code>~/.figma-console-mcp/plugin/manifest.json</code>. Depois, rode o plugin no arquivo.</p>
+              </div></li><li class="step"><span class="step__num" aria-hidden="true">4</span><div class="step__body">
+                <p data-i18n="mcp-step4">Selecione a tela no Figma e peça ao agente, com o link do protocolo:</p>
+                <div class="copy">
+                    <span class="copy__label" data-i18n="mcp-prompt-label">Pedido</span>
+                    <pre><code id="pedido-mcp" data-i18n="mcp-prompt">Analise a tela selecionada no Figma seguindo estritamente as regras de acessibilidade do arquivo https://<wbr>raw.githubusercontent.com/<wbr>fecarrico/<wbr>DA11Y.md/<wbr>main/<wbr>docs/<wbr>pt-BR/<wbr>DA11Y.md</code></pre>
+                    <div class="copy__row">
+                      <button type="button" class="btn" data-copy="pedido-mcp"><span class="btn__tex" aria-hidden="true"></span><span class="btn__label"><span data-i18n="copy-prompt">Copiar pedido</span><span class="sr-only" data-i18n="copy-mcp-sr"> para o agente por MCP</span></span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="10" height="10"/><path d="M4 13V4h9"/></svg></button>
+                      <span class="copy__status" role="status"></span>
+                    </div>
+                  </div>
+                <p data-i18n="mcp-step4-more">O agente lê o protocolo e, pelo plugin, mede, anota e desenha no arquivo as páginas de relatório e de handoff.</p>
+              </div></li>
+            </ol>
+            <p class="tabs__note" data-i18n="mcp-note">O agente roda fora do Figma, com a assinatura de inteligência artificial que você já usa. A ponte precisa do aplicativo do Figma para computador e não roda no navegador. O token abre todos os seus arquivos para o agente. Guarde-o só no seu computador e revogue quando parar de usar. Um servidor que não roda código no Figma só consegue anotar, e então o relatório fica no chat.</p>
+          </section>
         </div>
       </div>
     </section>
@@ -1241,6 +1275,21 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'lib-step2': 'In the library, open Library › Manage guidelines and upload the file.',
       'lib-step3': 'When someone asks the agent for a design with that library, the rule comes in by itself.',
       'lib-note': 'Library guidelines are a feature of the Professional, Organization and Enterprise plans, and they apply to design requests with the library. To analyze a screen that already exists, use the chat or the skill.',
+      'mcp-title': 'By <abbr>MCP</abbr>',
+      'mcp-lead': 'To use another artificial intelligence agent, such as Claude or Cursor, without the Figma agent\'s credits. It connects to the file through a Model Context Protocol (<abbr>MCP</abbr>) server.',
+      'mcp-step1': 'In Figma, open the account menu and go to Settings › Security › Personal access tokens. Create a token that reads file content, versions and variables, and reads and writes comments.',
+      'mcp-step2': 'Add the figma-console-mcp server to your agent. In Claude Code, run this command with your token in place of <code>figd_YOUR_TOKEN</code>:',
+      'mcp-cmd-label': 'Command',
+      'mcp-cmd': 'claude mcp add figma-console -s user -e FIGMA_ACCESS_TOKEN=figd_YOUR_TOKEN -- npx -y figma-console-mcp@latest',
+      'copy-cmd': 'Copy command',
+      'mcp-step2-more': 'In Claude Desktop and Cursor, the same server goes in the configuration file, as the <a href="https://github.com/southleft/figma-console-mcp" target="_blank" rel="noopener">figma-console-mcp repository<span class="sr-only"> (opens in a new tab)</span>' + EXT + '</a> shows.',
+      'mcp-step3': 'In the Figma desktop app, open the file and import the bridge plugin under Plugins › Development › Import plugin from manifest, with the file <code>~/.figma-console-mcp/plugin/manifest.json</code>. Then run the plugin in the file.',
+      'mcp-step4': 'Select the screen in Figma and ask the agent, with the link to the protocol:',
+      'mcp-prompt-label': 'Prompt',
+      'mcp-prompt': 'Analyze the screen selected in Figma strictly following the accessibility rules in the file ' + CORE,
+      'copy-mcp-sr': ' for the agent through MCP',
+      'mcp-step4-more': 'The agent reads the protocol and, through the plugin, measures, annotates and draws the report and handoff pages in the file.',
+      'mcp-note': 'The agent runs outside Figma, on the artificial intelligence subscription you already use. The bridge needs the Figma desktop app and does not run in the browser. The token opens all your files to the agent. Keep it on your computer only and revoke it when you stop using it. A server that does not run code in Figma can only annotate, and then the report stays in the chat.',
 
       'notes-title': 'How annotations appear in the file',
       'notes-intro': 'The annotations are native to Figma and pinned to the element. Fix here is a defect of use in this file, and it stays on the screen, with the finding’s number. A Proposal is what the agent proposes and you confirm: an element’s reading or a structural question. Design system error is a defect of the library, for whoever maintains it. In the Figma agent, these two become numbered cards on the report and handoff pages, beside a copy of the screen, so the screen does not fill with annotations. The screen gets an annotation with its status, in the Accessibility category. When you confirm a proposal, you add a line with ✓ and your name to the card.',
