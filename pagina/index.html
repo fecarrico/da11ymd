@@ -171,7 +171,6 @@ h3, p { margin: 0; }
 .subhead { font: 400 1.5rem/1.25 var(--display); }
 
 /* anotações: o canvas do Figma, com cada anotação presa a um componente */
-.pins { margin: 2.5rem 0 0; }
 .pin { display: grid; grid-template-rows: auto auto 1fr; justify-items: start; }
 .pin__node { display: flex; align-items: flex-end; min-height: 5.5rem; padding: 0 0 0.25rem 0.5rem; }
 .pin__line { width: 0; height: 2.25rem; margin-left: 2.25rem; border-left: 2px dashed var(--cat, var(--fig-pink)); }
@@ -225,16 +224,13 @@ h3, p { margin: 0; }
 .decisions-fig { display: grid; gap: 2.5rem; margin: 2.5rem 0 0; }
 .decisions-fig figcaption { font-size: 1.0625rem; color: var(--ink); max-width: 34em; }
 
-/* o canvas das anotações: a tela à esquerda, as quatro anotações à direita; a cor do contorno liga as duas */
-.canvas { display: grid; gap: 2.5rem; }
+/* a tela de exemplo das anotações; o contorno de cada elemento é o desenho do Figma, não a ligação */
 .mock-screen--pinned { outline: 2px solid var(--fig-pink); outline-offset: 6px; margin: 6px; }
 .mock--decision { --cat: var(--fig-blue); }
 .mock--fix { --cat: var(--fig-orange); }
 .mock--ds { --cat: var(--fig-violet); }
 .mock-screen .mock-toast { justify-self: start; }
-.canvas__cards { display: grid; gap: 1.5rem; align-content: start; }
-/* cada lado da figura diz o que é: a tela de exemplo, à esquerda, e as anotações, à direita */
-.canvas__side { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+/* cada parte da figura diz o que é: a tela de exemplo e as anotações */
 .canvas__label { display: flex; align-items: center; gap: 0.75rem; margin: 0; max-width: none; font: 500 0.875rem/1.4 var(--mono); }
 .canvas__label::after { content: ""; flex: 1; border-top: 1px solid var(--ink); }
 
@@ -244,11 +240,27 @@ h3, p { margin: 0; }
 .note { display: grid; gap: 2em; max-width: 40rem; padding: 1.125rem 1.25rem; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); font-size: 0.9375rem; line-height: 1.6; }
 .note p { margin: 0; max-width: none; }
 .note__title { font-weight: 700; }
-/* cada anotação leva a sua legenda logo abaixo, no bloco de apoio: o que ela é, o que cada marca do
-   card quer dizer e o que se faz com ela. O card escuro é o que o Figma mostra; a legenda é da página */
-.canvas .pin { grid-template-rows: auto auto; align-content: start; gap: 0.75rem; }
-.pin__legend { display: grid; gap: 2em; align-content: start; align-self: start; justify-self: stretch; padding: 1rem 1.125rem; border: 1px solid var(--ink); background: var(--paper-2); color: var(--ink); font-size: 0.9375rem; line-height: 1.5; }
-.pin__legend p { margin: 0; max-width: none; }
+/* as anotações no arquivo: a tela fica no título, ao lado da leitura, e cada anotação ganha uma linha
+   com o card que o Figma mostra e o que ele quer dizer: o que ela é, o que cada marca do card quer dizer
+   e o que se faz com ela. A letra no círculo, o mesmo da figura de "Por que começar pelo design", liga
+   o elemento da tela à anotação dele sem depender da cor (GOSTO 6). A linha é a unidade, então a
+   explicação não precisa de caixa própria */
+.notes__intro { margin-top: 1rem; }
+.notes .split__head .canvas__label { margin-top: 2rem; }
+.notes-screen { position: relative; margin-top: 1.75rem; }
+/* o D senta na linha da moldura, que o Figma desenha em volta da tela inteira */
+.notes-screen__mark { position: absolute; top: -1.2rem; left: 1rem; z-index: 1; margin: 0; background: var(--paper); }
+.notes-screen .mock-row .mock-order { margin-top: 0.6rem; }
+.notes-screen .mock-row--field .mock-order { margin-top: 2rem; }
+.split .split__body > .notes-rows { margin: 1rem 0 0; padding: 0; list-style: none; }
+.notes-row { display: grid; gap: 1.5rem 2rem; padding-block: 2rem; border-top: 1px solid var(--rule); }
+.notes-row:last-child { border-bottom: 1px solid var(--rule); }
+.notes-row__card { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0.75rem; align-items: start; }
+.notes-row__card .mock-order { margin-top: 1rem; }
+.notes-row__text { display: grid; gap: 2em; align-content: start; font-size: 1rem; }
+.notes-row__text p { margin: 0; max-width: none; }
+@media (max-width: 59.99em) { .notes .split__body { margin-top: 3rem; } }
+@media (min-width: 75em) { .notes-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .pin__key { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.5rem 0.75rem; margin: 0; }
 .pin__key dt { font-weight: 700; }
 .pin__key dd { margin: 0; }
@@ -281,10 +293,6 @@ h3, p { margin: 0; }
   .decisions-fig .topics { grid-template-columns: minmax(0, 1fr); }
   .decisions-fig figcaption { grid-column: 1 / -1; }
   .decisions-fig .mock-screen { justify-self: end; }
-  .canvas { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
-  .canvas__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-  /* a tela de exemplo acompanha a leitura das legendas, para cada anotação ser lida ao lado do que ela comenta */
-  .canvas__side:first-child { position: sticky; top: 5rem; }
   .rule { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); column-gap: 3rem; }
   .rule h3, .rule > p { grid-column: 1; }
   .rule__ex { grid-column: 2; grid-row: 1 / span 2; align-self: start; margin-top: 0.4rem; }
@@ -760,60 +768,69 @@ h3, p { margin: 0; }
       </figure>
     </section>
 
-    <section class="section section--tight" aria-labelledby="anotacoes">
-      <div class="section__intro">
+    <section class="section section--tight split notes" aria-labelledby="anotacoes">
+      <div class="split__head">
         <h2 id="anotacoes" data-i18n="notes-title">Como as anotações aparecem no arquivo</h2>
-        <p data-i18n="notes-intro">No Figma, cada anotação fica presa ao elemento que ela comenta, e cada tipo pede uma ação diferente.</p>
+        <p class="notes__intro" data-i18n="notes-intro">No Figma, cada anotação fica presa ao elemento que ela comenta. As letras ligam cada elemento da tela à anotação dele.</p>
+        <p class="canvas__label" aria-hidden="true" data-i18n="notes-label-screen">A tela, no Figma</p>
+        <div class="mock-screen mock-screen--pinned notes-screen" aria-hidden="true">
+          <span class="mock-order notes-screen__mark">D</span>
+          <div class="mock-row"><span class="mock-order">A</span><div class="mock-toast mock mock--decision"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock-x">×</span></div></div>
+          <div class="mock-row mock-row--field"><span class="mock-order">B</span><div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock--fix mock-input"></span></div></div>
+          <div class="mock-row"><span class="mock-order">C</span><span class="mock mock--ds btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span></div>
+        </div>
+        <p class="pins__credit" data-i18n="legend-credit">Ilustração feita para esta página.</p>
       </div>
-      <figure class="pins">
-        <div class="canvas">
-          <div class="canvas__side">
-            <p class="canvas__label" aria-hidden="true" data-i18n="notes-label-screen">A tela, no Figma</p>
-          <div class="mock-screen mock-screen--pinned" aria-hidden="true">
-            <div class="mock-toast mock mock--decision"><span data-i18n="mock-toast">Aviso salvo</span> <span class="mock-x">×</span></div>
-            <div class="mock-field"><span class="mock-field__label" data-i18n="mock-email">E-mail</span><span class="mock mock--fix mock-input"></span></div>
-            <span class="mock mock--ds btn btn--primary btn--mock"><span class="btn__tex"></span><span class="btn__label" data-i18n="mock-continue">Continuar</span><svg class="ico" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 10h13M11 5l5 5-5 5"/></svg></span>
-          </div>
-          </div>
-          <div class="canvas__side">
-            <p class="canvas__label" data-i18n="notes-label-cards">As anotações, como o Figma mostra</p>
-            <div class="canvas__cards">
-            <div class="pin pin--decision">
+      <div class="split__body">
+        <p class="canvas__label" data-i18n="notes-label-cards">As anotações, como o Figma mostra</p>
+        <ul class="notes-rows">
+          <li class="notes-row pin--decision">
+            <div class="notes-row__card">
+              <span class="mock-order" aria-hidden="true">A</span>
               <div class="pin__card">
                 <span class="chip" data-i18n="cat-decision">Proposta</span>
                 <p class="pin__type" data-i18n="type-decision">3 · aviso</p>
                 <p data-i18n="pin1-a">📢 "Aviso salvo"</p>
                 <p data-i18n="pin1-b">🔊 botão "Fechar aviso"</p>
-              </div>
-              <div class="pin__legend">
-                <p data-i18n="lg-decision-what">A leitura que o agente propõe para o elemento, ou uma pergunta sobre ele.</p>
-                <dl class="pin__key"><dt data-i18n="lg-decision-k0t">3 ·</dt><dd data-i18n="lg-decision-k0d">a posição dele na ordem de leitura</dd><dt data-i18n="lg-decision-k1t">📢</dt><dd data-i18n="lg-decision-k1d">o que o leitor de tela anuncia quando o aviso aparece</dd><dt data-i18n="lg-decision-k2t">🔊</dt><dd data-i18n="lg-decision-k2d">o que o leitor de tela lê, uma parada por linha</dd></dl>
-                <p data-i18n="lg-decision-after">Vira decisão quando você acrescenta ✓ e o seu nome. No agente do Figma, a leitura fica na página de handoff.</p>
-              </div>
+                </div>
             </div>
-            <div class="pin pin--fix">
+            <div class="notes-row__text">
+              <p data-i18n="lg-decision-what">A leitura que o agente propõe para o elemento, ou uma pergunta sobre ele.</p>
+              <dl class="pin__key"><dt data-i18n="lg-decision-k0t">3 ·</dt><dd data-i18n="lg-decision-k0d">a ordem de leitura</dd><dt data-i18n="lg-decision-k1t">📢</dt><dd data-i18n="lg-decision-k1d">o que o leitor de tela anuncia</dd><dt data-i18n="lg-decision-k2t">🔊</dt><dd data-i18n="lg-decision-k2d">o que ele lê, uma parada por linha</dd></dl>
+              <p data-i18n="lg-decision-after">Você confirma com ✓ e o seu nome. No agente do Figma, ela fica na página de handoff.</p>
+            </div>
+          </li>
+          <li class="notes-row pin--fix">
+            <div class="notes-row__card">
+              <span class="mock-order" aria-hidden="true">B</span>
               <div class="pin__card">
                 <span class="chip" data-i18n="cat-fix">Corrigir aqui</span>
                 <p class="pin__type" data-i18n="pin2-type">🟠 HIGH · Aqui: borda do campo E-mail com a cor trocada</p>
-              </div>
-              <div class="pin__legend">
-                <p data-i18n="lg-fix-what">Um defeito de uso neste arquivo, como uma variante errada ou uma cor trocada.</p>
-                <dl class="pin__key"><dt data-i18n="lg-fix-k0t">🟠 HIGH</dt><dd data-i18n="lg-fix-k0d">a gravidade, em cor e em texto</dd><dt data-i18n="lg-fix-k1t">Aqui:</dt><dd data-i18n="lg-fix-k1d">o defeito é deste arquivo</dd></dl>
-                <p data-i18n="lg-fix-after">Você corrige, ou autoriza o agente a corrigir. Fica na tela, com o número do achado.</p>
-              </div>
+                </div>
             </div>
-            <div class="pin pin--ds">
+            <div class="notes-row__text">
+              <p data-i18n="lg-fix-what">Um defeito de uso, como uma cor trocada.</p>
+              <dl class="pin__key"><dt data-i18n="lg-fix-k0t">🟠 HIGH</dt><dd data-i18n="lg-fix-k0d">a gravidade, em cor e em texto</dd><dt data-i18n="lg-fix-k1t">Aqui:</dt><dd data-i18n="lg-fix-k1d">o defeito é deste arquivo</dd></dl>
+              <p data-i18n="lg-fix-after">Você corrige, ou autoriza o agente a corrigir. Ela fica na tela.</p>
+            </div>
+          </li>
+          <li class="notes-row pin--ds">
+            <div class="notes-row__card">
+              <span class="mock-order" aria-hidden="true">C</span>
               <div class="pin__card">
                 <span class="chip" data-i18n="cat-ds">Erro do design system</span>
                 <p class="pin__type" data-i18n="pin3-type">🟠 HIGH · Biblioteca: texto do botão abaixo do contraste mínimo</p>
-              </div>
-              <div class="pin__legend">
-                <p data-i18n="lg-ds-what">Um defeito do componente, do token ou do estilo da biblioteca.</p>
-                <dl class="pin__key"><dt data-i18n="lg-ds-k0t">Biblioteca:</dt><dd data-i18n="lg-ds-k0d">o defeito é da biblioteca, não deste arquivo</dd></dl>
-                <p data-i18n="lg-ds-after">Quem cuida da biblioteca corrige lá. No agente do Figma, ele fica na página de relatório.</p>
-              </div>
+                </div>
             </div>
-            <div class="pin pin--frame">
+            <div class="notes-row__text">
+              <p data-i18n="lg-ds-what">Um defeito do componente, do token ou do estilo.</p>
+              <dl class="pin__key"><dt data-i18n="lg-ds-k0t">🟠 HIGH</dt><dd data-i18n="lg-ds-k0d">a gravidade</dd><dt data-i18n="lg-ds-k1t">Biblioteca:</dt><dd data-i18n="lg-ds-k1d">o defeito é da biblioteca, não deste arquivo</dd></dl>
+              <p data-i18n="lg-ds-after">Quem cuida da biblioteca corrige lá. No agente do Figma, ela fica na página de relatório.</p>
+            </div>
+          </li>
+          <li class="notes-row pin--frame">
+            <div class="notes-row__card">
+              <span class="mock-order" aria-hidden="true">D</span>
               <div class="pin__card">
                 <span class="chip">Accessibility</span>
                 <p class="pin__type" data-i18n="flow2-status">CONDICIONAL</p>
@@ -822,18 +839,16 @@ h3, p { margin: 0; }
                 <p data-i18n="pin4-c3">Corrigir aqui — 1</p>
                 <p data-i18n="pin4-c4">Erros do design system — 1</p>
                 <p data-i18n="pin4-c5">Não lidos — 0</p>
-              </div>
-              <div class="pin__legend">
-                <p data-i18n="lg-frame-what">O status da tela e quantas anotações de cada tipo ela tem.</p>
-                <dl class="pin__key"><dt data-i18n="lg-frame-k0t">CONDICIONAL</dt><dd data-i18n="lg-frame-k0d">o status. A tela só é aprovada depois que alguém que não desenhou confere.</dd></dl>
-                <p data-i18n="lg-frame-after">Ela fica presa à tela inteira, e o contorno da tela tem a cor dela.</p>
-              </div>
+                </div>
             </div>
+            <div class="notes-row__text">
+              <p data-i18n="lg-frame-what">O status da tela e quantas anotações de cada tipo ela tem.</p>
+              <dl class="pin__key"><dt data-i18n="lg-frame-k0t">CONDICIONAL</dt><dd data-i18n="lg-frame-k0d">a tela só é aprovada depois que alguém que não desenhou confere</dd></dl>
+              <p data-i18n="lg-frame-after">Ela fica presa à tela inteira.</p>
             </div>
-          </div>
-        </div>
-        <figcaption class="pins__credit" data-i18n="legend-credit">Ilustração feita para esta página.</figcaption>
-      </figure>
+          </li>
+        </ul>
+      </div>
     </section>
 
     <section class="section split" aria-labelledby="outras-formas">
@@ -1338,29 +1353,31 @@ Relatório completo na página DA11Y — relatórios</code></pre>
       'mcp-note': 'The agent runs outside Figma, on the artificial intelligence subscription you already use. The bridge needs the Figma desktop app and does not run in the browser. The token opens all your files to the agent. Keep it on your computer only and revoke it when you stop using it. A server that does not run code in Figma can only annotate, and then the report stays in the chat.',
 
       'notes-title': 'How annotations appear in the file',
-      'notes-intro': 'In Figma, each annotation is pinned to the element it comments on, and each type asks for a different action.',
+      'notes-intro': 'In Figma, each annotation is pinned to the element it comments on. The letters link each element on the screen to its annotation.',
       'lg-decision-what': 'The reading the agent proposes for the element, or a question about it.',
       'lg-decision-k0t': '3 ·',
-      'lg-decision-k0d': 'its place in the reading order',
+      'lg-decision-k0d': 'the reading order',
       'lg-decision-k1t': '📢',
-      'lg-decision-k1d': 'what the screen reader announces when the notice appears',
+      'lg-decision-k1d': 'what the screen reader announces',
       'lg-decision-k2t': '🔊',
-      'lg-decision-k2d': 'what the screen reader reads, one stop per line',
-      'lg-decision-after': 'It becomes a decision when you add ✓ and your name. In the Figma agent, the reading lives on the handoff page.',
-      'lg-fix-what': 'A defect of use in this file, such as a wrong variant or a swapped color.',
+      'lg-decision-k2d': 'what it reads, one stop per line',
+      'lg-decision-after': 'You confirm it with ✓ and your name. In the Figma agent, it lives on the handoff page.',
+      'lg-fix-what': 'A defect of use, such as a swapped color.',
       'lg-fix-k0t': '🟠 HIGH',
       'lg-fix-k0d': 'the severity, in color and in text',
       'lg-fix-k1t': 'Here:',
       'lg-fix-k1d': 'the defect belongs to this file',
-      'lg-fix-after': 'You fix it, or authorize the agent to. It stays on the screen, with the finding\'s number.',
-      'lg-ds-what': 'A defect of the library\'s component, token or style.',
-      'lg-ds-k0t': 'Library:',
-      'lg-ds-k0d': 'the defect belongs to the library, not to this file',
+      'lg-fix-after': 'You fix it, or authorize the agent to. It stays on the screen.',
+      'lg-ds-what': 'A defect of the component, the token or the style.',
+      'lg-ds-k0t': '🟠 HIGH',
+      'lg-ds-k0d': 'the severity',
+      'lg-ds-k1t': 'Library:',
+      'lg-ds-k1d': 'the defect belongs to the library, not to this file',
       'lg-ds-after': 'Whoever maintains the library fixes it there. In the Figma agent, it lives on the report page.',
       'lg-frame-what': 'The screen\'s status and how many annotations of each type it has.',
       'lg-frame-k0t': 'CONDITIONAL',
-      'lg-frame-k0d': 'the status. The screen is approved only after someone who did not design it checks.',
-      'lg-frame-after': 'It is pinned to the whole screen, and the screen\'s outline takes its color.',
+      'lg-frame-k0d': 'the screen is approved only after someone who did not design it checks',
+      'lg-frame-after': 'It is pinned to the whole screen.',
       'notes-label-screen': 'The screen, in Figma',
       'notes-label-cards': 'The annotations, as Figma shows them',
       'legend-credit': 'An illustration made for this page.',
